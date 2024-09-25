@@ -1,0 +1,18 @@
+{
+  "resources/css/filament/admin/theme.css": {
+    "file": "assets/theme-DINNrv4J.css",
+    "src": "resources/css/filament/admin/theme.css",
+    "isEntry": true
+  },
+  "resources/css/wordsphere.css": {
+    "file": "assets/wordsphere-BpQ6Y7B_.css",
+    "src": "resources/css/wordsphere.css",
+    "isEntry": true
+  },
+  "resources/js/wordsphere.js": {
+    "file": "assets/wordsphere-DCZQ8JcZ.js",
+    "name": "wordsphere",
+    "src": "resources/js/wordsphere.js",
+    "isEntry": true
+  }
+}

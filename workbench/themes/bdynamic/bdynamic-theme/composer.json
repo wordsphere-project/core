@@ -1,0 +1,10 @@
+{
+    "name": "bdynamic/bdynamic-theme",
+    "description": "The awesome bDynamic theme.",
+    "authors": [
+        {
+            "name": "Francisco Barrento",
+            "email": "francisco.barrento@gmail.com"
+        }
+    ]
+}

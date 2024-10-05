@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace WordSphere\Core;
 
+use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
+use Awcodes\Curator\CuratorPlugin;
 use Exception;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -22,7 +24,10 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
+use WordSphere\Core\Settings\AppSettings;
 use function __;
+use function app_path;
+use function config;
 
 class WordSphereDashboardServiceProvider extends PanelProvider
 {
@@ -40,10 +45,16 @@ class WordSphereDashboardServiceProvider extends PanelProvider
             ->emailVerification()
             ->passwordReset()
             ->profile()
+            ->sidebarCollapsibleOnDesktop()
+            ->brandName(app(AppSettings::class)->name)
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverResources(
                 in: __DIR__.'/Filament/Resources',
                 for: 'WordSphere\\Core\\Filament\\Resources'
+            )
+            ->discoverResources(
+                in: app_path('Filament/Resources'),
+                for: 'App\\Filament\\Resources'
             )
             ->discoverPages(
                 in: __DIR__.'/Filament/Pages',
@@ -53,14 +64,17 @@ class WordSphereDashboardServiceProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->navigationGroups([
-                NavigationGroup::make('Content'),
+                NavigationGroup::make('CMS')
+                    ->label(__('CMS'))
+                    ->collapsed(false)
+                    ->icon('heroicon-o-newspaper'),
                 NavigationGroup::make('Appearance')
                     ->label(__('Appearance'))
                     ->collapsed(true)
                     ->icon('heroicon-o-paint-brush'),
                 NavigationGroup::make('Settings')
                     ->label(__('Settings'))
-                    ->collapsed()
+                    ->collapsed(true)
                     ->icon('heroicon-o-cog-6-tooth'),
 
             ])
@@ -85,6 +99,20 @@ class WordSphereDashboardServiceProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->plugins(
+                plugins: [
+                    FilamentSpatieRolesPermissionsPlugin::make(),
+                    CuratorPlugin::make()
+                        ->label('Media')
+                        ->pluralLabel('Media')
+                        ->navigationIcon('heroicon-o-photo')
+                        ->navigationGroup('Content')
+                        ->navigationSort(3)
+                        ->navigationCountBadge()
+                        ->registerNavigation(true)
+                        ->defaultListView('list'),
+                ]
+            );
     }
 }

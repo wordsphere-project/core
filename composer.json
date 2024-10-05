@@ -19,15 +19,25 @@
     ],
     "require": {
         "php": "^8.2",
+        "althinect/filament-spatie-roles-permissions": "^2.2",
+        "awcodes/filament-curator": "^3.6",
         "filament/actions": "^3.2",
-        "filament/filament": "^3.2",
+        "filament/filament": "^3.2.57",
         "filament/spatie-laravel-settings-plugin": "^3.2",
         "laravel/framework": "^11.0",
+        "laravel/horizon": "^5.24",
+        "livewire/livewire": "^3.4",
+        "pinkary-project/type-guard": "^0.1.0",
+        "predis/predis": "^2.2",
+        "sentry/sentry-laravel": "^4.5",
+        "spatie/eloquent-sortable": "^4.2",
+        "spatie/laravel-data": "^4.9",
         "spatie/laravel-package-tools": "^1.16"
     },
     "require-dev": {
         "larastan/larastan": "^2.9",
         "laravel/pint": "^1.14",
+        "laravel/tinker": "^2.9",
         "nunomaduro/collision": "^8.1.1||^7.10.0",
         "orchestra/testbench": "^9.4",
         "pestphp/pest": "^2.34",
@@ -41,7 +51,8 @@
     "autoload": {
         "psr-4": {
             "WordSphere\\Core\\": "src/",
-            "WordSphere\\Core\\Database\\Factories\\": "database/factories/"
+            "WordSphere\\Core\\Database\\Factories\\": "database/factories/",
+            "WordSphere\\Core\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {

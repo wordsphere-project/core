@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace WordSphere\Core\Filament\Resources;
 
-use WordSphere\Core\Filament\Resources\ArticleResource\Pages;
-use WordSphere\Core\Models\Article;
 use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Awcodes\Curator\Components\Tables\CuratorColumn;
 use Filament\Forms;
@@ -14,11 +12,12 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use WordSphere\Core\Filament\Resources\ArticleResource\Pages;
+use WordSphere\Core\Models\Article;
 
 class ArticleResource extends Resource
 {
     protected static ?string $model = Article::class;
-
 
     protected static ?string $navigationGroup = 'CMS';
 

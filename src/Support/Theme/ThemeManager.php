@@ -32,7 +32,7 @@ class ThemeManager
 
     public function getThemesFolders(): array
     {
-        $finder = new Finder();
+        $finder = new Finder;
         $finder->directories()
             ->in(config('wordsphere.themes.path'))
             ->depth(1);

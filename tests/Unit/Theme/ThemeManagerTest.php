@@ -5,7 +5,7 @@ declare(strict_types=1);
 use WordSphere\Core\Support\Theme\ThemeManager;
 
 beforeEach(function () {
-    $this->themeManager = new ThemeManager();
+    $this->themeManager = new ThemeManager;
 });
 
 describe('theme manager', function () {

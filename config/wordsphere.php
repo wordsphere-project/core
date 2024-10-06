@@ -10,7 +10,7 @@ return [
     ],
     'paths_to_scan_for_routeable_models' => [
         app_path(),
-        wordsphere_path()
-    ]
+        wordsphere_path(),
+    ],
 
 ];

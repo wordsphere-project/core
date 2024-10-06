@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
 
@@ -9,5 +8,5 @@ Route::get('/', function (): View {
 });
 
 Route::get('/test', function () {
-    return "Hello Mundo!";
+    return 'Hello Mundo!';
 });

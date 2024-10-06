@@ -38,14 +38,14 @@ class WordSphereDashboardServiceProvider extends PanelProvider
         return $panel
             ->id('wordsphere')
             ->path('admin')
-            ->default(false)
+            ->default(true)
             ->login()
             ->authPasswordBroker('users')
             ->emailVerification()
             ->passwordReset()
             ->profile()
             ->sidebarCollapsibleOnDesktop()
-            ->brandName(app(AppSettings::class)->name)
+            ->brandName(config('app.name'))
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverResources(
                 in: __DIR__.'/Filament/Resources',

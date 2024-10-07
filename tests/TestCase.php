@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Illuminate\Cache\CacheServiceProvider;
+use Illuminate\Database\DatabaseServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Filesystem\FilesystemServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\View\ViewServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\Attributes\WithEnv;
-use Orchestra\Testbench\Attributes\WithMigration;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
 use WordSphere\Core\WordSphereServiceProvider;
@@ -50,11 +53,17 @@ class TestCase extends Orchestra
         $app['config']->set([
             'auth.providers.users.model' => 'Workbench\\App\\User',
             'database.default' => 'testing',
+            'database.migrations' => 'db_migration',
             'view.compiled' => realpath(storage_path('framework/views')),
             'view.paths' => [
                 realpath(base_path('resources/vies'))
             ],
-            'database.migrations' => 'db_migration'
+            'cache.stores' => [
+              'array' => [
+                  'driver' => 'array',
+                  'serialize' => false,
+              ]
+            ]
         ]);
 
     }
@@ -69,6 +78,10 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
+            DatabaseServiceProvider::class,
+            ViewServiceProvider::class,
+            FilesystemServiceProvider::class,
+            CacheServiceProvider::class,
             LivewireServiceProvider::class,
             WordSphereServiceProvider::class,
         ];

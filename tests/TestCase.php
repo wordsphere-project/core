@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests;
 
 use Illuminate\Cache\CacheServiceProvider;
+use Illuminate\Database\DatabaseServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Filesystem\FilesystemServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -78,6 +79,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
+            DatabaseServiceProvider::class,
             ViewServiceProvider::class,
             FilesystemServiceProvider::class,
             CacheServiceProvider::class,

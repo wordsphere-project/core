@@ -50,11 +50,12 @@ class TestCase extends Orchestra
         $app['config']->set([
             'auth.providers.users.model' => 'Workbench\\App\\User',
             'database.default' => 'testing',
+            'database.migrations' => 'db_migration',
             'view.compiled' => realpath(storage_path('framework/views')),
             'view.paths' => [
                 realpath(base_path('resources/vies'))
             ],
-            'database.migrations' => 'db_migration'
+            'cache.store' => 'array'
         ]);
 
     }

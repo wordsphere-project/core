@@ -1,11 +1,11 @@
 {
-  "resources/css/filament/admin/theme.css": {
-    "file": "assets/theme-DINNrv4J.css",
-    "src": "resources/css/filament/admin/theme.css",
+  "resources/css/filament/admin/wordsphere.css": {
+    "file": "assets/wordsphere-B0ghIzP2.css",
+    "src": "resources/css/filament/admin/wordsphere.css",
     "isEntry": true
   },
   "resources/css/wordsphere.css": {
-    "file": "assets/wordsphere-BpQ6Y7B_.css",
+    "file": "assets/wordsphere-BB1GXA83.css",
     "src": "resources/css/wordsphere.css",
     "isEntry": true
   },

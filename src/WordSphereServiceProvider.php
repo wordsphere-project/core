@@ -11,13 +11,23 @@ use WordSphere\Core\Commands\InstallCommand;
 use WordSphere\Core\Commands\MakeThemeCommand;
 use WordSphere\Core\Livewire\Pages\ManageTheme;
 
+use function public_path;
+
 class WordSphereServiceProvider extends PackageServiceProvider
 {
     public function boot(): void
     {
 
         $this->registerResources();
+        $this->publishAssets();
 
+    }
+
+    private function publishAssets(): void
+    {
+        $this->publishes([
+            __DIR__.'/../public' => public_path('vendor/wordsphere'),
+        ], 'wordsphere-assets');
     }
 
     public function configurePackage(Package $package): void
@@ -31,6 +41,7 @@ class WordSphereServiceProvider extends PackageServiceProvider
             ->name('wordsphere')
             ->hasConfigFile()
             ->hasViews()
+            ->hasAssets()
             ->hasRoute('web')
             ->hasMigration('create_migration_table_name_table')
             ->hasCommands(

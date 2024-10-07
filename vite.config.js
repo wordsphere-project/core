@@ -5,9 +5,9 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/css/theme.css',
-                'resources/css/filament/admin/theme.css',
-                'resources/js/theme.js',
+                'resources/css/wordsphere.css',
+                'resources/css/filament/admin/wordsphere.css',
+                'resources/js/wordsphere.js',
             ],
         }),
     ],

@@ -36,4 +36,4 @@ jobs:
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: Run PHPStan
-        run: ./vendor/bin/phpstan --error-format=github
+        run: composer analyse

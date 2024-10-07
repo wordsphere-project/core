@@ -13,6 +13,9 @@ use Filament\Forms\Form;
 use Filament\Pages\Page;
 use WordSphere\Core\Support\Theme\ThemeManager;
 
+/**
+ * @property Form $form
+ */
 class ManageTheme extends Page implements HasForms
 {
     use InteractsWithForms;

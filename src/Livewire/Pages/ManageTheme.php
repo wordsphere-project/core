@@ -12,6 +12,9 @@ use Filament\Forms\Form;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
+/**
+ * @property Form $form
+ */
 class ManageTheme extends Component implements HasForms
 {
     use InteractsWithForms;

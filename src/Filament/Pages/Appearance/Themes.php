@@ -27,11 +27,9 @@ class Themes extends Page implements HasActions, HasForms
 
     protected static string $view = 'wordsphere::filament.pages.appearance.themes';
 
-    private ThemeManager $themeManager;
-
     public function mount(ThemeManager $themeManager): void
     {
-        $this->themeManager = $themeManager;
+
         $this->themes = $themeManager->getThemes();
     }
 

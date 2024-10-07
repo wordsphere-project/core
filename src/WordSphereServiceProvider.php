@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace WordSphere\Core;
 
 use Livewire\Livewire;
+use Livewire\LivewireServiceProvider;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use WordSphere\Core\Commands\InstallCommand;
 use WordSphere\Core\Commands\MakeThemeCommand;
 use WordSphere\Core\Livewire\Pages\ManageTheme;
 
+use function config;
 use function public_path;
 
 class WordSphereServiceProvider extends PackageServiceProvider
@@ -20,7 +22,20 @@ class WordSphereServiceProvider extends PackageServiceProvider
 
         $this->registerResources();
         $this->publishAssets();
+        $this->setPermissionsConfig();
+        $this->setCuratorConfig();
 
+    }
+
+
+    private function setCuratorConfig(): void
+    {
+        config()->set('curator', config('wordsphere.curator'));
+    }
+
+    private function setPermissionsConfig(): void
+    {
+        config()->set('permission', config('wordsphere.permission'));
     }
 
     private function publishAssets(): void

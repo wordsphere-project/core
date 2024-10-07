@@ -2,18 +2,24 @@
 
 declare(strict_types=1);
 
-namespace WordSphere\Core\Tests;
+namespace Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use JetBrains\PhpStorm\NoReturn;
+use Livewire\LivewireServiceProvider;
+use Orchestra\Testbench\Attributes\WithEnv;
+use Orchestra\Testbench\Attributes\WithMigration;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
 use WordSphere\Core\WordSphereServiceProvider;
 
+use function base_path;
 use function Orchestra\Testbench\package_path;
+use function realpath;
+use function storage_path;
 
-abstract class TestCase extends Orchestra
+#[WithEnv('DB_CONNECTION', 'testing')]
+class TestCase extends Orchestra
 {
     use RefreshDatabase;
     use WithWorkbench;
@@ -26,27 +32,44 @@ abstract class TestCase extends Orchestra
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'WordSphere\\Core\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
+
     }
+
 
     final public static function applicationBasePath(): string
     {
         return package_path('workbench');
     }
 
-    #[NoReturn]
-    final public function getEnvironmentSetUp($app): void
+    /**
+     * @param $app
+     * @return void
+     */
+    protected function defineEnvironment($app): void
     {
-        config()->set('database.default', 'testing');
+        $app['config']->set([
+            'auth.providers.users.model' => 'Workbench\\App\\User',
+            'database.default' => 'testing',
+            'view.compiled' => realpath(storage_path('framework/views')),
+            'view.paths' => [
+                realpath(base_path('resources/vies'))
+            ],
+            'database.migrations' => 'db_migration'
+        ]);
 
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_skeleton_table.php.stub';
-        $migration->up();
-        */
+    }
+
+    protected function defineDatabaseMigrations(): void
+    {
+        $this->loadMigrationsFrom(
+            package_path('workbench/database/migrations')
+        );
     }
 
     protected function getPackageProviders($app): array
     {
         return [
+            LivewireServiceProvider::class,
             WordSphereServiceProvider::class,
         ];
     }

@@ -6,14 +6,14 @@ namespace WordSphere\Core\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Althinect\FilamentSpatieRolesPermissions\Concerns\HasSuperAdmin;
-use WordSphere\Core\Enums\SystemRole;
-use WordSphere\Core\Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Contracts\Auth;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use WordSphere\Core\Database\Factories\UserFactory;
+use WordSphere\Core\Enums\SystemRole;
 
 class User extends Authenticatable implements Auth\MustVerifyEmail, FilamentUser
 {

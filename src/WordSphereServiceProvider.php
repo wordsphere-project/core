@@ -10,6 +10,7 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 use WordSphere\Core\Commands\InstallCommand;
 use WordSphere\Core\Commands\MakeThemeCommand;
 use WordSphere\Core\Livewire\Pages\ManageTheme;
+
 use function public_path;
 
 class WordSphereServiceProvider extends PackageServiceProvider
@@ -25,7 +26,7 @@ class WordSphereServiceProvider extends PackageServiceProvider
     private function publishAssets(): void
     {
         $this->publishes([
-            __DIR__.'/../public' => public_path('vendor/wordsphere')
+            __DIR__.'/../public' => public_path('vendor/wordsphere'),
         ], 'wordsphere-assets');
     }
 

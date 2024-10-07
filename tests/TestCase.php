@@ -8,6 +8,7 @@ use Illuminate\Cache\CacheServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Filesystem\FilesystemServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\View\ViewServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\Attributes\WithEnv;
 use Orchestra\Testbench\Attributes\WithMigration;
@@ -77,6 +78,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
+            ViewServiceProvider::class,
             FilesystemServiceProvider::class,
             CacheServiceProvider::class,
             LivewireServiceProvider::class,

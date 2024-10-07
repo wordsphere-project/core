@@ -12,12 +12,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\View\ViewServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\Attributes\WithEnv;
-use Orchestra\Testbench\Attributes\WithMigration;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
 use WordSphere\Core\WordSphereServiceProvider;
 
-use wordsphere\core\workbench\app\Providers\WorkbenchServiceProvider;
 use function base_path;
 use function Orchestra\Testbench\package_path;
 use function realpath;
@@ -80,7 +78,6 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
-            WorkbenchServiceProvider::class,
             DatabaseServiceProvider::class,
             ViewServiceProvider::class,
             FilesystemServiceProvider::class,

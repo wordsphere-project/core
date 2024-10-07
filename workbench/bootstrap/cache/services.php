@@ -24,9 +24,10 @@
     20 => 'Illuminate\\Translation\\TranslationServiceProvider',
     21 => 'Illuminate\\Validation\\ValidationServiceProvider',
     22 => 'Illuminate\\View\\ViewServiceProvider',
-    23 => 'Illuminate\\Cache\\CacheServiceProvider',
-    24 => 'Livewire\\LivewireServiceProvider',
-    25 => 'WordSphere\\Core\\WordSphereServiceProvider',
+    23 => 'Illuminate\\Filesystem\\FilesystemServiceProvider',
+    24 => 'Illuminate\\Cache\\CacheServiceProvider',
+    25 => 'Livewire\\LivewireServiceProvider',
+    26 => 'WordSphere\\Core\\WordSphereServiceProvider',
   ),
   'eager' => 
   array (
@@ -40,8 +41,9 @@
     7 => 'Illuminate\\Pagination\\PaginationServiceProvider',
     8 => 'Illuminate\\Session\\SessionServiceProvider',
     9 => 'Illuminate\\View\\ViewServiceProvider',
-    10 => 'Livewire\\LivewireServiceProvider',
-    11 => 'WordSphere\\Core\\WordSphereServiceProvider',
+    10 => 'Illuminate\\Filesystem\\FilesystemServiceProvider',
+    11 => 'Livewire\\LivewireServiceProvider',
+    12 => 'WordSphere\\Core\\WordSphereServiceProvider',
   ),
   'deferred' => 
   array (

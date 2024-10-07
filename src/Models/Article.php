@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use WordSphere\Core\Database\Factories\ArticleFactory;
 
+/**
+ * @property int $id
+ * @method static ArticleFactory factory($count = null, $state = [])
+ */
 final class Article extends Model
 {
     /** @use HasFactory<ArticleFactory> */

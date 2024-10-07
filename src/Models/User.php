@@ -6,8 +6,8 @@ namespace WordSphere\Core\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Althinect\FilamentSpatieRolesPermissions\Concerns\HasSuperAdmin;
-use App\Enums\SystemRole;
-use Database\Factories\UserFactory;
+use WordSphere\Core\Enums\SystemRole;
+use WordSphere\Core\Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Contracts\Auth;
@@ -22,6 +22,12 @@ class User extends Authenticatable implements Auth\MustVerifyEmail, FilamentUser
 
     use HasSuperAdmin;
     use Notifiable;
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
 
     /**
      * The attributes that should be hidden for serialization.

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace wordsphere\core\workbench\app\Providers;
 
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -14,7 +17,7 @@ class WorkbenchServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+
     }
 
     /**
@@ -22,6 +25,7 @@ class WorkbenchServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Model::unguard();
         Route::view('/', 'welcome');
     }
 }

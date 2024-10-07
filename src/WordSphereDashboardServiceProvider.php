@@ -36,6 +36,7 @@ class WordSphereDashboardServiceProvider extends PanelProvider
     {
         return $panel
             ->id('wordsphere')
+            ->font('switzer', 'https://fonts.cdnfonts.com/css/switzer')
             ->path('admin')
             ->default(true)
             ->login()
@@ -45,7 +46,7 @@ class WordSphereDashboardServiceProvider extends PanelProvider
             ->profile()
             ->sidebarCollapsibleOnDesktop()
             ->brandName(config('app.name'))
-            ->viteTheme('resources/css/filament/admin/theme.css')
+            ->viteTheme('resources/css/filament/admin/wordsphere.css', 'vendor/wordsphere/build')
             ->discoverResources(
                 in: __DIR__.'/Filament/Resources',
                 for: 'WordSphere\\Core\\Filament\\Resources'

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Enums;
+namespace WordSphere\Core\Enums;
 
 use Filament\Support\Contracts\HasLabel;
 

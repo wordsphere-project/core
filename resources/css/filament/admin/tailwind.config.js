@@ -7,5 +7,5 @@ export default {
         './resources/views/livewire/**/*.blade.php',
         './vendor/filament/**/*.blade.php',
         './vendor/awcodes/filament-curator/resources/**/*.blade.php',
-    ],
+    ]
 }

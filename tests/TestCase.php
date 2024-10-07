@@ -55,7 +55,12 @@ class TestCase extends Orchestra
             'view.paths' => [
                 realpath(base_path('resources/vies'))
             ],
-            'cache.store' => 'array'
+            'cache.stores' => [
+              'array' => [
+                  'driver' => 'array',
+                  'serialize' => false,
+              ]
+            ]
         ]);
 
     }

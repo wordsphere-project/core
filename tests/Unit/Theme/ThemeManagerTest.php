@@ -2,17 +2,27 @@
 
 declare(strict_types=1);
 
+namespace Tests\Unit\ThemeManager;
+
+use Tests\TestCase;
 use WordSphere\Core\Support\Theme\ThemeManager;
 
-beforeEach(function () {
+
+beforeEach(function (): void {
+    /* @var TestCase $this */
+
     $this->themeManager = new ThemeManager;
 });
 
 describe('theme manager', function () {
 
+
     it('returns a list of themes', function () {
+        /* @var TestCase $this */
+
+
         $themes = $this->themeManager->getThemes();
-        expect($themes)->dd($themes)->toBeArray();
+        expect($themes)->toBeArray();
     });
 
     it('return a list of themes folders', function () {

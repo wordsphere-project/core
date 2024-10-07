@@ -1,1 +1,3 @@
-github: :vendor_name
+github:
+  - wordsphere-project
+  - core

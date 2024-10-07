@@ -13,6 +13,6 @@ class WordSphere extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return \Wordsphere\Core\WordSphere::class;
+        return \WordSphere\Core\WordSphere::class;
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Illuminate\Cache\CacheServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\LivewireServiceProvider;
@@ -75,6 +76,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
+            CacheServiceProvider::class,
             LivewireServiceProvider::class,
             WordSphereServiceProvider::class,
         ];

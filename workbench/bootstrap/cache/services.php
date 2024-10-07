@@ -24,8 +24,9 @@
     20 => 'Illuminate\\Translation\\TranslationServiceProvider',
     21 => 'Illuminate\\Validation\\ValidationServiceProvider',
     22 => 'Illuminate\\View\\ViewServiceProvider',
-    23 => 'Livewire\\LivewireServiceProvider',
-    24 => 'WordSphere\\Core\\WordSphereServiceProvider',
+    23 => 'Illuminate\\Cache\\CacheServiceProvider',
+    24 => 'Livewire\\LivewireServiceProvider',
+    25 => 'WordSphere\\Core\\WordSphereServiceProvider',
   ),
   'eager' => 
   array (

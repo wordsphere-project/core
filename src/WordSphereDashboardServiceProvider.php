@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace WordSphere\Core;
 
-use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
 use Awcodes\Curator\CuratorPlugin;
 use Exception;
 use Filament\Http\Middleware\Authenticate;
@@ -24,7 +23,6 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-use WordSphere\Core\Filament\Resources\PageResource;
 use function __;
 use function app_path;
 
@@ -99,6 +97,16 @@ class WordSphereDashboardServiceProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->plugins([
+                CuratorPlugin::make()
+                    ->label('Media')
+                    ->pluralLabel('Media')
+                    ->navigationIcon('heroicon-o-photo')
+                    ->navigationSort(3)
+                    ->navigationCountBadge()
+                    ->registerNavigation(true)
+                    ->defaultListView('grid'),
             ]);
     }
 }

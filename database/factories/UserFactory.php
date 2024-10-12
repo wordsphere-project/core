@@ -30,7 +30,6 @@ class UserFactory extends Factory
 
     /**
      * Define the model's default state.
-     *
      */
     public function definition(): array
     {

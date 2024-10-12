@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WordSphere\Tests;
 
+use Awcodes\Curator\CuratorServiceProvider;
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use Filament\Actions\ActionsServiceProvider;
 use Filament\FilamentServiceProvider;
@@ -44,7 +45,6 @@ use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use Spatie\LaravelSettings\LaravelSettingsServiceProvider;
 use Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository;
-use Spatie\LaravelSettings\SettingsRepositories\RedisSettingsRepository;
 use Spatie\Permission\Models\Role;
 use WordSphere\Core\Enums\SystemRole;
 use WordSphere\Core\Models\User;
@@ -53,9 +53,6 @@ use WordSphere\Core\WordSphereServiceProvider;
 
 use function database_path;
 use function Orchestra\Testbench\package_path;
-use function realpath;
-use function resource_path;
-use function storage_path;
 
 #[WithEnv('DB_CONNECTION', 'testing')]
 class TestCase extends Orchestra
@@ -83,19 +80,13 @@ class TestCase extends Orchestra
             user: $user
         );
 
-
     }
-
 
     final public static function applicationBasePath(): string
     {
         return package_path('workbench');
     }
 
-    /**
-     * @param $app
-     * @return void
-     */
     protected function defineEnvironment($app): void
     {
         $app['config']->set([
@@ -108,7 +99,7 @@ class TestCase extends Orchestra
                     'array' => [
                         'driver' => 'array',
                         'serialize' => false,
-                    ]
+                    ],
                 ],
             ],
 
@@ -126,9 +117,9 @@ class TestCase extends Orchestra
                     ],
                 ],
                 'cache' => [
-                    'enables' => false
-                ]
-            ]
+                    'enables' => false,
+                ],
+            ],
         ]);
 
     }
@@ -179,6 +170,7 @@ class TestCase extends Orchestra
             ValidationServiceProvider::class,
             SpatieLaravelSettingsPluginServiceProvider::class,
             LaravelSettingsServiceProvider::class,
+            CuratorServiceProvider::class,
             WordSphereDashboardServiceProvider::class,
             WordSphereServiceProvider::class,
         ];

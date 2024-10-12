@@ -2,9 +2,8 @@
 
 namespace WordSphere\Core\Filament\Resources\PageResource\Pages;
 
-use WordSphere\Core\Filament\Resources\PageResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use WordSphere\Core\Filament\Resources\PageResource;
 
 class CreatePage extends CreateRecord
 {

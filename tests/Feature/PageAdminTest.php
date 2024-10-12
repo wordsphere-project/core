@@ -10,6 +10,7 @@ use WordSphere\Core\Models\Page;
 use WordSphere\Core\Settings\AppSettings;
 use WordSphere\Core\Support\Theme\ThemeManager;
 use WordSphere\Tests\TestCase;
+
 use function WordSphere\Tests\livewire;
 
 beforeEach(function () {
@@ -17,26 +18,60 @@ beforeEach(function () {
 
     AppSettings::fake(
         values: [
-            'theme' => 'wordsphere/orbit-theme'
+            'theme' => 'wordsphere/orbit-theme',
         ],
         loadMissingValues: true
     );
 
-
 });
-
 
 describe('page admin', tests: function (): void {
 
-    test('template selector has the templates as options', function(): void {
+    test('it shows the custom fields group', function (): void {})->todo();
+
+    test('it shows the content field by default', function (): void {
+        $component = livewire(
+            component: PageResource\Pages\CreatePage::class
+        );
+
+        $component->assertFormFieldExists(
+            fieldName: 'content'
+        );
+    });
+
+    test('it show the excerpt field if excerpt support is on', function (): void {
+        $component = livewire(
+            component: PageResource\Pages\CreatePage::class
+        );
+        $component->fillForm(
+            state: [
+                'excerptSupport' => true,
+            ]
+        );
+
+        $component->assertFormFieldExists(
+            fieldName: 'excerpt'
+        );
+    });
+
+    test('it shows the excerpt field if the field has content', function (): void {})->todo();
+
+    test('it does not show the excerpt field if excerpt support is off', function () {
+
+        $component = livewire(component: PageResource\Pages\CreatePage::class);
+        $component->assertFormFieldDoesNotExist('excerpt');
+    });
+
+    test('template selector has the templates as options', function (): void {
 
         $component = livewire(component: PageResource\Pages\CreatePage::class);
 
-        $component->assertFormFieldExists('template', function (Select $input)  {
+        $component->assertFormFieldExists('template', function (Select $input) {
             /** @var ThemeManager $themeManager */
             $themeManager = app()->make(
                 abstract: ThemeManager::class
             );
+
             return $themeManager->getCurrentThemeTemplates() === $input->getOptions();
         });
 
@@ -58,7 +93,6 @@ describe('page admin', tests: function (): void {
             )
             ->call('create')
             ->assertHasNoFormErrors();
-
 
     });
 

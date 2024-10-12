@@ -64,8 +64,9 @@
     60 => 'Filament\\Notifications\\NotificationsServiceProvider',
     61 => 'Filament\\SpatieLaravelSettingsPluginServiceProvider',
     62 => 'Spatie\\LaravelSettings\\LaravelSettingsServiceProvider',
-    63 => 'WordSphere\\Core\\WordSphereDashboardServiceProvider',
-    64 => 'WordSphere\\Core\\WordSphereServiceProvider',
+    63 => 'Awcodes\\Curator\\CuratorServiceProvider',
+    64 => 'WordSphere\\Core\\WordSphereDashboardServiceProvider',
+    65 => 'WordSphere\\Core\\WordSphereServiceProvider',
   ),
   'eager' => 
   array (
@@ -107,8 +108,9 @@
     35 => 'Filament\\Notifications\\NotificationsServiceProvider',
     36 => 'Filament\\SpatieLaravelSettingsPluginServiceProvider',
     37 => 'Spatie\\LaravelSettings\\LaravelSettingsServiceProvider',
-    38 => 'WordSphere\\Core\\WordSphereDashboardServiceProvider',
-    39 => 'WordSphere\\Core\\WordSphereServiceProvider',
+    38 => 'Awcodes\\Curator\\CuratorServiceProvider',
+    39 => 'WordSphere\\Core\\WordSphereDashboardServiceProvider',
+    40 => 'WordSphere\\Core\\WordSphereServiceProvider',
   ),
   'deferred' => 
   array (

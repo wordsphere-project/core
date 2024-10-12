@@ -9,7 +9,7 @@ use Filament\Support\Contracts\HasLabel;
 
 use function __;
 
-enum ContentStatus: int implements HasLabel, HasColor
+enum ContentStatus: int implements HasColor, HasLabel
 {
     case DRAFT = 0;
     case IN_REVIEW = 1;

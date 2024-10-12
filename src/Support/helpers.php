@@ -15,7 +15,6 @@ if (! function_exists('themes_path')) {
     }
 }
 
-
 if (! function_exists('wordsphere_path')) {
     /**
      * Get the path to the base of the wordsphere source code.

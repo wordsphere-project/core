@@ -7,6 +7,7 @@ export default {
     content: [
         './resources/**/*.blade.php',
         './resources/**/*.js',
+        './vendor/awcodes/filament-curator/resources/**/*.blade.php'
     ],
 
     theme: {

@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace WordSphere\Tests\Unit\ThemeManager;
 
 use WordSphere\Core\Settings\AppSettings;
-use WordSphere\Tests\TestCase;
 use WordSphere\Core\Support\Theme\ThemeManager;
-
+use WordSphere\Tests\TestCase;
 
 beforeEach(function (): void {
     /* @var TestCase $this */
 
     AppSettings::fake(
         values: [
-            'theme' => 'wordsphere/orbit-theme'
+            'theme' => 'wordsphere/orbit-theme',
         ],
         loadMissingValues: true
     );
@@ -22,8 +21,6 @@ beforeEach(function (): void {
     $this->themeManager = app()->make(
         abstract: ThemeManager::class
     );
-
-
 
 });
 
@@ -40,7 +37,6 @@ describe('theme manager', function () {
 
     it('returns a list of themes', function () {
         /* @var TestCase $this */
-
 
         $themes = $this->themeManager->getThemes();
         expect($themes)->toBeArray();

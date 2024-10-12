@@ -2,21 +2,26 @@
 
 namespace WordSphere\Core\Filament\Resources;
 
-
+use Awcodes\Curator\Components\Forms\CuratorPicker;
+use Awcodes\Curator\PathGenerators\DatePathGenerator;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Split;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use WordSphere\Core\Enums\ContentStatus;
-use WordSphere\Core\Filament\Resources\PageResource\Pages;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use WordSphere\Core\Enums\ContentStatus;
+use WordSphere\Core\Filament\Resources\PageResource\Pages;
 use WordSphere\Core\Models\Page;
 use WordSphere\Core\Support\Theme\ThemeManager;
+
 use function __;
 use function now;
 
@@ -37,10 +42,14 @@ class PageResource extends Resource
                                 ->schema(
                                     components: [
                                         TextInput::make('title')
+                                            ->label(__('Title'))
                                             ->maxLength(255)
+                                            ->columnSpan(2)
                                             ->required(),
 
                                         TextInput::make('path')
+                                            ->label(__('Path'))
+                                            ->columnSpan(2)
                                             ->required()
                                             ->unique(
                                                 table: 'pages',
@@ -49,32 +58,77 @@ class PageResource extends Resource
                                             ),
 
                                         Textarea::make('excerpt')
-                                            ->rows(5),
+                                            ->label(__('Excerpt'))
+                                            ->columnSpan(2)
+                                            ->visible(fn ($get): bool => $get('excerptSupport'))
+                                            ->required()
+                                            ->rows(4),
+
+                                        RichEditor::make('content')
+                                            ->label(__('Content'))
+                                            ->columnSpan(2)
+                                            ->visible(fn ($get): bool => $get('contentSupport'))
+                                            ->required(),
 
                                     ]
-                                )->grow(true),
-                            Section::make()
+                                )
+                                ->columns(2)
+                                ->grow(true),
+                            Group::make()
                                 ->schema(
                                     components: [
-                                        Select::make('template')
-                                            ->label(__('Template'))
-                                            ->options(function (ThemeManager $themeManager) {
-                                                return $themeManager->getCurrentThemeTemplates();
-                                            }),
+                                        Section::make()
+                                            ->schema(
+                                                components: [
+                                                    Select::make('template')
+                                                        ->label(__('Template'))
+                                                        ->required()
+                                                        ->options(function (ThemeManager $themeManager) {
+                                                            return $themeManager->getCurrentThemeTemplates();
+                                                        }),
 
-                                        Select::make('status')
-                                            ->label(__('Content Status'))
-                                            ->options(options: ContentStatus::class)
-                                            ->searchable()
-                                            ->preload(),
+                                                    Select::make('status')
+                                                        ->label(__('Content Status'))
+                                                        ->required()
+                                                        ->options(options: ContentStatus::class)
+                                                        ->searchable()
+                                                        ->preload(),
 
-                                        TextInput::make('sort_order')
-                                            ->label(__('Order'))
-                                            ->numeric()
-                                            ->default(1),
+                                                    TextInput::make('sort_order')
+                                                        ->label(__('Order'))
+                                                        ->numeric()
+                                                        ->default(1),
 
-                                        DateTimePicker::make('publish_at')
-                                            ->default(now()),
+                                                    DateTimePicker::make('publish_at')
+                                                        ->default(now()),
+                                                ]
+                                            ),
+                                        Section::make(__('Featured Image'))
+                                            ->label('')
+                                            ->schema(
+                                                components: [
+                                                    CuratorPicker::make('media_id')
+                                                        ->label(__('Featured Image'))
+                                                        ->buttonLabel(__('Add Feature Image'))
+                                                        ->pathGenerator(DatePathGenerator::class)
+                                                        ->size('lg')->listDisplay(true),
+                                                ]
+                                            ),
+                                        Section::make(__('Settings'))
+                                            ->schema(
+                                                components: [
+                                                    Toggle::make('excerptSupport')
+                                                        ->label(__('Excerpt'))
+                                                        ->default(false)
+                                                        ->dehydrated(false)
+                                                        ->reactive(),
+                                                    Toggle::make('contentSupport')
+                                                        ->label(__('Content'))
+                                                        ->default(true)
+                                                        ->dehydrated(false)
+                                                        ->reactive(),
+                                                ]
+                                            ),
                                     ])->grow(false),
                         ]
                     )->from('lg'),

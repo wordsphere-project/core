@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use WordSphere\Core\Enums\ContentStatus;
 use WordSphere\Core\Enums\ContentVisibility;
 use WordSphere\Core\Models\Page;
+
 use function now;
 
 /**
@@ -25,13 +26,12 @@ class PageFactory extends Factory
 
     /**
      * Define the model's default state.
-     *
      */
     public function definition(): array
     {
         return [
-            'title' => $title =  $this->faker->unique()->words(4, true),
-            'path' => '/' . Str::slug($title),
+            'title' => $title = $this->faker->unique()->words(4, true),
+            'path' => '/'.Str::slug($title),
             'content' => $this->faker->paragraphs(4, true),
             'excerpt' => $this->faker->paragraph(),
             'template' => 'default',

@@ -2,9 +2,9 @@
 
 namespace WordSphere\Core\Filament\Resources\PageResource\Pages;
 
-use WordSphere\Core\Filament\Resources\PageResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use WordSphere\Core\Filament\Resources\PageResource;
 
 class EditPage extends EditRecord
 {

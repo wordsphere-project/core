@@ -2,7 +2,6 @@
 
 namespace WordSphere\Core\Models;
 
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use WordSphere\Core\Database\Factories\PageFactory;

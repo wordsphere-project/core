@@ -16,9 +16,9 @@ return [
     'auth' => [
         'providers' => [
             'user' => [
-                'model' => \WordSphere\Core\Models\User::class
-            ]
-        ]
+                'model' => \WordSphere\Core\Models\User::class,
+            ],
+        ],
     ],
 
     'permission' => [

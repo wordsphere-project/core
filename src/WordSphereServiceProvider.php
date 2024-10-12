@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WordSphere\Core;
 
 use Livewire\Livewire;
-use Livewire\LivewireServiceProvider;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use WordSphere\Core\Commands\InstallCommand;

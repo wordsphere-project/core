@@ -24,6 +24,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
+use WordSphere\Core\Filament\Resources\PageResource;
 use function __;
 use function app_path;
 
@@ -38,7 +39,7 @@ class WordSphereDashboardServiceProvider extends PanelProvider
             ->id('wordsphere')
             ->font('switzer', 'https://fonts.cdnfonts.com/css/switzer')
             ->path('admin')
-            ->default(true)
+            ->default()
             ->login()
             ->authPasswordBroker('users')
             ->emailVerification()
@@ -98,20 +99,6 @@ class WordSphereDashboardServiceProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])
-            ->plugins(
-                plugins: [
-                    FilamentSpatieRolesPermissionsPlugin::make(),
-                    CuratorPlugin::make()
-                        ->label('Media')
-                        ->pluralLabel('Media')
-                        ->navigationIcon('heroicon-o-photo')
-                        ->navigationGroup('Content')
-                        ->navigationSort(3)
-                        ->navigationCountBadge()
-                        ->registerNavigation(true)
-                        ->defaultListView('list'),
-                ]
-            );
+            ]);
     }
 }

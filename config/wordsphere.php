@@ -13,6 +13,14 @@ return [
         wordsphere_path(),
     ],
 
+    'auth' => [
+        'providers' => [
+            'user' => [
+                'model' => \WordSphere\Core\Models\User::class
+            ]
+        ]
+    ],
+
     'permission' => [
         'models' => [
 

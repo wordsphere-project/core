@@ -2,39 +2,87 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace WordSphere\Tests;
 
+use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
+use Filament\Actions\ActionsServiceProvider;
+use Filament\FilamentServiceProvider;
+use Filament\Forms\FormsServiceProvider;
+use Filament\Infolists\InfolistsServiceProvider;
+use Filament\Notifications\NotificationsServiceProvider;
+use Filament\SpatieLaravelSettingsPluginServiceProvider;
+use Filament\Support\SupportServiceProvider;
+use Filament\Tables\TablesServiceProvider;
+use Filament\Widgets\WidgetsServiceProvider;
+use Illuminate\Auth\AuthServiceProvider;
+use Illuminate\Auth\Passwords\PasswordResetServiceProvider;
+use Illuminate\Broadcasting\BroadcastServiceProvider;
+use Illuminate\Bus\BusServiceProvider;
 use Illuminate\Cache\CacheServiceProvider;
+use Illuminate\Concurrency\ConcurrencyServiceProvider;
+use Illuminate\Cookie\CookieServiceProvider;
 use Illuminate\Database\DatabaseServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Encryption\EncryptionServiceProvider;
 use Illuminate\Filesystem\FilesystemServiceProvider;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Providers\ConsoleSupportServiceProvider;
+use Illuminate\Foundation\Providers\FoundationServiceProvider;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Hashing\HashServiceProvider;
+use Illuminate\Mail\MailServiceProvider;
+use Illuminate\Pagination\PaginationServiceProvider;
+use Illuminate\Pipeline\PipelineServiceProvider;
+use Illuminate\Queue\QueueServiceProvider;
+use Illuminate\Session\SessionServiceProvider;
+use Illuminate\Translation\TranslationServiceProvider;
+use Illuminate\Validation\ValidationServiceProvider;
 use Illuminate\View\ViewServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\Attributes\WithEnv;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
+use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
+use Spatie\LaravelSettings\LaravelSettingsServiceProvider;
+use Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository;
+use Spatie\LaravelSettings\SettingsRepositories\RedisSettingsRepository;
+use Spatie\Permission\Models\Role;
+use WordSphere\Core\Enums\SystemRole;
+use WordSphere\Core\Models\User;
+use WordSphere\Core\WordSphereDashboardServiceProvider;
 use WordSphere\Core\WordSphereServiceProvider;
 
-use function base_path;
+use function database_path;
 use function Orchestra\Testbench\package_path;
 use function realpath;
+use function resource_path;
 use function storage_path;
 
 #[WithEnv('DB_CONNECTION', 'testing')]
 class TestCase extends Orchestra
 {
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
     use WithWorkbench;
 
     protected function setUp(): void
     {
 
         parent::setUp();
-
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'WordSphere\\Core\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
+
+        /** @var User $user */
+        $user = User::factory()->create();
+        $superAdmin = Role::findByName(
+            name: SystemRole::SUPER_ADMIN->value
+        );
+        $user->assignRole(
+            roles: $superAdmin
+        );
+        $this->actingAs(
+            user: $user
+        );
+
 
     }
 
@@ -54,15 +102,32 @@ class TestCase extends Orchestra
             'auth.providers.users.model' => 'Workbench\\App\\User',
             'database.default' => 'testing',
             'database.migrations' => 'db_migration',
-            'view.compiled' => realpath(storage_path('framework/views')),
-            'view.paths' => [
-                realpath(base_path('resources/vies'))
+            'cache' => [
+                'default' => 'array',
+                'stores' => [
+                    'array' => [
+                        'driver' => 'array',
+                        'serialize' => false,
+                    ]
+                ],
             ],
-            'cache.stores' => [
-              'array' => [
-                  'driver' => 'array',
-                  'serialize' => false,
-              ]
+
+            'settings' => [
+                'migrations_paths' => [
+                    database_path('settings'),
+                ],
+                'default_repository' => 'database',
+                'repositories' => [
+                    'database' => [
+                        'type' => DatabaseSettingsRepository::class,
+                        'model' => null,
+                        'table' => null,
+                        'connection' => null,
+                    ],
+                ],
+                'cache' => [
+                    'enables' => false
+                ]
             ]
         ]);
 
@@ -78,11 +143,43 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
+            TablesServiceProvider::class,
+            FormsServiceProvider::class,
+            FilamentServiceProvider::class,
+            SupportServiceProvider::class,
+            ActionsServiceProvider::class,
+            BladeCaptureDirectiveServiceProvider::class,
+            BladeHeroiconsServiceProvider::class,
+            InfolistsServiceProvider::class,
+            NotificationsServiceProvider::class,
+            WidgetsServiceProvider::class,
             DatabaseServiceProvider::class,
             ViewServiceProvider::class,
             FilesystemServiceProvider::class,
             CacheServiceProvider::class,
             LivewireServiceProvider::class,
+            SessionServiceProvider::class,
+            AuthServiceProvider::class,
+            BroadcastServiceProvider::class,
+            BusServiceProvider::class,
+            ConsoleSupportServiceProvider::class,
+            ConcurrencyServiceProvider::class,
+            CookieServiceProvider::class,
+            EncryptionServiceProvider::class,
+            FilesystemServiceProvider::class,
+            FoundationServiceProvider::class,
+            HashServiceProvider::class,
+            MailServiceProvider::class,
+            NotificationsServiceProvider::class,
+            PaginationServiceProvider::class,
+            PasswordResetServiceProvider::class,
+            PipelineServiceProvider::class,
+            QueueServiceProvider::class,
+            TranslationServiceProvider::class,
+            ValidationServiceProvider::class,
+            SpatieLaravelSettingsPluginServiceProvider::class,
+            LaravelSettingsServiceProvider::class,
+            WordSphereDashboardServiceProvider::class,
             WordSphereServiceProvider::class,
         ];
     }

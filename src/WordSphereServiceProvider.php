@@ -27,7 +27,6 @@ class WordSphereServiceProvider extends PackageServiceProvider
 
     }
 
-
     private function setCuratorConfig(): void
     {
         config()->set('curator', config('wordsphere.curator'));

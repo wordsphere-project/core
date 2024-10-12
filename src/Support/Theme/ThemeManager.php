@@ -6,9 +6,54 @@ namespace WordSphere\Core\Support\Theme;
 
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\Finder;
+use WordSphere\Core\Settings\AppSettings;
+use function explode;
+use function Orchestra\Testbench\workbench_path;
+use function themes_path;
 
 class ThemeManager
 {
+
+    public function __construct(
+        private AppSettings $appSettings,
+        private Finder $finder,
+    ) {
+
+    }
+
+
+
+    public function getCurrentThemeTemplates(): array
+    {
+
+        $this->finder
+            ->files()
+            ->in($this->getCurrentThemeBasePath() . '/views/templates')
+            ->name('*.blade.php')
+            ->depth(0);
+
+
+        $files = [];
+        foreach ($this->finder as $file) {
+            $fileName = $file->getRelativePathname();
+            $files[explode('.', $fileName)[0]] = $fileName;
+        }
+
+        return $files;
+    }
+
+    public function getCurrentThemeBasePath(): string
+    {
+        $themesPath =  themes_path($this->appSettings->theme);
+
+        //Just For Testing Propose
+        if (!File::isDirectory($themesPath)) {
+            $themesPath = workbench_path('themes/' . $this->appSettings->theme);
+        }
+        return $themesPath;
+    }
+
+
     public function getThemes(): array
     {
         $pathsToScan = $this->getThemesFolders();
@@ -32,13 +77,12 @@ class ThemeManager
 
     public function getThemesFolders(): array
     {
-        $finder = new Finder;
-        $finder->directories()
+        $this->finder->directories()
             ->in(config('wordsphere.themes.path'))
             ->depth(1);
 
         $folders = [];
-        foreach ($finder as $directory) {
+        foreach ($this->finder as $directory) {
             if (! $this->isValid($directory->getPathname())) {
                 continue;
             }

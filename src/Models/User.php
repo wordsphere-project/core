@@ -23,6 +23,8 @@ class User extends Authenticatable implements Auth\MustVerifyEmail, FilamentUser
     use HasSuperAdmin;
     use Notifiable;
 
+    protected string $guard_name = 'web';
+
     protected $fillable = [
         'name',
         'email',

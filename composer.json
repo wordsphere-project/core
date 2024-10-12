@@ -60,8 +60,11 @@
         }
     },
     "autoload-dev": {
+        "files": [
+            "tests/helpers.php"
+        ],
         "psr-4": {
-            "Tests\\": "tests/",
+            "WordSphere\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/",
             "Workbench\\Database\\Factories\\": "workbench/database/factories/",
             "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
@@ -87,6 +90,7 @@
         "format": "vendor/bin/pint",
         "serve": [
             "Composer\\Config::disableProcessTimeout",
+            "@php vendor/bin/testbench migrate:fresh",
             "@build",
             "@php vendor/bin/testbench serve --ansi"
         ],

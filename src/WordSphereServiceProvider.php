@@ -24,12 +24,21 @@ class WordSphereServiceProvider extends PackageServiceProvider
         $this->publishAssets();
         $this->setPermissionsConfig();
         $this->setCuratorConfig();
-        $this->bindCustomFieldsManager();
 
+    }
+
+    /**
+     * @return void
+     */
+    public function register(): void
+    {
+        $this->bindCustomFieldsManager();
     }
 
     private function bindCustomFieldsManager(): void
     {
+
+
         $this->app->scoped(
             abstract: CustomFieldsManagerContract::class,
             concrete: config('wordsphere.custom_fields.manager')

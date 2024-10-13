@@ -35,4 +35,9 @@ class Page extends Model
             'meta' => 'json',
         ];
     }
+
+    public static function newFactory(): PageFactory
+    {
+        return PageFactory::new();
+    }
 }

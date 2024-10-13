@@ -64,8 +64,8 @@ class FormCompiler
                     ->reactive()
                     ->rows(4),
 
-                RichEditor::make('content')
-                    ->label(__('Content'))
+                RichEditor::make('content.content')
+                    ->label(__('content.content'))
                     ->columnSpan(2)
                     ->visible(true)
                     ->reactive(),
@@ -99,7 +99,7 @@ class FormCompiler
                                 ->label(__('Excerpt'))
                                 ->reactive(),
                             Toggle::make('contentSupport')
-                                ->label(__('Content'))
+                                ->label(__('content.content'))
                                 ->reactive(),
                         ]
                     ),

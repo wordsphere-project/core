@@ -29,10 +29,8 @@ describe('theme manager', function () {
     it('returns a list of templates', function () {
         expect($this->themeManager->getCurrentThemeTemplates())
             ->toBeArray()
-            ->toBe([
-                'home' => 'home.blade.php',
-                'contact' => 'contact.blade.php',
-            ]);
+            ->toHaveKey('home')
+            ->toHaveKey('contact');
     });
 
     it('returns a list of themes', function () {

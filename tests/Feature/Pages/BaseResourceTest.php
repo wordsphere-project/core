@@ -21,7 +21,7 @@ describe('page admin', tests: function (): void {
         );
 
         $component->assertFormFieldExists(
-            fieldName: 'content'
+            fieldName: __('content')
         );
     });
 

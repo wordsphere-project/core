@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WordSphere\Tests;
 
 use Awcodes\Curator\CuratorServiceProvider;
+use Awcodes\Curator\Resources\MediaResource;
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use Filament\Actions\ActionsServiceProvider;
 use Filament\FilamentServiceProvider;
@@ -49,6 +50,7 @@ use Spatie\Permission\Models\Role;
 use WordSphere\Core\Enums\SystemRole;
 use WordSphere\Core\Models\User;
 use WordSphere\Core\Settings\AppSettings;
+use WordSphere\Core\Support\CustomFields\CustomFieldsManager;
 use WordSphere\Core\WordSphereDashboardServiceProvider;
 use WordSphere\Core\WordSphereServiceProvider;
 
@@ -187,11 +189,11 @@ class TestCase extends Orchestra
             QueueServiceProvider::class,
             TranslationServiceProvider::class,
             ValidationServiceProvider::class,
+            WordSphereDashboardServiceProvider::class,
+            WordSphereServiceProvider::class,
             SpatieLaravelSettingsPluginServiceProvider::class,
             LaravelSettingsServiceProvider::class,
             CuratorServiceProvider::class,
-            WordSphereDashboardServiceProvider::class,
-            WordSphereServiceProvider::class,
         ];
     }
 }

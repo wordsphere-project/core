@@ -64,7 +64,7 @@ class FormCompiler
                     ->reactive()
                     ->rows(4),
 
-                RichEditor::make('content.content')
+                RichEditor::make('content')
                     ->label(__('content.content'))
                     ->columnSpan(2)
                     ->visible(true)

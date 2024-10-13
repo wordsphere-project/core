@@ -51,75 +51,7 @@ readonly class HomePageCustomFields
                                 ->maxLength(500)
                                 ->columnSpan(2),
 
-                            TextInput::make('action')
-                                ->label(__('Action'))
-                                ->maxLength(150)
-                                ->hint(__('The route path or route name')),
 
-                            Select::make('target')
-                                ->label(__('Target'))
-                                ->default('_self')
-                                ->options(
-                                    options: [
-                                        '_blank' => 'Blank',
-                                        '_self' => 'Self',
-                                        '_parent' => 'Parent',
-                                        '_top' => 'Top',
-                                    ]
-                                ),
-
-                            Repeater::make('slides')
-                                ->label(__('Slides'))
-                                ->columns(2)
-                                ->schema(
-                                    components: [
-                                        TextInput::make('title')
-                                            ->label(__('Title'))
-                                            ->maxLength(45),
-                                        TextInput::make('alt')
-                                            ->label(__('Alt'))
-                                            ->maxLength(45),
-                                        CuratorPicker::make('media_id')
-                                            ->label(__('Image'))
-                                            ->buttonLabel(__('Add Image'))
-                                            ->pathGenerator(DatePathGenerator::class)
-                                            ->size('sm')
-                                            ->listDisplay(true),
-                                    ]
-                                )
-                                ->columnSpan(2),
-                        ]
-                    )->columns(2),
-
-                Section::make(__('Who we are'))
-                    ->statePath('data.who')
-                    ->schema(
-                        components: [
-                            TextInput::make('title')
-                                ->label(__('Title'))
-                                ->columnSpan(2),
-
-                            RichEditor::make('content')
-                                ->label('About Us')
-                                ->maxLength(500)
-                                ->columnSpan(2),
-
-                            TextInput::make('action')
-                                ->label(__('Action'))
-                                ->maxLength(150)
-                                ->hint(__('The route path or route name')),
-
-                            Select::make('target')
-                                ->label(__('Target'))
-                                ->default('_self')
-                                ->options(
-                                    options: [
-                                        '_blank' => 'Blank',
-                                        '_self' => 'Self',
-                                        '_parent' => 'Parent',
-                                        '_top' => 'Top',
-                                    ]
-                                ),
                         ]
                     )->columns(2),
             ]
@@ -155,7 +87,6 @@ readonly class HomePageCustomFields
 
                             TextInput::make('action')
                                 ->label(__('Action'))
-                                ->required()
                                 ->default('')
                                 ->hint(__('The route path or route name')),
 

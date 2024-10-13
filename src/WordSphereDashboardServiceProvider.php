@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WordSphere\Core;
 
 use Awcodes\Curator\CuratorPlugin;
+use Awcodes\Curator\Resources\MediaResource;
 use Exception;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -106,6 +107,7 @@ class WordSphereDashboardServiceProvider extends PanelProvider
                     ->navigationSort(3)
                     ->navigationCountBadge()
                     ->registerNavigation(true)
+                    ->resource(MediaResource::class)
                     ->defaultListView('grid'),
             ]);
     }

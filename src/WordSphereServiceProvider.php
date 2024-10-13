@@ -12,36 +12,35 @@ use WordSphere\Core\Commands\MakeThemeCommand;
 use WordSphere\Core\Contracts\CustomFieldsManagerContract;
 use WordSphere\Core\Livewire\Pages\ManageTheme;
 
+use WordSphere\Core\Support\CustomFields\CustomFieldsManager;
 use function config;
 use function public_path;
 
 class WordSphereServiceProvider extends PackageServiceProvider
 {
-    public function boot(): void
-    {
-
-        $this->registerResources();
-        $this->publishAssets();
-        $this->setPermissionsConfig();
-        $this->setCuratorConfig();
-
-    }
-
-    /**
-     * @return void
-     */
     public function register(): void
     {
+        parent::register();
         $this->bindCustomFieldsManager();
     }
+
+    public function boot(): void
+    {
+        parent::boot();
+        //$this->setPermissionsConfig();
+        //$this->setCuratorConfig();
+        $this->registerResources();
+        $this->publishAssets();
+    }
+
+
 
     private function bindCustomFieldsManager(): void
     {
 
-
         $this->app->scoped(
             abstract: CustomFieldsManagerContract::class,
-            concrete: config('wordsphere.custom_fields.manager')
+            concrete: CustomFieldsManager::class,
         );
     }
 

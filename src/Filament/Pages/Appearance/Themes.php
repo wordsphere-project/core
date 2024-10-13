@@ -12,7 +12,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use WordSphere\Core\Settings\AppSettings;
-use WordSphere\Core\Support\Theme\ThemeManager;
+use WordSphere\Core\Support\Themes\ThemeManager;
 
 class Themes extends Page implements HasActions, HasForms
 {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WordSphere\Core\Commands;
 
 use Illuminate\Console\Command;
-use WordSphere\Core\Support\Theme\ThemeManager;
+use WordSphere\Core\Support\Themes\ThemeManager;
 
 class MakeThemeCommand extends Command
 {

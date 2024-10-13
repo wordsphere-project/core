@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace WordSphere\Core;
 
-use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
 use Awcodes\Curator\CuratorPlugin;
+use Awcodes\Curator\Resources\MediaResource;
 use Exception;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -38,7 +38,7 @@ class WordSphereDashboardServiceProvider extends PanelProvider
             ->id('wordsphere')
             ->font('switzer', 'https://fonts.cdnfonts.com/css/switzer')
             ->path('admin')
-            ->default(true)
+            ->default()
             ->login()
             ->authPasswordBroker('users')
             ->emailVerification()
@@ -99,19 +99,16 @@ class WordSphereDashboardServiceProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->plugins(
-                plugins: [
-                    FilamentSpatieRolesPermissionsPlugin::make(),
-                    CuratorPlugin::make()
-                        ->label('Media')
-                        ->pluralLabel('Media')
-                        ->navigationIcon('heroicon-o-photo')
-                        ->navigationGroup('Content')
-                        ->navigationSort(3)
-                        ->navigationCountBadge()
-                        ->registerNavigation(true)
-                        ->defaultListView('list'),
-                ]
-            );
+            ->plugins([
+                CuratorPlugin::make()
+                    ->label('Media')
+                    ->pluralLabel('Media')
+                    ->navigationIcon('heroicon-o-photo')
+                    ->navigationSort(3)
+                    ->navigationCountBadge()
+                    ->registerNavigation(true)
+                    ->resource(MediaResource::class)
+                    ->defaultListView('grid'),
+            ]);
     }
 }

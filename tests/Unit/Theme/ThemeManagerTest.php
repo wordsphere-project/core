@@ -2,24 +2,41 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\ThemeManager;
+namespace WordSphere\Tests\Unit\ThemeManager;
 
-use Tests\TestCase;
-use WordSphere\Core\Support\Theme\ThemeManager;
-
+use WordSphere\Core\Settings\AppSettings;
+use WordSphere\Core\Support\Themes\ThemeManager;
+use WordSphere\Tests\TestCase;
 
 beforeEach(function (): void {
     /* @var TestCase $this */
 
-    $this->themeManager = new ThemeManager;
+    AppSettings::fake(
+        values: [
+            'theme' => 'wordsphere/orbit-theme',
+        ],
+        loadMissingValues: true
+    );
+
+    $this->themeManager = app()->make(
+        abstract: ThemeManager::class
+    );
+
 });
 
 describe('theme manager', function () {
 
+    it('returns a list of templates', function () {
+        expect($this->themeManager->getCurrentThemeTemplates())
+            ->toBeArray()
+            ->toMatchArray([
+                'home' => 'home.blade.php',
+                'contact' => 'contact.blade.php',
+            ]);
+    });
 
     it('returns a list of themes', function () {
         /* @var TestCase $this */
-
 
         $themes = $this->themeManager->getThemes();
         expect($themes)->toBeArray();

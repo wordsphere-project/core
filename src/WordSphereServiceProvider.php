@@ -5,28 +5,44 @@ declare(strict_types=1);
 namespace WordSphere\Core;
 
 use Livewire\Livewire;
-use Livewire\LivewireServiceProvider;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use WordSphere\Core\Commands\InstallCommand;
 use WordSphere\Core\Commands\MakeThemeCommand;
+use WordSphere\Core\Contracts\CustomFieldsManagerContract;
 use WordSphere\Core\Livewire\Pages\ManageTheme;
 
+use WordSphere\Core\Support\CustomFields\CustomFieldsManager;
 use function config;
 use function public_path;
 
 class WordSphereServiceProvider extends PackageServiceProvider
 {
-    public function boot(): void
+    public function register(): void
     {
-
-        $this->registerResources();
-        $this->publishAssets();
-        $this->setPermissionsConfig();
-        $this->setCuratorConfig();
-
+        parent::register();
+        $this->bindCustomFieldsManager();
     }
 
+    public function boot(): void
+    {
+        parent::boot();
+        $this->setPermissionsConfig();
+        $this->setCuratorConfig();
+        $this->registerResources();
+        $this->publishAssets();
+    }
+
+
+
+    private function bindCustomFieldsManager(): void
+    {
+
+        $this->app->scoped(
+            abstract: CustomFieldsManagerContract::class,
+            concrete: CustomFieldsManager::class,
+        );
+    }
 
     private function setCuratorConfig(): void
     {

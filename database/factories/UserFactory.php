@@ -10,10 +10,19 @@ use Illuminate\Support\Str;
 use WordSphere\Core\Models\User;
 
 /**
- * @extends Factory<User>
+ * @template TModel of User
+ *
+ * @extends Factory<TModel>
  */
 class UserFactory extends Factory
 {
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var class-string<TModel>
+     */
+    protected $model = User::class;
+
     /**
      * The current password being used by the factory.
      */
@@ -21,7 +30,6 @@ class UserFactory extends Factory
 
     /**
      * Define the model's default state.
-     *
      */
     public function definition(): array
     {

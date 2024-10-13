@@ -27,8 +27,8 @@ class WordSphereServiceProvider extends PackageServiceProvider
     public function boot(): void
     {
         parent::boot();
-        //$this->setPermissionsConfig();
-        //$this->setCuratorConfig();
+        $this->setPermissionsConfig();
+        $this->setCuratorConfig();
         $this->registerResources();
         $this->publishAssets();
     }

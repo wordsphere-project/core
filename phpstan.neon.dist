@@ -7,6 +7,12 @@ parameters:
         - src
         - config
         - database
+    excludePaths:
+        - tests/**/*
+    ignoreErrors:
+            -
+                message: '#Undefined variable: \$foo.*#'
+                path: tests/*
     tmpDir: build/phpstan
     checkOctaneCompatibility: true
     checkModelProperties: true

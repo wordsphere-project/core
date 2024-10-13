@@ -63,6 +63,7 @@
         "psr-4": {
             "Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Themes\\": "workbench/themes",
             "Workbench\\Database\\Factories\\": "workbench/database/factories/",
             "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
         }

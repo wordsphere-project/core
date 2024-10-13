@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WordSphere\Tests\Unit\ThemeManager;
 
 use WordSphere\Core\Settings\AppSettings;
-use WordSphere\Core\Support\Theme\ThemeManager;
+use WordSphere\Core\Support\Themes\ThemeManager;
 use WordSphere\Tests\TestCase;
 
 beforeEach(function (): void {

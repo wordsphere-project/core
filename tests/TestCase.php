@@ -48,6 +48,7 @@ use Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository;
 use Spatie\Permission\Models\Role;
 use WordSphere\Core\Enums\SystemRole;
 use WordSphere\Core\Models\User;
+use WordSphere\Core\Settings\AppSettings;
 use WordSphere\Core\WordSphereDashboardServiceProvider;
 use WordSphere\Core\WordSphereServiceProvider;
 
@@ -60,6 +61,8 @@ class TestCase extends Orchestra
     use LazilyRefreshDatabase;
     use WithWorkbench;
 
+    protected User $superAdmin;
+
     protected function setUp(): void
     {
 
@@ -68,18 +71,34 @@ class TestCase extends Orchestra
             fn (string $modelName) => 'WordSphere\\Core\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
 
-        /** @var User $user */
-        $user = User::factory()->create();
+        $this->setTheme();
+        $this->createSuperAdminUSer();
+        $this->actingAs(
+            user: $this->superAdmin
+        );
+
+    }
+
+    private function createSuperAdminUSer(): void
+    {
+
+        $this->superAdmin = User::factory()->create();
         $superAdmin = Role::findByName(
             name: SystemRole::SUPER_ADMIN->value
         );
-        $user->assignRole(
+        $this->superAdmin->assignRole(
             roles: $superAdmin
         );
-        $this->actingAs(
-            user: $user
-        );
+    }
 
+    private function setTheme(): void
+    {
+        AppSettings::fake(
+            values: [
+                'theme' => 'wordsphere/orbit-theme',
+            ],
+            loadMissingValues: true
+        );
     }
 
     final public static function applicationBasePath(): string

@@ -8,8 +8,8 @@ use WordSphere\Core\WordSphereServiceProvider;
 use Workbench\App\Providers\WorkbenchServiceProvider;
 
 return [
-    WorkbenchServiceProvider::class,
     WordSphereServiceProvider::class,
     WordSphereDashboardServiceProvider::class,
+    WorkbenchServiceProvider::class,
     LivewireServiceProvider::class,
 ];

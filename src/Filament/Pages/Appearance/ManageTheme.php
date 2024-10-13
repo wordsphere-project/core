@@ -11,7 +11,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
-use WordSphere\Core\Support\Theme\ThemeManager;
+use WordSphere\Core\Support\Themes\ThemeManager;
 
 /**
  * @property Form $form

@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 // config for VendorName/Skeleton
+use WordSphere\Core\Support\CustomFields\CustomFieldsManager;
+
 return [
 
     'themes' => [
@@ -11,6 +13,9 @@ return [
     'paths_to_scan_for_routeable_models' => [
         app_path(),
         wordsphere_path(),
+    ],
+    'custom_fields' => [
+        'manager' => CustomFieldsManager::class,
     ],
 
     'auth' => [

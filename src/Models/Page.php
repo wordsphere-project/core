@@ -8,6 +8,16 @@ use WordSphere\Core\Database\Factories\PageFactory;
 use WordSphere\Core\Enums\ContentStatus;
 use WordSphere\Core\Enums\ContentVisibility;
 
+/**
+ * @property int $id
+ * @property string $title
+ * @property string $path
+ * @property string $content
+ * @property string $excerpt
+ * @property string $template
+ * @property string $data
+ * @property string $meta
+ */
 class Page extends Model
 {
     /** @use HasFactory<PageFactory> */
@@ -21,6 +31,8 @@ class Page extends Model
         return [
             'status' => ContentStatus::class,
             'visibility' => ContentVisibility::class,
+            'data' => 'json',
+            'meta' => 'json',
         ];
     }
 }

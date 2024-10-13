@@ -9,6 +9,7 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use WordSphere\Core\Commands\InstallCommand;
 use WordSphere\Core\Commands\MakeThemeCommand;
+use WordSphere\Core\Contracts\CustomFieldsManagerContract;
 use WordSphere\Core\Livewire\Pages\ManageTheme;
 
 use function config;
@@ -23,7 +24,16 @@ class WordSphereServiceProvider extends PackageServiceProvider
         $this->publishAssets();
         $this->setPermissionsConfig();
         $this->setCuratorConfig();
+        $this->bindCustomFieldsManager();
 
+    }
+
+    private function bindCustomFieldsManager(): void
+    {
+        $this->app->scoped(
+            abstract: CustomFieldsManagerContract::class,
+            concrete: config('wordsphere.custom_fields.manager')
+        );
     }
 
     private function setCuratorConfig(): void

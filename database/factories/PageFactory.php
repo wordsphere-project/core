@@ -4,9 +4,10 @@ namespace WordSphere\Core\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use WordSphere\Core\Enums\ContentStatus;
-use WordSphere\Core\Enums\ContentVisibility;
-use WordSphere\Core\Models\Page;
+use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleId;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Page;
+use WordSphere\Core\Legacy\Enums\ContentStatus;
+use WordSphere\Core\Legacy\Enums\ContentVisibility;
 
 use function now;
 

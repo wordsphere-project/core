@@ -6,8 +6,8 @@ use Filament\Forms\Components\Select;
 use Symfony\Component\HttpFoundation\Response;
 use WordSphere\Core\Filament\Resources\PageResource;
 use WordSphere\Core\Filament\Resources\PageResource\Pages\ListPages;
-use WordSphere\Core\Models\Page;
-use WordSphere\Core\Support\Themes\ThemeManager;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Page;
+use WordSphere\Core\Legacy\Support\Themes\ThemeManager;
 
 use function WordSphere\Tests\livewire;
 
@@ -17,7 +17,7 @@ describe('page admin', tests: function (): void {
 
     test('it shows the content field by default', function (): void {
         $component = livewire(
-            component: PageResource\Pages\CreatePage::class
+            component: \WordSphere\Core\Filament\Resources\PageResource\Pages\CreatePage::class
         );
 
         $component->assertFormFieldExists(
@@ -27,7 +27,7 @@ describe('page admin', tests: function (): void {
 
     test('it show the excerpt field if excerpt support is on', function (): void {
         $component = livewire(
-            component: PageResource\Pages\CreatePage::class
+            component: \WordSphere\Core\Filament\Resources\PageResource\Pages\CreatePage::class
         );
         $component->fillForm(
             state: [
@@ -44,13 +44,13 @@ describe('page admin', tests: function (): void {
 
     test('it does not show the excerpt field if excerpt support is off', function () {
 
-        $component = livewire(component: PageResource\Pages\CreatePage::class);
+        $component = livewire(component: \WordSphere\Core\Filament\Resources\PageResource\Pages\CreatePage::class);
         $component->assertFormFieldDoesNotExist('excerpt');
     })->skip();
 
     test('template selector has the templates as options', function (): void {
 
-        $component = livewire(component: PageResource\Pages\CreatePage::class);
+        $component = livewire(component: \WordSphere\Core\Filament\Resources\PageResource\Pages\CreatePage::class);
 
         $component->assertFormFieldExists('template', function (Select $input) {
             /** @var ThemeManager $themeManager */
@@ -67,7 +67,7 @@ describe('page admin', tests: function (): void {
 
         $newData = Page::factory()->make();
 
-        livewire(PageResource\Pages\CreatePage::class)
+        livewire(\WordSphere\Core\Filament\Resources\PageResource\Pages\CreatePage::class)
             ->fillForm(
                 state: [
                     'title' => $newData->title,

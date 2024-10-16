@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WordSphere\Tests;
 
 use Awcodes\Curator\CuratorServiceProvider;
-use Awcodes\Curator\Resources\MediaResource;
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use Filament\Actions\ActionsServiceProvider;
 use Filament\FilamentServiceProvider;
@@ -47,10 +46,9 @@ use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use Spatie\LaravelSettings\LaravelSettingsServiceProvider;
 use Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository;
 use Spatie\Permission\Models\Role;
-use WordSphere\Core\Enums\SystemRole;
+use WordSphere\Core\Legacy\Enums\SystemRole;
+use WordSphere\Core\Legacy\Settings\AppSettings;
 use WordSphere\Core\Models\User;
-use WordSphere\Core\Settings\AppSettings;
-use WordSphere\Core\Support\CustomFields\CustomFieldsManager;
 use WordSphere\Core\WordSphereDashboardServiceProvider;
 use WordSphere\Core\WordSphereServiceProvider;
 

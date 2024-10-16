@@ -13,7 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use WordSphere\Core\Filament\Resources\ArticleResource\Pages;
-use WordSphere\Core\Models\Article;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article;
 
 class ArticleResource extends Resource
 {

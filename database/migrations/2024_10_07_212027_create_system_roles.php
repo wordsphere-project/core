@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Spatie\Permission\Models\Role;
-use WordSphere\Core\Enums\SystemRole;
+use WordSphere\Core\Legacy\Enums\SystemRole;
 
 return new class extends Migration
 {

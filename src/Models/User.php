@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use WordSphere\Core\Database\Factories\UserFactory;
-use WordSphere\Core\Enums\SystemRole;
+use WordSphere\Core\Legacy\Enums\SystemRole;
 
 class User extends Authenticatable implements Auth\MustVerifyEmail, FilamentUser
 {

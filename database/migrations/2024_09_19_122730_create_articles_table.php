@@ -6,7 +6,6 @@ use Awcodes\Curator\Models\Media;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use WordSphere\Core\Enums\ContentStatus;
 
 return new class extends Migration
 {
@@ -16,19 +15,27 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('articles', function (Blueprint $table): void {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('title');
             $table->string('slug')
                 ->index()
                 ->unique();
+            $table->text('excerpt')
+                ->nullable();
             $table->text('content')
                 ->nullable();
+            $table->jsonb('data')
+                ->nullable();
+            $table->string('status')
+                ->index();
             $table->foreignIdFor(Media::class)
                 ->nullable()
                 ->constrained('media')
                 ->nullOnDelete();
-            $table->integer('status')
-                ->default(ContentStatus::DRAFT);
+            $table->timestamp('published_at')
+                ->nullable();
+            $table->timestamp('publish_at')
+                ->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

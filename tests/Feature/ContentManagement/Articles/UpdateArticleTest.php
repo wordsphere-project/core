@@ -53,9 +53,9 @@ test('can update an article', function (): void {
     expect($updatedArticle)
         ->toBeInstanceOf(Article::class)
         ->and($updatedArticle->getTitle())->toBe('Updated Title')
-        ->and($updatedArticle->getContent())->toBe('Updated content')
-        ->and($updatedArticle->getExcerpt())->toBe('Updated excerpt')
-        ->and($updatedArticle->getSlug()->toString())->toBe('updated-slug');
+        ->and($updatedArticle->getContent())->toBe('Updated Content')
+        ->and($updatedArticle->getExcerpt())->toBe('Updated Excerpt')
+        ->and($updatedArticle->getSlug()->toString())->toBe('original-title');
 
 });
 

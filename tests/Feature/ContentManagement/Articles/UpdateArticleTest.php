@@ -59,7 +59,7 @@ test('can update an article', function (): void {
 
 });
 
-test('updating article with existing slug appends number to slug', function(): void {
+test('updating article with existing slug appends number to slug', function (): void {
 
     ArticleEntityFactory::new()
         ->create(

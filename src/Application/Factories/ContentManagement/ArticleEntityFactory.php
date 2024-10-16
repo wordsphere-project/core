@@ -11,7 +11,6 @@ use WordSphere\Core\Domain\ContentManagement\Enums\ArticleStatus;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleId;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as ArticleModel;
 
 /**
  * @template TModel of Article
@@ -20,7 +19,6 @@ use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article 
  */
 final class ArticleEntityFactory extends Factory
 {
-
     /**
      * The name of the factory's corresponding model.
      *
@@ -29,7 +27,7 @@ final class ArticleEntityFactory extends Factory
     protected $model = Article::class;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function definition(): array
     {
@@ -60,10 +58,10 @@ final class ArticleEntityFactory extends Factory
         });
     }
 
-
     public function make($attributes = [], ?Model $parent = null)
     {
         $articleData = array_merge($this->definition(), $attributes);
+
         return new Article(
             id: $articleData['id'],
             title: $articleData['title'],
@@ -78,13 +76,12 @@ final class ArticleEntityFactory extends Factory
         );
     }
 
-
     public function create($attributes = [], ?Model $parent = null)
     {
         $article = $this->make($attributes, $parent);
         app(abstract: ArticleRepositoryInterface::class)
             ->save($article);
+
         return $article;
     }
-
 }

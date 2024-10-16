@@ -38,7 +38,7 @@ test('can update an article', function (): void {
 
     $command = new UpdateArticleCommand(
         id: ArticleId::fromString($this->testArticle->getId()->toString()),
-        title: 'Updated title',
+        title: 'Updated Title',
         content: 'Updated Content',
         excerpt: 'Updated Excerpt',
         slug: Slug::fromString('original-title')

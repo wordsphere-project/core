@@ -15,7 +15,6 @@ use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleId;
 use WordSphere\Core\Filament\Resources\ArticleResource;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ArticleAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article;
-use function dump;
 
 class EditArticle extends EditRecord
 {

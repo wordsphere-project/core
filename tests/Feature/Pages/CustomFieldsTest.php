@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use WordSphere\Core\Enums\ContentStatus;
 use WordSphere\Core\Filament\Resources\PageResource\Pages\CreatePage;
-use WordSphere\Core\Models\Page;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Page;
+use WordSphere\Core\Legacy\Enums\ContentStatus;
 
 use function WordSphere\Tests\livewire;
 

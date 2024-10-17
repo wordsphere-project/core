@@ -14,12 +14,12 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use WordSphere\Core\Enums\ContentStatus;
 use WordSphere\Core\Filament\Resources\PageResource\Form\FormCompiler;
 use WordSphere\Core\Filament\Resources\PageResource\Pages;
-use WordSphere\Core\Models\Page;
-use WordSphere\Core\Support\CustomFields\CustomFieldsManager;
-use WordSphere\Core\Support\Themes\ThemeManager;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Page;
+use WordSphere\Core\Legacy\Enums\ContentStatus;
+use WordSphere\Core\Legacy\Support\CustomFields\CustomFieldsManager;
+use WordSphere\Core\Legacy\Support\Themes\ThemeManager;
 
 use function __;
 use function now;

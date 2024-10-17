@@ -5,8 +5,8 @@ namespace WordSphere\Core\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use WordSphere\Core\Database\Factories\PageFactory;
-use WordSphere\Core\Enums\ContentStatus;
-use WordSphere\Core\Enums\ContentVisibility;
+use WordSphere\Core\Legacy\Enums\ContentStatus;
+use WordSphere\Core\Legacy\Enums\ContentVisibility;
 
 /**
  * @property int $id

@@ -65,6 +65,7 @@
         ],
         "psr-4": {
             "WordSphere\\Tests\\": "tests/",
+            "WordSphere\\Core\\Application\\Factories\\": "src/Application/Factories/",
             "Workbench\\App\\": "workbench/app/",
             "Workbench\\Database\\Factories\\": "workbench/database/factories/",
             "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"

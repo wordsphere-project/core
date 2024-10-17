@@ -11,10 +11,10 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use WordSphere\Core\Contracts\CustomFieldsManagerContract;
-use WordSphere\Core\Enums\ResourceTab;
 use WordSphere\Core\Filament\Resources\PageResource;
-use WordSphere\Core\Support\CustomFields\CustomFieldsScope;
+use WordSphere\Core\Legacy\Contracts\CustomFieldsManagerContract;
+use WordSphere\Core\Legacy\Enums\ResourceTab;
+use WordSphere\Core\Legacy\Support\CustomFields\CustomFieldsScope;
 
 use function __;
 use function app;
@@ -50,7 +50,6 @@ readonly class HomePageCustomFields
                                 ->label('About Us')
                                 ->maxLength(500)
                                 ->columnSpan(2),
-
 
                         ]
                     )->columns(2),

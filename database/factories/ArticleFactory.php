@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WordSphere\Core\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use WordSphere\Core\Models\Article;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article;
 
 /**
  * @extends Factory<Article>

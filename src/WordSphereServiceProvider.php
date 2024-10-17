@@ -7,6 +7,7 @@ namespace WordSphere\Core;
 use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use WordSphere\Core\Infrastructure\ServiceProviders\ContentManagementServiceProvider;
 use WordSphere\Core\Legacy\Commands\InstallCommand;
 use WordSphere\Core\Legacy\Commands\MakeThemeCommand;
 use WordSphere\Core\Legacy\Contracts\CustomFieldsManagerContract;
@@ -21,6 +22,7 @@ class WordSphereServiceProvider extends PackageServiceProvider
     public function register(): void
     {
         parent::register();
+        $this->registerProviders();
         $this->bindCustomFieldsManager();
     }
 
@@ -31,6 +33,13 @@ class WordSphereServiceProvider extends PackageServiceProvider
         $this->setCuratorConfig();
         $this->registerResources();
         $this->publishAssets();
+    }
+
+    private function registerProviders(): void
+    {
+        $this->app->register(
+            provider: ContentManagementServiceProvider::class
+        );
     }
 
     private function bindCustomFieldsManager(): void

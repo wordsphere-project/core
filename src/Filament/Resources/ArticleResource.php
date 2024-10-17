@@ -32,6 +32,8 @@ class ArticleResource extends Resource
                     Forms\Components\TextInput::make('slug')
                         ->columnSpan(2)
                         ->required(),
+                    Forms\Components\Textarea::make('excerpt')
+                        ->columnSpan(2),
                     Forms\Components\RichEditor::make('content')
                         ->columnSpan(2),
                     CuratorPicker::make('media_id'),

@@ -1,6 +1,7 @@
 <?php
 
 use WordSphere\Core\Application\ContentManagement\Commands\UpdateArticleCommand;
+use WordSphere\Core\Application\ContentManagement\Exceptions\ArticleNotFoundException;
 use WordSphere\Core\Application\ContentManagement\Services\UpdateArticleService;
 use WordSphere\Core\Application\Factories\ContentManagement\ArticleEntityFactory;
 use WordSphere\Core\Domain\ContentManagement\Entities\Article;
@@ -87,5 +88,23 @@ test('updating article with existing slug appends number to slug', function (): 
         ->and($updatedArticle->getSlug()->toString())
         ->not
         ->toBe('updated-slug');
+
+});
+
+test('throws exception when updating non-existing article', function (): void {
+
+    $updateArticleService = $this->app->make(UpdateArticleService::class);
+
+    $command = new UpdateArticleCommand(
+      id: ArticleId::generate(),
+      title: 'Updated Title',
+      content: 'Updated Content',
+      excerpt: 'Updated Excerpt',
+      slug: Slug::fromString('updated-slug')
+    );
+
+    $this->expectException(ArticleNotFoundException::class);
+
+    $updateArticleService->execute($command);
 
 });

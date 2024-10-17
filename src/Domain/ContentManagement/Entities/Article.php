@@ -82,13 +82,13 @@ class Article
         $this->updatedAt = new DateTimeImmutable;
     }
 
-    public function updateContent(string $newContent): void
+    public function updateContent(?string $newContent): void
     {
         $this->content = $newContent;
         $this->updatedAt = new DateTimeImmutable;
     }
 
-    public function updateExcerpt(string $newExcerpt): void
+    public function updateExcerpt(?string $newExcerpt): void
     {
         $this->excerpt = $newExcerpt;
         $this->updatedAt = new DateTimeImmutable;
@@ -100,10 +100,16 @@ class Article
         $this->updatedAt = new DateTimeImmutable;
     }
 
-    public function updateData(array $data): void
+    public function updateData(?array $newData): void
     {
-        $this->data = array_merge($this->data, $data);
-        $this->updatedAt = new DateTimeImmutable;
+        if ($newData === null) {
+            // If null is passed, clear the existing data
+            $this->data = [];
+        } else {
+            // Merge the new data with existing data
+            $this->data = array_merge($this->data, $newData);
+        }
+        $this->updatedAt = new DateTimeImmutable();
 
     }
 
@@ -143,7 +149,7 @@ class Article
         return $this->slug;
     }
 
-    public function getContent(): string
+    public function getContent(): ?string
     {
         return $this->content;
     }
@@ -153,9 +159,19 @@ class Article
         return $this->excerpt;
     }
 
+    public function getData(): ?array
+    {
+        return $this->data;
+    }
+
     public function getStatus(): ArticleStatus
     {
         return $this->status;
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->updatedAt;
     }
 
     public function getUpdatedAt(): DateTimeImmutable
@@ -166,6 +182,25 @@ class Article
     public function getPublishedAt(): ?DateTimeImmutable
     {
         return $this->publishedAt;
+    }
+
+    /**
+     * @return array<string, string|array|null>
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId()->toString(),
+            'title' => $this->getTitle(),
+            'content' => $this->getContent(),
+            'excerpt' => $this->getExcerpt(),
+            'slug' => $this->getSlug()->toString(),
+            'status' => $this->getStatus()->toString(),
+            'data' => $this->getData(),
+            'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            'updated_at' => $this->getUpdatedAt()->format('Y-m-d H:i:s'),
+            'published_at' => $this->getPublishedAt()?->format('Y-m-d H:i:s'),
+        ];
     }
 
     public function pullDomainEvents(): array
@@ -180,9 +215,6 @@ class Article
     {
         if (empty($this->title)) {
             throw new InvalidArgumentException('Title cannot be empty');
-        }
-        if (empty($this->content)) {
-            throw new InvalidArgumentException('Content cannot be empty');
         }
         if ($this->updatedAt < $this->createdAt) {
             throw new InvalidArgumentException('Updated at cannot be earlier than created at');

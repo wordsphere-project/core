@@ -12,7 +12,7 @@ use function explode;
 use function Orchestra\Testbench\workbench_path;
 use function themes_path;
 
-class ThemeManager
+readonly class ThemeManager
 {
     public function __construct(
         private AppSettings $appSettings,

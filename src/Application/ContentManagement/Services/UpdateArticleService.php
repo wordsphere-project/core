@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WordSphere\Core\Application\ContentManagement\Services;
 
+use InvalidArgumentException;
 use WordSphere\Core\Application\ContentManagement\Commands\UpdateArticleCommand;
 use WordSphere\Core\Application\ContentManagement\Exceptions\ArticleNotFoundException;
 use WordSphere\Core\Domain\ContentManagement\Entities\Article;
@@ -24,39 +25,22 @@ readonly class UpdateArticleService
             throw new ArticleNotFoundException($command->id);
         }
 
-        $this->updateArticleFields($article, $command);
+        foreach ($command->getUpdatedFields() as $field) {
+            match ($field) {
+                'title' => $article->updateTitle($command->title),
+                'content' => $article->updateContent($command->content),
+                'excerpt' => $article->updateExcerpt($command->excerpt),
+                'slug' => $article->updateSlug($this->slugGenerator
+                    ->generateUniqueSlug(
+                        baseSlug: $command->slug,
+                        currentSlug: $article->getSlug()
+                    )),
+                'data' => $article->updateData($command->data),
+                default => throw new InvalidArgumentException("Unexpected field: $field")
+            };
+        }
 
         $this->articleRepository->save($article);
     }
 
-    private function updateArticleFields(Article $article, UpdateArticleCommand $command): void
-    {
-        if ($command->title !== null) {
-            $article->updateTitle($command->title);
-        }
-
-        if ($command->content !== null) {
-            $article->updateContent($command->content);
-        }
-
-        if ($command->excerpt !== null) {
-            $article->updateExcerpt($command->excerpt);
-        }
-
-        if ($command->slug !== null) {
-            $newSlug = $this->slugGenerator
-                ->generateUniqueSlug(
-                    baseSlug: $command->slug,
-                    currentSlug: $article->getSlug()
-                );
-            $article->updateSlug(
-                newSlug: $newSlug
-            );
-        }
-
-        if ($command->data !== null) {
-            $article->updateData($command->data);
-        }
-
-    }
 }

@@ -6,11 +6,11 @@ namespace WordSphere\Core\Application\Factories\ContentManagement;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
-use WordSphere\Core\Domain\ContentManagement\Entities\Article;
 use WordSphere\Core\Domain\ContentManagement\Enums\ArticleStatus;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleId;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article;
 
 /**
  * @template TModel of Article

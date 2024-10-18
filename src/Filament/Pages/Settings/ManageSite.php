@@ -13,7 +13,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Str;
-use WordSphere\Core\Settings\AppSettings;
+use WordSphere\Core\Legacy\Settings\AppSettings;
 
 class ManageSite extends SettingsPage
 {

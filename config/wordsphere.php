@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 // config for VendorName/Skeleton
-use WordSphere\Core\Support\CustomFields\CustomFieldsManager;
+use WordSphere\Core\Legacy\Support\CustomFields\CustomFieldsManager;
 
 return [
 

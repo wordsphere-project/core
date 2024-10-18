@@ -10,10 +10,10 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Get;
-use WordSphere\Core\Contracts\CustomFieldsManagerContract;
-use WordSphere\Core\Enums\ResourceTab;
 use WordSphere\Core\Filament\Resources\PageResource;
-use WordSphere\Core\Support\CustomFields\CustomFieldsScope;
+use WordSphere\Core\Legacy\Contracts\CustomFieldsManagerContract;
+use WordSphere\Core\Legacy\Enums\ResourceTab;
+use WordSphere\Core\Legacy\Support\CustomFields\CustomFieldsScope;
 
 use function __;
 

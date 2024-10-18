@@ -13,7 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use WordSphere\Core\Filament\Resources\ArticleResource\Pages;
-use WordSphere\Core\Models\Article;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article;
 
 class ArticleResource extends Resource
 {
@@ -32,6 +32,8 @@ class ArticleResource extends Resource
                     Forms\Components\TextInput::make('slug')
                         ->columnSpan(2)
                         ->required(),
+                    Forms\Components\Textarea::make('excerpt')
+                        ->columnSpan(2),
                     Forms\Components\RichEditor::make('content')
                         ->columnSpan(2),
                     CuratorPicker::make('media_id'),

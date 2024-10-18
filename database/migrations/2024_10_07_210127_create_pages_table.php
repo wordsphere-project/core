@@ -6,8 +6,8 @@ use Awcodes\Curator\Models\Media;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use WordSphere\Core\Enums\ContentStatus;
-use WordSphere\Core\Enums\ContentVisibility;
+use WordSphere\Core\Legacy\Enums\ContentStatus;
+use WordSphere\Core\Legacy\Enums\ContentVisibility;
 
 return new class extends Migration
 {

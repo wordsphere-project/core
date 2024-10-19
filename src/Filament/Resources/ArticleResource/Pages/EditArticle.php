@@ -21,6 +21,7 @@ class EditArticle extends EditRecord
     protected static string $resource = ArticleResource::class;
 
     protected UpdateArticleService $updateArticleService;
+
     protected ArticleRepositoryInterface $articleRepository;
 
     public function boot(
@@ -41,7 +42,7 @@ class EditArticle extends EditRecord
     protected function handleRecordUpdate(Article|Model $record, array $data): Article
     {
 
-        if (!$record instanceof Article) {
+        if (! $record instanceof Article) {
             throw new Exception(__('Article not found.'));
         }
 

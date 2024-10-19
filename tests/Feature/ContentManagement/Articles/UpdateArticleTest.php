@@ -96,11 +96,11 @@ test('throws exception when updating non-existing article', function (): void {
     $updateArticleService = $this->app->make(UpdateArticleService::class);
 
     $command = new UpdateArticleCommand(
-      id: ArticleId::generate(),
-      title: 'Updated Title',
-      content: 'Updated Content',
-      excerpt: 'Updated Excerpt',
-      slug: Slug::fromString('updated-slug')
+        id: ArticleId::generate(),
+        title: 'Updated Title',
+        content: 'Updated Content',
+        excerpt: 'Updated Excerpt',
+        slug: Slug::fromString('updated-slug')
     );
 
     $this->expectException(ArticleNotFoundException::class);

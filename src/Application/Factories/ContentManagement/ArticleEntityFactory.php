@@ -29,7 +29,6 @@ final class ArticleEntityFactory extends Factory
      */
     protected $model = EloquentArticle::class;
 
-
     public function definition(): array
     {
 
@@ -60,9 +59,7 @@ final class ArticleEntityFactory extends Factory
     }
 
     /**
-     * @param array<string, mixed> $attributes
-     * @param Model|DomainArticle|null $parent
-     * @return Model|DomainArticle|EloquentArticle
+     * @param  array<string, mixed>  $attributes
      */
     public function make($attributes = [], null|Model|DomainArticle $parent = null): Model|DomainArticle|EloquentArticle
     {

@@ -13,11 +13,10 @@ use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article 
 
 class ArticleAdapter
 {
-
     public static function toEloquent(DomainArticle $domainArticle): EloquentArticle
     {
 
-        $eloquentArticle = new EloquentArticle();
+        $eloquentArticle = new EloquentArticle;
         $eloquentArticle->forceFill(attributes: $domainArticle->toArray());
 
         return $eloquentArticle;
@@ -39,6 +38,4 @@ class ArticleAdapter
             publishedAt: new DateTimeImmutable($eloquentArticle->published_at->toString()),
         );
     }
-
-
 }

@@ -8,11 +8,9 @@ use WordSphere\Core\Application\ContentManagement\Exceptions\ArticleNotFoundExce
 use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidArticleStatusException;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleId;
-use function log;
 
 readonly class PublishArticleService
 {
-
     public function __construct(
         private ArticleRepositoryInterface $articleRepository,
         private Dispatcher $dispatcher,
@@ -25,7 +23,7 @@ readonly class PublishArticleService
 
         $article = $this->articleRepository->findById($articleId);
 
-        if (!$article) {
+        if (! $article) {
             throw new ArticleNotFoundException($articleId);
         }
 
@@ -43,5 +41,4 @@ readonly class PublishArticleService
         }
 
     }
-
 }

@@ -8,7 +8,6 @@ use Illuminate\Contracts\Events\Dispatcher;
 use InvalidArgumentException;
 use WordSphere\Core\Application\ContentManagement\Commands\UpdateArticleCommand;
 use WordSphere\Core\Application\ContentManagement\Exceptions\ArticleNotFoundException;
-use WordSphere\Core\Domain\ContentManagement\Entities\Article;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\Services\SlugGeneratorService;
 
@@ -48,5 +47,4 @@ readonly class UpdateArticleService
             $this->dispatcher->dispatch($event);
         }
     }
-
 }

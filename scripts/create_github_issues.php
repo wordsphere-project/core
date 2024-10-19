@@ -2,29 +2,29 @@
 
 require 'vendor/autoload.php';
 
-use GuzzleHttp\Client;
 use Dotenv\Dotenv;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
 // Load environment variables from .env file
-$dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv = Dotenv::createImmutable(__DIR__.'/..');
 $dotenv->load();
 
-$jsonFile = __DIR__ . '/data/github_issues.json';
+$jsonFile = __DIR__.'/data/github_issues.json';
 $jsonContent = file_get_contents($jsonFile);
 $data = json_decode($jsonContent, true);
 
 $client = new Client([
     'base_uri' => 'https://api.github.com/graphql',
     'headers' => [
-        'Authorization' => 'bearer ' . $_ENV['GITHUB_TOKEN'],
+        'Authorization' => 'bearer '.$_ENV['GITHUB_TOKEN'],
         'Content-Type' => 'application/json',
     ],
 ]);
 
 $org = $_ENV['GITHUB_ORG'];
 $repo = $_ENV['GITHUB_REPO'];
-$projectNumber = (int)$_ENV['GITHUB_PROJECT_NUMBER'];
+$projectNumber = (int) $_ENV['GITHUB_PROJECT_NUMBER'];
 
 // First, get the project ID
 $query = <<<'GRAPHQL'
@@ -40,7 +40,6 @@ query($org: String!, $repo: String!, $projectNumber: Int!) {
 }
 GRAPHQL;
 
-
 try {
     $response = $client->post('', [
         'json' => [
@@ -54,15 +53,15 @@ try {
     ]);
     $result = json_decode($response->getBody(), true);
 
-    if(isset($result['errors'])) {
-        throw new Exception("GraphQL Error: " . json_encode($result['errors']));
+    if (isset($result['errors'])) {
+        throw new Exception('GraphQL Error: '.json_encode($result['errors']));
     }
     $repoId = $result['data']['organization']['repository']['id'];
     $projectId = $result['data']['organization']['projectV2']['id'];
 } catch (GuzzleException $e) {
-    die("Error fetching project: " . $e->getMessage() . "\n");
+    exit('Error fetching project: '.$e->getMessage()."\n");
 } catch (Exception $e) {
-    die($e->getMessage() . "\n");
+    exit($e->getMessage()."\n");
 }
 
 foreach ($data['issues'] as $issue) {
@@ -92,7 +91,7 @@ GRAPHQL;
         $result = json_decode($response->getBody(), true);
 
         if (isset($result['errors'])) {
-            throw new Exception("GraphQL Error: " . json_encode($result['errors']));
+            throw new Exception('GraphQL Error: '.json_encode($result['errors']));
         }
 
         $issueId = $result['data']['createIssue']['issue']['id'];
@@ -121,14 +120,14 @@ GRAPHQL;
         $result = json_decode($response->getBody(), true);
 
         if (isset($result['errors'])) {
-            throw new Exception("GraphQL Error: " . json_encode($result['errors']));
+            throw new Exception('GraphQL Error: '.json_encode($result['errors']));
         }
 
         echo "Created issue: {$issue['title']} and added to project.\n";
     } catch (GuzzleException $e) {
-        echo "Error creating issue {$issue['title']}: " . $e->getMessage() . "\n";
+        echo "Error creating issue {$issue['title']}: ".$e->getMessage()."\n";
     } catch (Exception $e) {
-        echo "Error for issue {$issue['title']}: " . $e->getMessage() . "\n";
+        echo "Error for issue {$issue['title']}: ".$e->getMessage()."\n";
     }
 }
 

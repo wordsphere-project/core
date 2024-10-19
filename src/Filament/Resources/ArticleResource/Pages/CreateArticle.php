@@ -12,12 +12,12 @@ use WordSphere\Core\Filament\Resources\ArticleResource;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ArticleAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article;
 
-
 class CreateArticle extends CreateRecord
 {
     protected static string $resource = ArticleResource::class;
 
     protected CreateArticleService $createArticleService;
+
     protected ArticleRepositoryInterface $articleRepository;
 
     public function boot(

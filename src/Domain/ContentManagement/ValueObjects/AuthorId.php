@@ -6,4 +6,4 @@ namespace WordSphere\Core\Domain\ContentManagement\ValueObjects;
 
 use WordSphere\Core\Domain\Shared\ValueObjects\AbstractId;
 
-class PageId extends AbstractId {}
+class AuthorId extends AbstractId {}

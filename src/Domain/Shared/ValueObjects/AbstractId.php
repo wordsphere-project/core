@@ -5,23 +5,32 @@ namespace WordSphere\Core\Domain\Shared\ValueObjects;
 use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 
-/** @phpstan-consistent-constructor */
 abstract class AbstractId
 {
     protected string $value;
 
-    protected function __construct(string $value)
+    final protected function __construct(string $value)
     {
         $this->ensureValidUuid($value);
         $this->value = $value;
     }
 
-    public static function generate(): self
+    public static function generate(): static
     {
-        return new static(Uuid::uuid4()->toString());
+        return static::create(Uuid::uuid4()->toString());
     }
 
-    public static function fromString(string $value): self
+    public static function fromString(string $value): static
+    {
+        return static::create($value);
+    }
+
+    /**
+     * Named constructor to be overridden by child classes
+     * @param string $value
+     * @return static
+     */
+    protected static function create(string $value): static
     {
         return new static($value);
     }
@@ -41,5 +50,10 @@ abstract class AbstractId
         if (! Uuid::isValid($uuid)) {
             throw new InvalidArgumentException('Invalid UUID: '.$uuid);
         }
+    }
+
+    public function __toString(): string
+    {
+        return $this->value;
     }
 }

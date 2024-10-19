@@ -27,8 +27,6 @@ abstract class AbstractId
 
     /**
      * Named constructor to be overridden by child classes
-     * @param string $value
-     * @return static
      */
     protected static function create(string $value): static
     {

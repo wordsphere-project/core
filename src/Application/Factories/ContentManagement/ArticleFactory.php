@@ -20,7 +20,7 @@ use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article 
  *
  * @extends Factory<TModel>
  */
-final class ArticleEntityFactory extends Factory
+final class ArticleFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
@@ -48,7 +48,7 @@ final class ArticleEntityFactory extends Factory
         ];
     }
 
-    public function published(): ArticleEntityFactory
+    public function published(): ArticleFactory
     {
         return $this->state(function (array $attributes): array {
             return [

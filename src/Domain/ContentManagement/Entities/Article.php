@@ -7,6 +7,7 @@ namespace WordSphere\Core\Domain\ContentManagement\Entities;
 use DateTimeImmutable;
 use InvalidArgumentException;
 use WordSphere\Core\Domain\ContentManagement\Enums\ArticleStatus;
+use WordSphere\Core\Domain\ContentManagement\Events\ArticleCreated;
 use WordSphere\Core\Domain\ContentManagement\Events\ArticlePublished;
 use WordSphere\Core\Domain\ContentManagement\Events\ArticleUnpublished;
 use WordSphere\Core\Domain\ContentManagement\Events\ArticleUpdated;
@@ -45,7 +46,7 @@ class Article
 
         $now = new DateTimeImmutable;
 
-        return new self(
+        $article =  new self(
             id: ArticleId::generate(),
             title: $title,
             slug: $slug,
@@ -56,6 +57,9 @@ class Article
             createdAt: $now,
             updatedAt: $now,
         );
+
+        $article->domainEvents[] = new ArticleCreated($article->id);
+        return $article;
 
     }
 
@@ -115,8 +119,8 @@ class Article
 
     public function publish(): void
     {
-        if (! $this->status->isDraft()) {
-            throw new InvalidArticleStatusException('Cannot publish an article that is not in draft status.');
+        if ($this->status->isPublished()) {
+            throw new InvalidArticleStatusException(__('Article is already published'));
         }
         $this->status = ArticleStatus::PUBLISHED;
         $this->updatedAt = new DateTimeImmutable;
@@ -127,7 +131,7 @@ class Article
     public function unpublish(): void
     {
         if (! $this->status->isPublished()) {
-            throw new InvalidArticleStatusException('Cannot unpublish an article that is not published.');
+            throw new InvalidArticleStatusException(__('Cannot unpublish an article that is not published.'));
         }
         $this->status = ArticleStatus::DRAFT;
         $this->updatedAt = new \DateTimeImmutable;

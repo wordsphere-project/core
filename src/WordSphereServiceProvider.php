@@ -8,6 +8,7 @@ use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use WordSphere\Core\Infrastructure\ServiceProviders\ContentManagementServiceProvider;
+use WordSphere\Core\Infrastructure\ServiceProviders\EventServiceProvider;
 use WordSphere\Core\Legacy\Commands\InstallCommand;
 use WordSphere\Core\Legacy\Commands\MakeThemeCommand;
 use WordSphere\Core\Legacy\Contracts\CustomFieldsManagerContract;
@@ -39,6 +40,10 @@ class WordSphereServiceProvider extends PackageServiceProvider
     {
         $this->app->register(
             provider: ContentManagementServiceProvider::class
+        );
+
+        $this->app->register(
+            provider: EventServiceProvider::class
         );
     }
 

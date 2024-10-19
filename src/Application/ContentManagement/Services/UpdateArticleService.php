@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WordSphere\Core\Application\ContentManagement\Services;
 
+use Illuminate\Contracts\Events\Dispatcher;
 use InvalidArgumentException;
 use WordSphere\Core\Application\ContentManagement\Commands\UpdateArticleCommand;
 use WordSphere\Core\Application\ContentManagement\Exceptions\ArticleNotFoundException;
@@ -15,7 +16,8 @@ readonly class UpdateArticleService
 {
     public function __construct(
         private ArticleRepositoryInterface $articleRepository,
-        private SlugGeneratorService $slugGenerator
+        private SlugGeneratorService $slugGenerator,
+        private Dispatcher $dispatcher
     ) {}
 
     public function execute(UpdateArticleCommand $command): void
@@ -41,6 +43,10 @@ readonly class UpdateArticleService
         }
 
         $this->articleRepository->save($article);
+
+        foreach ($article->pullDomainEvents() as $event) {
+            $this->dispatcher->dispatch($event);
+        }
     }
 
 }

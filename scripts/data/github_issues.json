@@ -1,0 +1,125 @@
+{
+    "project": "Article Enhancements",
+    "issues": [
+        {
+            "title": "Create abstract Id class",
+            "description": "Implement an abstract Id class in the `WordSphere\\Core\\Domain\\Shared\\ValueObjects` namespace. This class should encapsulate common functionality for ID value objects, including UUID generation, validation, and comparison methods."
+        },
+        {
+            "title": "Update ArticleId to extend abstract Id class",
+            "description": "Modify the existing ArticleId class to extend the new abstract Id class. Remove any duplicated methods that are now inherited from the abstract class. Ensure all Article-specific functionality is maintained."
+        },
+        {
+            "title": "Update AuthorId to extend abstract Id class",
+            "description": "Similar to ArticleId, update the AuthorId class to extend the abstract Id class. Remove duplicated methods and maintain any Author-specific functionality."
+        },
+        {
+            "title": "Update PageId to extend abstract Id class",
+            "description": "Update the PageId class to extend the abstract Id class. Remove duplicated methods and ensure any Page-specific functionality is preserved."
+        },
+        {
+            "title": "Create Author entity",
+            "description": "Implement an Author entity in the ContentManagement domain. Include properties for id (AuthorId), name, and email. Implement appropriate getter methods and any necessary domain logic."
+        },
+        {
+            "title": "Add featured image field to Article entity",
+            "description": "Update the Article entity to include a field for the featured image. This should be of type MediaId from the MediaManagement domain. Add appropriate getter and setter methods."
+        },
+        {
+            "title": "Add author field to Article entity",
+            "description": "Update the Article entity to include a field for the author. This should be of type Author. Add appropriate getter and setter methods."
+        },
+        {
+            "title": "Update Article constructor to include author and featured image",
+            "description": "Modify the Article entity constructor to accept optional parameters for author and featured image. Update any factory methods or named constructors accordingly."
+        },
+        {
+            "title": "Implement setAuthor method in Article entity",
+            "description": "Create a setAuthor method in the Article entity that accepts an Author object. Include appropriate validation to ensure the author is not null."
+        },
+        {
+            "title": "Implement setFeaturedImage method in Article entity",
+            "description": "Create a setFeaturedImage method in the Article entity that accepts a MediaId object. This method should allow setting or updating the featured image."
+        },
+        {
+            "title": "Implement removeFeaturedImage method in Article entity",
+            "description": "Create a removeFeaturedImage method in the Article entity that clears the featured image field. This allows for removing a previously set featured image."
+        },
+        {
+            "title": "Create unit tests for updated Id classes",
+            "description": "Implement Pest tests for the abstract Id class and the updated ArticleId, AuthorId, and PageId classes. Include tests for generation, comparison, and any specific functionality of each ID type."
+        },
+        {
+            "title": "Create unit tests for Author entity",
+            "description": "Implement Pest tests for the new Author entity. Include tests for creation, getter methods, and any domain-specific logic."
+        },
+        {
+            "title": "Update unit tests for Article entity with new fields",
+            "description": "Modify existing Article entity tests to include the new author and featured image fields. Add new tests for setting and getting these fields, as well as the new methods like setAuthor, setFeaturedImage, and removeFeaturedImage."
+        },
+        {
+            "title": "Implement ArticleRepository interface",
+            "description": "Create an interface for ArticleRepository in the domain layer. Include methods for finding articles by ID, author, saving articles, and any other necessary data access methods."
+        },
+        {
+            "title": "Implement AuthorRepository interface",
+            "description": "Create an interface for AuthorRepository in the domain layer. Include methods for finding authors by ID, name, saving authors, and any other necessary data access methods."
+        },
+        {
+            "title": "Create application service for adding author to article",
+            "description": "Implement an application service that handles the logic of assigning an author to an article. This should use the ArticleRepository and AuthorRepository."
+        },
+        {
+            "title": "Create application service for setting featured image on article",
+            "description": "Implement an application service that handles the logic of setting a featured image for an article. This should use the ArticleRepository and interact with the MediaManagement domain."
+        },
+        {
+            "title": "Update ArticleResource in Filament to include author field",
+            "description": "Modify the existing ArticleResource in Filament to include a field for selecting an author. This should integrate with the Author entity and repository."
+        },
+        {
+            "title": "Integrate awcodes/filament-curator for featured image in ArticleResource",
+            "description": "Update the ArticleResource in Filament to use the awcodes/filament-curator package for managing the featured image field. Ensure this integrates correctly with the Article entity and MediaManagement domain."
+        },
+        {
+            "title": "Create migration for adding author_id to articles table",
+            "description": "Create a new Laravel migration to add an author_id column to the articles table. This should be a foreign key referencing the authors table."
+        },
+        {
+            "title": "Create migration for adding featured_image_id to articles table",
+            "description": "Create a new Laravel migration to add a featured_image_id column to the articles table. This should reference the appropriate table in the MediaManagement domain."
+        },
+        {
+            "title": "Update Article Eloquent model with new relationships",
+            "description": "Modify the Article Eloquent model to include relationships for author and featured image. Ensure these align with the domain entities and use the correct foreign keys."
+        },
+        {
+            "title": "Create Author Eloquent model",
+            "description": "Implement an Eloquent model for Author that corresponds to the Author entity in the domain. Include appropriate relationships and any necessary Eloquent-specific logic."
+        },
+        {
+            "title": "Organize test directory structure",
+            "description": "Restructure the tests directory to reflect the DDD architecture. Create separate directories for Unit, Integration, and Feature tests, mirroring the structure of the src directory."
+        },
+        {
+            "title": "Update phpunit.xml for new test structure",
+            "description": "Modify the phpunit.xml file to accommodate the new test directory structure. Ensure all test suites are correctly defined and can be run independently."
+        },
+        {
+            "title": "Create integration tests for ArticleRepository",
+            "description": "Implement integration tests for the concrete implementation of ArticleRepository. These should test the repository's interaction with the database."
+        },
+        {
+            "title": "Create integration tests for AuthorRepository",
+            "description": "Implement integration tests for the concrete implementation of AuthorRepository. These should test the repository's interaction with the database."
+        },
+        {
+            "title": "Create feature tests for article creation with author and featured image",
+            "description": "Implement feature tests that cover the entire flow of creating an article with an author and featured image, from the HTTP request through to database persistence."
+        },
+        {
+            "title": "Update existing feature tests to accommodate new article fields",
+            "description": "Review and update all existing feature tests related to articles to ensure they work correctly with the new author and featured image fields."
+        }
+    ]
+}

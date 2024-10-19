@@ -6,20 +6,28 @@ namespace WordSphere\Core\Filament\Resources;
 
 use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Awcodes\Curator\Components\Tables\CuratorColumn;
+use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use WordSphere\Core\Application\ContentManagement\Commands\PublishArticleCommand;
+use WordSphere\Core\Application\ContentManagement\Services\PublishArticleService;
+use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidArticleStatusException;
 use WordSphere\Core\Filament\Resources\ArticleResource\Pages;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as EloquentArticle;
 
 class ArticleResource extends Resource
 {
-    protected static ?string $model = Article::class;
+    protected static ?string $model = EloquentArticle::class;
 
     protected static ?string $navigationGroup = 'CMS';
+
+
 
     public static function form(Form $form): Form
     {
@@ -53,6 +61,8 @@ class ArticleResource extends Resource
                         ->searchable(),
                     TextColumn::make('slug')
                         ->searchable(),
+                    TextColumn::make('status')
+                        ->badge()
                 ]
             )
             ->filters([
@@ -60,12 +70,33 @@ class ArticleResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('publish')
+                ->label(__('Publish'))
+                ->action(fn (PublishArticleService $publishArticleService, EloquentArticle $record) => static::publishArticle($record, $publishArticleService))
+                ->requiresConfirmation()
+                ->visible(fn (EloquentArticle $record): bool => $record->status !== 'published'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+
+    public static function publishArticle(EloquentArticle $record, PublishArticleService $publishArticleService): void
+    {
+        $command = new PublishArticleCommand($record->id);
+
+        try {
+            $publishArticleService->execute($command);
+        } catch (InvalidArticleStatusException $exception) {
+            Notification::make()
+                ->title(__('Unable to publish article.'))
+                ->body($exception->getMessage())
+                ->danger()
+                ->send();
+        }
     }
 
     public static function getRelations(): array

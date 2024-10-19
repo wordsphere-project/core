@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WordSphere\Core\Domain\ContentManagement\Events;
 
-class ArticleUnpublished extends ArticleEvent
+class ArticleCreated extends ArticleEvent
 {
+
 }

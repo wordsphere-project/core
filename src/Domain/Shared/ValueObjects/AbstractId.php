@@ -5,9 +5,9 @@ namespace WordSphere\Core\Domain\Shared\ValueObjects;
 use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 
+/** @phpstan-consistent-constructor */
 abstract class AbstractId
 {
-
     protected string $value;
 
     protected function __construct(string $value)
@@ -38,9 +38,8 @@ abstract class AbstractId
 
     public function ensureValidUuid(string $uuid): void
     {
-        if (!Uuid::isValid($uuid)) {
-            throw new InvalidArgumentException('Invalid UUID: ' . $uuid);
+        if (! Uuid::isValid($uuid)) {
+            throw new InvalidArgumentException('Invalid UUID: '.$uuid);
         }
     }
-
 }

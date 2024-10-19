@@ -10,12 +10,9 @@ use WordSphere\Core\Domain\ContentManagement\Events\ArticlePublished;
 
 class EventServiceProvider extends ServiceProvider
 {
-
     protected $listen = [
         ArticlePublished::class => [
             HandleArticlePublished::class,
-        ]
+        ],
     ];
-
-
 }

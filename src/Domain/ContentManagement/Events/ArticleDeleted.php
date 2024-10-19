@@ -2,7 +2,4 @@
 
 namespace WordSphere\Core\Domain\ContentManagement\Events;
 
-class ArticleDeleted extends ArticleEvent
-{
-
-}
+class ArticleDeleted extends ArticleEvent {}

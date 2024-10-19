@@ -8,7 +8,6 @@ use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleId;
 
 final class UpdateArticleCommand
 {
-
     private array $updatedFields = [];
 
     public function __construct(
@@ -23,7 +22,6 @@ final class UpdateArticleCommand
             return $key !== 'id' && $key !== 'updatedFields';
         }, ARRAY_FILTER_USE_BOTH));
     }
-
 
     public function getUpdatedFields(): array
     {

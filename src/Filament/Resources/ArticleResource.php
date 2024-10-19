@@ -6,13 +6,11 @@ namespace WordSphere\Core\Filament\Resources;
 
 use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Awcodes\Curator\Components\Tables\CuratorColumn;
-use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use WordSphere\Core\Application\ContentManagement\Commands\PublishArticleCommand;
@@ -26,8 +24,6 @@ class ArticleResource extends Resource
     protected static ?string $model = EloquentArticle::class;
 
     protected static ?string $navigationGroup = 'CMS';
-
-
 
     public static function form(Form $form): Form
     {
@@ -62,7 +58,7 @@ class ArticleResource extends Resource
                     TextColumn::make('slug')
                         ->searchable(),
                     TextColumn::make('status')
-                        ->badge()
+                        ->badge(),
                 ]
             )
             ->filters([
@@ -71,10 +67,10 @@ class ArticleResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('publish')
-                ->label(__('Publish'))
-                ->action(fn (PublishArticleService $publishArticleService, EloquentArticle $record) => static::publishArticle($record, $publishArticleService))
-                ->requiresConfirmation()
-                ->visible(fn (EloquentArticle $record): bool => $record->status !== 'published'),
+                    ->label(__('Publish'))
+                    ->action(fn (PublishArticleService $publishArticleService, EloquentArticle $record) => static::publishArticle($record, $publishArticleService))
+                    ->requiresConfirmation()
+                    ->visible(fn (EloquentArticle $record): bool => $record->status !== 'published'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -82,7 +78,6 @@ class ArticleResource extends Resource
                 ]),
             ]);
     }
-
 
     public static function publishArticle(EloquentArticle $record, PublishArticleService $publishArticleService): void
     {

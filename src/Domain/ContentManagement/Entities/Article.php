@@ -46,7 +46,7 @@ class Article
 
         $now = new DateTimeImmutable;
 
-        $article =  new self(
+        $article = new self(
             id: ArticleId::generate(),
             title: $title,
             slug: $slug,
@@ -59,6 +59,7 @@ class Article
         );
 
         $article->domainEvents[] = new ArticleCreated($article->id);
+
         return $article;
 
     }
@@ -113,7 +114,7 @@ class Article
             // Merge the new data with existing data
             $this->data = array_merge($this->data, $newData);
         }
-        $this->updatedAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable;
 
     }
 

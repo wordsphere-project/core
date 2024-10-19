@@ -3,7 +3,7 @@
 use WordSphere\Core\Application\ContentManagement\Commands\UpdateArticleCommand;
 use WordSphere\Core\Application\ContentManagement\Exceptions\ArticleNotFoundException;
 use WordSphere\Core\Application\ContentManagement\Services\UpdateArticleService;
-use WordSphere\Core\Application\Factories\ContentManagement\ArticleEntityFactory;
+use WordSphere\Core\Application\Factories\ContentManagement\ArticleFactory;
 use WordSphere\Core\Domain\ContentManagement\Entities\Article;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleId;
@@ -62,7 +62,7 @@ test('can update an article', function (): void {
 
 test('updating article with existing slug appends number to slug', function (): void {
 
-    ArticleEntityFactory::new()
+    ArticleFactory::new()
         ->create(
             attributes: [
                 'slug' => Slug::fromString('updated-slug'),
@@ -85,9 +85,8 @@ test('updating article with existing slug appends number to slug', function (): 
 
     expect($updatedArticle->getSlug()->toString())
         ->toStartWith('updated-slug-')
-        ->and($updatedArticle->getSlug()->toString())
-        ->not
-        ->toBe('updated-slug');
+        ->and($updatedArticle->getSlug()->toString())->not
+            ->toBe('updated-slug');
 
 });
 

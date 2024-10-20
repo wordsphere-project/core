@@ -19,31 +19,31 @@ class AdminUserSeeder extends Seeder
     {
 
         /* @var EloquentUser $francisco */
-        $francisco = EloquentUser::query()->createOrFirst([
-            'email' => 'francisco.barrento@bdynamic.pt',
+        $test1 = EloquentUser::query()->createOrFirst([
+            'email' => 'test@wordsphere.io',
         ], [
-            'password' => Hash::make('123456789'),
+            'password' => Hash::make('password'),
             'email_verified_at' => now(),
-            'name' => 'Francisco Barrento',
+            'name' => 'Bruce Wayne',
         ]);
 
         /* @var EloquentUser $joao */
-        $joao = EloquentUser::query()->createOrFirst([
-            'email' => 'joaopanoias@gmail.com',
+        $test2 = EloquentUser::query()->createOrFirst([
+            'email' => 'test+2@wordsphere.io',
         ], [
             'password' => Hash::make('123456789'),
             'email_verified_at' => now(),
-            'name' => 'João Panoias',
+            'name' => 'John Doe',
         ]);
 
         $superAdmin = Role::findByName(
             name: SystemRole::SUPER_ADMIN->value
         );
 
-        $francisco->assignRole([
+        $test1->assignRole([
             $superAdmin,
         ]);
-        $joao->assignRole([
+        $test2->assignRole([
             $superAdmin,
         ]);
 

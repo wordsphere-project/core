@@ -94,7 +94,7 @@
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage",
         "format": "vendor/bin/pint",
-        "serve": [
+        "dev": [
             "Composer\\Config::disableProcessTimeout",
             "@php vendor/bin/testbench migrate:fresh",
             "@php vendor/bin/testbench db:seed \"Workbench\\Database\\Seeders\\DatabaseSeeder\" ",

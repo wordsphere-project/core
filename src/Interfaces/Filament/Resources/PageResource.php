@@ -35,6 +35,8 @@ class PageResource extends Resource
 
     protected static ?string $navigationGroup = 'CMS';
 
+    protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
+
     protected CustomFieldsManager $customFieldsManager;
 
     public static function form(Form $form): Form

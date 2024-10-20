@@ -39,7 +39,7 @@ test('can update author and track changes', function (): void {
     $updatedBy = Uuid::generate();
     $author = AuthorFactory::new()
         ->makeForDomain([
-            'updated_by' => $updatedBy
+            'updated_by' => $updatedBy,
         ]);
 
     $author->updateName('John Doe');

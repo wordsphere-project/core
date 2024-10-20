@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use WordSphere\Core\Database\Factories\PageFactory;
-use WordSphere\Core\Infrastructure\Shared\Concerns\HasFeaturedImage;
+use WordSphere\Core\Infrastructure\Support\Concerns\HasFeaturedImage;
 use WordSphere\Core\Legacy\Enums\ContentStatus;
 use WordSphere\Core\Legacy\Enums\ContentVisibility;
 

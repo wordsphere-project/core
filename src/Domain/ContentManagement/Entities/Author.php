@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace WordSphere\Core\Domain\ContentManagement\Entities;
 
 use InvalidArgumentException;
+use WordSphere\Core\Domain\ContentManagement\DTOs\AuthorStateDTO;
+use WordSphere\Core\Domain\ContentManagement\Events\AuthorUpdated;
 use WordSphere\Core\Domain\Shared\Concerns\HasAuditTrail;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
+
+use function in_array;
 
 class Author
 {
@@ -26,6 +30,10 @@ class Author
 
     private array $socialLinks;
 
+    private array $domainEvents = [];
+
+    private array $changedFields = [];
+
     private const ALLOWED_SOCIAL_PLATFORMS = [
         'twitter',
         'linkedin',
@@ -33,6 +41,7 @@ class Author
         'instagram',
         'github',
         'pinkary',
+        'youtube',
     ];
 
     public function __construct(
@@ -103,6 +112,7 @@ class Author
         }
 
         $this->name = $name;
+        $this->changedFields['name'] = $name;
         $this->updateAuditTrail();
     }
 
@@ -114,12 +124,14 @@ class Author
         }
 
         $this->email = $email;
+        $this->changedFields['email'] = $email;
         $this->updateAuditTrail();
     }
 
     public function updateBio(?string $bio): void
     {
         $this->bio = $bio;
+        $this->changedFields['bio'] = $bio;
         $this->updateAuditTrail();
     }
 
@@ -129,12 +141,14 @@ class Author
             throw new InvalidArgumentException('Invalid website URL.');
         }
         $this->website = $website;
+        $this->changedFields['website'] = $website;
         $this->updateAuditTrail();
     }
 
     public function updatePhoto(?string $photo): void
     {
         $this->photo = $photo;
+        $this->changedFields['photo'] = $photo;
         $this->updateAuditTrail();
     }
 
@@ -145,6 +159,7 @@ class Author
         }
 
         $this->socialLinks = $socialLinks;
+        $this->changedFields['socialLinks'] = $socialLinks;
         $this->updateAuditTrail();
     }
 
@@ -152,12 +167,14 @@ class Author
     {
         $this->validateSocialPlatform($platform);
         $this->socialLinks[$platform] = $username;
+        $this->changedFields['socialLinks'][$platform] = $username;
         $this->updateAuditTrail();
     }
 
     public function removeSocialLink(string $platform): void
     {
         unset($this->socialLinks[$platform]);
+        $this->changedFields['socialLinks'][$platform] = null;
         $this->updateAuditTrail();
     }
 
@@ -170,11 +187,11 @@ class Author
             'bio' => $this->getBio(),
             'website' => $this->getWebsite(),
             'photo' => $this->getPhoto(),
-            'socialLinks' => $this->getSocialLinks(),
+            'social_links' => $this->getSocialLinks(),
             'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
             'updated_at' => $this->getUpdatedAt()->format('Y-m-d H:i:s'),
             'created_by' => $this->getCreatedBy()->toString(),
-            'last_updated_by' => $this->getUpdatedBy()->toString(),
+            'updated_by' => $this->getUpdatedBy()->toString(),
         ];
     }
 
@@ -183,5 +200,35 @@ class Author
         if (! in_array($platform, self::ALLOWED_SOCIAL_PLATFORMS)) {
             throw new InvalidArgumentException("Invalid social platform: $platform");
         }
+    }
+
+    public function finalizeUpdate(): void
+    {
+        if (! empty($this->changedFields)) {
+            $changesDTO = new AuthorStateDTO(
+                name: $this->changedFields['name'] ?? null,
+                email: $this->changedFields['email'] ?? null,
+                bio: $this->changedFields['bio'] ?? null,
+                website: $this->changedFields['website'] ?? null,
+                photo: $this->changedFields['photo'] ?? null,
+                socialLinks: $this->changedFields['socialLinks'] ?? null
+            );
+
+            $this->recordEvent(new AuthorUpdated($this->id, $changesDTO));
+            $this->changedFields = [];
+        }
+    }
+
+    private function recordEvent($event): void
+    {
+        $this->domainEvents[] = $event;
+    }
+
+    public function pullDomainEvents(): array
+    {
+        $events = $this->domainEvents;
+        $this->domainEvents = [];
+
+        return $events;
     }
 }

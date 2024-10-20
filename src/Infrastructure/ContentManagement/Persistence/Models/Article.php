@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use WordSphere\Core\Database\Factories\ArticleFactory;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
-use WordSphere\Core\Infrastructure\Shared\Concerns\HasFeaturedImage;
+use WordSphere\Core\Infrastructure\Support\Concerns\HasFeaturedImage;
 
 /**
  * @property string $id

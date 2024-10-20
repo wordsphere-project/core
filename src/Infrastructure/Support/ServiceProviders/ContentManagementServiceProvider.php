@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WordSphere\Core\Infrastructure\ServiceProviders;
+namespace WordSphere\Core\Infrastructure\Support\ServiceProviders;
 
 use Illuminate\Support\ServiceProvider;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;

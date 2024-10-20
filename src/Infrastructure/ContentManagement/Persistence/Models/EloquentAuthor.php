@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use WordSphere\Core\Application\Factories\ContentManagement\AuthorFactory;
-use WordSphere\Core\Infrastructure\Shared\Concerns\HasFeaturedImage;
+use WordSphere\Core\Infrastructure\Support\Concerns\HasFeaturedImage;
 
 /**
  * @property string $id

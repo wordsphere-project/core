@@ -50,7 +50,7 @@ test('can update an article', function (): void {
 
     $command = new UpdateArticleCommand(
         id: ArticleUuid::fromString($this->testArticle->getId()->toString()),
-        updater: UserUuid::fromString($user->uuid),
+        updatedBy: UserUuid::fromString($user->uuid),
         title: 'Updated Title',
         content: 'Updated Content',
         excerpt: 'Updated Excerpt',
@@ -89,7 +89,7 @@ test('updating article with existing slug appends number to slug', function (): 
     $updateArticleService = $this->app->make(UpdateArticleService::class);
     $command = new UpdateArticleCommand(
         id: ArticleUuid::fromString($this->testArticle->getId()->toString()),
-        updater: UserUuid::fromString($user->uuid),
+        updatedBy: UserUuid::fromString($user->uuid),
         title: 'Updated title',
         content: 'Updated Content',
         excerpt: 'Updated Excerpt',
@@ -116,7 +116,7 @@ test('throws exception when updating non-existing article', function (): void {
 
     $command = new UpdateArticleCommand(
         id: ArticleUuid::generate(),
-        updater: UserUuid::fromString($user->uuid),
+        updatedBy: UserUuid::fromString($user->uuid),
         title: 'Updated Title',
         content: 'Updated Content',
         excerpt: 'Updated Excerpt',

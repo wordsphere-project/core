@@ -43,7 +43,8 @@ class ArticleResource extends Resource
                         ->columnSpan(2),
                     Forms\Components\RichEditor::make('content')
                         ->columnSpan(2),
-                    CuratorPicker::make('media_id'),
+                    CuratorPicker::make('featured_image_id')
+                        ->label(__('Featured Image')),
                 ]
             );
     }
@@ -53,9 +54,9 @@ class ArticleResource extends Resource
         return $table
             ->columns(
                 components: [
-                    CuratorColumn::make('media_id')
+                    CuratorColumn::make('featured_image_id')
                         ->label('Feature Image')
-                        ->size(40),
+                        ->size(60),
                     TextColumn::make('title')
                         ->searchable(),
                     TextColumn::make('slug')

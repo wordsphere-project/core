@@ -27,7 +27,7 @@ readonly class CreateArticleService
         $article = Article::create(
             title: $command->title,
             slug: $slug,
-            creator: $command->creator,
+            creator: $command->createdBy,
             content: $command->content,
             excerpt: $command->excerpt,
             customFields: $command->customFields,

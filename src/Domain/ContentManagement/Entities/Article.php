@@ -15,7 +15,7 @@ use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidArticleStatusExce
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
-use WordSphere\Core\Domain\MediaManagement\ValueObjects\MediaId;
+use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\Concerns\HasAuditTrail;
 use WordSphere\Core\Domain\Shared\Concerns\HasFeaturedImage;
 
@@ -50,13 +50,13 @@ class Article
         ArticleUuid $id,
         string $title,
         Slug $slug,
-        UserUuid $creator,
-        UserUuid $updater,
+        UserUuid $createdBy,
+        UserUuid $updatedBy,
         ?Author $author = null,
         ?string $content = null,
         ?string $excerpt = null,
         ?array $customFields = [],
-        ?MediaId $featuredImage = null,
+        ?Id $featuredImage = null,
         ArticleStatus $status = ArticleStatus::DRAFT,
         ?DateTimeImmutable $publishedAt = null,
         ?DateTimeImmutable $createdAt = null,
@@ -71,13 +71,13 @@ class Article
         $this->customFields = $customFields ?? [];
         $this->status = $status;
         $this->publishedAt = $publishedAt ?? null;
-        $this->updateFeaturedImage($featuredImage);
+        $this->updateFeaturedImage($featuredImage, $updatedBy);
 
-        $this->createdBy = $creator;
-        $this->updatedBy = $updater;
+        $this->createdBy = $createdBy;
+        $this->updatedBy = $updatedBy;
 
         if (! $createdAt && ! $updatedAt) {
-            $this->initializeHasAuditTrail($creator);
+            $this->initializeHasAuditTrail($createdBy);
         } else {
             $this->createdAt = $createdAt;
             $this->updatedAt = $updatedAt;
@@ -94,14 +94,14 @@ class Article
         ?string $content = null,
         ?string $excerpt = null,
         ?array $customFields = [],
-        ?MediaId $featuredImage = null,
+        ?Id $featuredImage = null,
     ): self {
         return new self(
             id: ArticleUuid::generate(),
             title: $title,
             slug: $slug,
-            creator: $creator,
-            updater: $creator,
+            createdBy: $creator,
+            updatedBy: $creator,
             content: $content,
             excerpt: $excerpt,
             customFields: $customFields,
@@ -118,7 +118,7 @@ class Article
         ?string $slugString = null,
         ?array $customFields = [],
         ?Author $author = null,
-        ?MediaId $featuredImage = null,
+        ?Id $featuredImage = null,
     ): void {
         $this->title = $title;
         $this->content = $content;
@@ -254,12 +254,12 @@ class Article
             'status' => $this->getStatus()->value,
             'customFields' => $this->customFields,
             'author' => $this->getAuthor()?->toArray(),
-            'featuredImageId' => $this->getFeaturedImage()?->toString(),
-            'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
-            'updated_at' => $this->getUpdatedAt()->format('Y-m-d H:i:s'),
-            'published_at' => $this->getPublishedAt()?->format('Y-m-d H:i:s'),
-            'created_by' => $this->getCreatedBy()->toString(),
-            'updated_by' => $this->getUpdatedBy()->toString(),
+            'featuredImageId' => $this->getFeaturedImage()?->toInt(),
+            'createdAt' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            'createdBy' => $this->getCreatedBy()->toString(),
+            'updatedAt' => $this->getUpdatedAt()->format('Y-m-d H:i:s'),
+            'updatedBy' => $this->getUpdatedBy()->toString(),
+            'publishedAt' => $this->getPublishedAt()?->format('Y-m-d H:i:s'),
         ];
     }
 

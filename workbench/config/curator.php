@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentMedia;
+
 return [
     'accepted_file_types' => [
         'image/jpeg',
@@ -40,7 +42,7 @@ return [
     'is_tenant_aware' => true,
     'tenant_ownership_relationship_name' => 'tenant',
     'max_size' => 5000,
-    'model' => Awcodes\Curator\Models\Media::class,
+    'model' => EloquentMedia::class,
     'min_size' => 0,
     'path_generator' => null,
     'resources' => [

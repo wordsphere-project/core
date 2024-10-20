@@ -4,12 +4,12 @@ use WordSphere\Core\Application\Factories\ContentManagement\AuthorFactory;
 use WordSphere\Core\Domain\ContentManagement\Entities\Author;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\AuthorId;
 use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
-use WordSphere\Core\Domain\MediaManagement\ValueObjects\MediaId;
+use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
 
 test('can create an author with al properties', function (): void {
     $authorId = AuthorId::generate();
     $createdBy = UserUuid::generate();
-    $featuredImage = MediaId::generate();
+    $featuredImage = Id::fromInt(0);
     $author = new Author(
         id: $authorId,
         name: 'Francisco B.',

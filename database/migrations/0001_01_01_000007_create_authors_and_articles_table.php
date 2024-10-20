@@ -21,19 +21,21 @@ return new class extends Migration
             $table->text('bio')->nullable();
             $table->string('website')->nullable();
             $table->json('social_links')->nullable();
-            $table->uuid('featured_image_id')->nullable();
+            $table->unsignedInteger('featured_image_id')->nullable();
             $table->uuid('created_by');
             $table->uuid('updated_by');
             $table->timestamps();
 
             $table->foreign('featured_image_id')
-                ->references('uuid')
-                ->on(app(config('curator.model'))
+                ->references('id')
+                ->on(app(config('wordsphere.curator.model'))
                     ->getTable())
                 ->onDelete('set null');
+
             $table->foreign('created_by')
                 ->references('uuid')
                 ->on('users');
+
             $table->foreign('updated_by')
                 ->references('uuid')
                 ->on('users');
@@ -48,7 +50,7 @@ return new class extends Migration
             $table->json('custom_fields')->nullable();
             $table->string('status');
             $table->uuid('author_id')->nullable();
-            $table->uuid('featured_image_id')->nullable();
+            $table->unsignedInteger('featured_image_id')->nullable();
             $table->timestamps();
             $table->timestamp('published_at')->nullable();
             $table->uuid('created_by');
@@ -58,13 +60,16 @@ return new class extends Migration
                 ->references('id')
                 ->on('authors')
                 ->onDelete('set null');
+
             $table->foreign('featured_image_id')
-                ->references('uuid')
-                ->on(app(config('curator.model'))->getTable())
-                ->onDelete('set null');
+                ->references('id')
+                ->on(app(config('wordsphere.curator.model'))
+                    ->getTable());
+
             $table->foreign('created_by')
                 ->references('uuid')
                 ->on('users');
+
             $table->foreign('updated_by')
                 ->references('uuid')
                 ->on('users');

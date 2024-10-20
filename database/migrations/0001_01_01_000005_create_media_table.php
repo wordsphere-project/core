@@ -10,7 +10,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create(app(config('curator.model'))->getTable(), function (Blueprint $table): void {
+        Schema::create(app(config('wordsphere.curator.model'))->getTable(), function (Blueprint $table): void {
             $table->id();
             $table->uuid()->unique();
             $table->string('disk')->default('public');
@@ -35,6 +35,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(app(config('curator.model'))->getTable());
+        Schema::dropIfExists(app(config('wordsphere.curator.model'))->getTable());
     }
 };

@@ -7,7 +7,7 @@ namespace WordSphere\Core\Domain\ContentManagement\Entities;
 use InvalidArgumentException;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\AuthorId;
 use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
-use WordSphere\Core\Domain\MediaManagement\ValueObjects\MediaId;
+use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\Concerns\HasAuditTrail;
 use WordSphere\Core\Domain\Shared\Concerns\HasFeaturedImage;
 
@@ -44,7 +44,7 @@ class Author
         UserUuid $creator,
         ?string $bio = null,
         ?string $website = null,
-        ?MediaId $featuredImage = null,
+        ?Id $featuredImage = null,
         ?array $socialLinks = [],
     ) {
         $this->id = $id;
@@ -157,7 +157,7 @@ class Author
             'bio' => $this->getBio(),
             'website' => $this->getWebsite(),
             'socialLinks' => $this->getSocialLinks(),
-            'featuredImageId' => $this->getFeaturedImage()?->toString(),
+            'featuredImageId' => $this->getFeaturedImage()?->toInt(),
             'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
             'updated_at' => $this->getUpdatedAt()->format('Y-m-d H:i:s'),
             'created_by' => $this->getCreatedBy()->toString(),

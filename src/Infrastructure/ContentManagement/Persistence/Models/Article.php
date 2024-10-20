@@ -22,7 +22,7 @@ use WordSphere\Core\Infrastructure\Shared\Concerns\HasFeaturedImage;
  * @property string $content
  * @property string $excerpt
  * @property string $status
- * @property string $feature_image_id
+ * @property int $feature_image_id
  * @property array $custom_fields
  * @property string $created_by
  * @property string $updated_by

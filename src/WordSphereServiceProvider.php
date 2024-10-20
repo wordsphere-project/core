@@ -35,6 +35,7 @@ class WordSphereServiceProvider extends PackageServiceProvider
         $this->setCuratorConfig();
         $this->registerResources();
         $this->publishAssets();
+
     }
 
     private function registerProviders(): void

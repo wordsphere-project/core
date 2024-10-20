@@ -28,7 +28,7 @@ readonly class PublishArticleService
         }
 
         try {
-            $article->publish($command->publisher);
+            $article->publish($command->publishedBy);
         } catch (InvalidArticleStatusException $e) {
             info($e->getMessage());
             throw $e;

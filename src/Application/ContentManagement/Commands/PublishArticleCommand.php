@@ -10,6 +10,6 @@ readonly class PublishArticleCommand
 {
     public function __construct(
         public string $id,
-        public UserUuid $publisher
+        public UserUuid $publishedBy
     ) {}
 }

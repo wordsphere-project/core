@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 // config for VendorName/Skeleton
-use Awcodes\Curator\Models\Media;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentMedia;
 use WordSphere\Core\Legacy\Support\CustomFields\CustomFieldsManager;
 
 return [
@@ -151,7 +151,7 @@ return [
         'is_tenant_aware' => true,
         'tenant_ownership_relationship_name' => 'tenant',
         'max_size' => 5000,
-        'model' => Media::class,
+        'model' => EloquentMedia::class,
         'min_size' => 0,
         'path_generator' => null,
         'resources' => [

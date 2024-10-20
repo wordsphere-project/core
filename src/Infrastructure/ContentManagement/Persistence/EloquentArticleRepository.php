@@ -9,7 +9,7 @@ use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInter
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
-use WordSphere\Core\Domain\MediaManagement\ValueObjects\MediaId;
+use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as EloquentArticle;
 
 class EloquentArticleRepository implements ArticleRepositoryInterface
@@ -72,8 +72,8 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
             id: ArticleUuid::fromString($eloquentArticle->id),
             title: $eloquentArticle->title,
             slug: Slug::fromString($eloquentArticle->slug),
-            creator: UserUuid::fromString($eloquentArticle->created_by),
-            updater: UserUuid::fromString($eloquentArticle->updated_by),
+            createdBy: UserUuid::fromString($eloquentArticle->created_by),
+            updatedBy: UserUuid::fromString($eloquentArticle->updated_by),
             content: $eloquentArticle->content,
             excerpt: $eloquentArticle->excerpt,
             customFields: $eloquentArticle->custom_fields,
@@ -88,7 +88,7 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
 
         if ($eloquentArticle->feature_image_id) {
             $article->updateFeaturedImage(
-                featuredImageId: MediaId::fromString($eloquentArticle->feature_image_id),
+                featuredImageId: Id::fromInt($eloquentArticle->feature_image_id),
                 updater: UserUuid::fromString($eloquentArticle->updated_by)
             );
         }

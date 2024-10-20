@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 use WordSphere\Core\Database\Factories\MediaFactory;
-use WordSphere\Core\Infrastructure\Shared\Concerns\HasFeaturedImage;
 
 /**
  * @property int $id
@@ -36,7 +35,7 @@ class EloquentMedia extends CuratorMedia
     /** @use HasFactory<MediaFactory> */
     use HasFactory;
 
-    use HasFeaturedImage;
+    protected $table = 'media';
 
     protected static function boot(): void
     {

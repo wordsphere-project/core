@@ -26,7 +26,7 @@ test('can create a article', function (): void {
     $createdBy = UserUuid::generate();
 
     $command = new CreateArticleCommand(
-        creator: $createdBy,
+        createdBy: $createdBy,
         title: 'Test Article',
         content: 'Test Article',
         excerpt: 'Test Article',
@@ -59,7 +59,7 @@ test('creates unique slug when not provided', function (): void {
         ->create();
     $createdBy = UserUuid::fromString($user->uuid);
     $command = new CreateArticleCommand(
-        creator: $createdBy,
+        createdBy: $createdBy,
         title : 'Test Article',
         content: 'Content',
         excerpt: 'Excerpt'
@@ -78,7 +78,7 @@ test('creates unique slug when not provided', function (): void {
 
     //Arrange part II
     $command2 = new CreateArticleCommand(
-        creator: $createdBy,
+        createdBy: $createdBy,
         title: 'Test Article',
         content: 'Different Content',
         excerpt: 'Different Excerpt',
@@ -95,7 +95,7 @@ test('creates unique slug when not provided', function (): void {
 
     // Create third article with same title
     $command3 = new CreateArticleCommand(
-        creator: $createdBy,
+        createdBy: $createdBy,
         title: 'Test Article',
         content: 'Content 3',
         excerpt: 'Excerpt 3'
@@ -117,7 +117,7 @@ test('throws exception for empty title', function (): void {
         ->create();
     $cratedBy = UserUuid::fromString($user->uuid);
     $command = new CreateArticleCommand(
-        creator: $cratedBy,
+        createdBy: $cratedBy,
         title: '',
         content: 'Content',
         excerpt: 'Excerpt'

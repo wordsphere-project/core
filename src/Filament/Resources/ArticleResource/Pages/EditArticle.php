@@ -14,10 +14,13 @@ use WordSphere\Core\Application\ContentManagement\Services\UpdateArticleService;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
+use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
 use WordSphere\Core\Filament\Resources\ArticleResource;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ArticleAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as EloquentArticle;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+
+use function array_key_exists;
 
 class EditArticle extends EditRecord
 {
@@ -60,12 +63,13 @@ class EditArticle extends EditRecord
 
         $command = new UpdateArticleCommand(
             id: $articleUuid,
-            updater: $updaterId,
+            updatedBy: $updaterId,
             title: $data['title'] ?? null,
             content: array_key_exists('content', $data) ? $data['content'] : null,
             excerpt: array_key_exists('excerpt', $data) ? $data['excerpt'] : null,
             slug: array_key_exists('slug', $data) ? $data['slug'] : null,
-            customFields: array_key_exists('data', $data) ? $data['data'] : null
+            customFields: array_key_exists('data', $data) ? $data['data'] : null,
+            featuredImage: array_key_exists('featured_image_id', $data) ? ($data['featured_image_id'] ? Id::fromInt($data['featured_image_id']) : null) : null,
         );
 
         $this->updateArticleService->execute($command);

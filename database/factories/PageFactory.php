@@ -4,14 +4,14 @@ namespace WordSphere\Core\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Page;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentPage;
 use WordSphere\Core\Legacy\Enums\ContentStatus;
 use WordSphere\Core\Legacy\Enums\ContentVisibility;
 
 use function now;
 
 /**
- * @template TModel of Page
+ * @template TModel of EloquentPage
  *
  * @extends Factory<TModel>
  */
@@ -22,7 +22,7 @@ class PageFactory extends Factory
      *
      * @var class-string<TModel>
      */
-    protected $model = Page::class;
+    protected $model = EloquentPage::class;
 
     /**
      * Define the model's default state.

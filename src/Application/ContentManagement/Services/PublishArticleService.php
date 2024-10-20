@@ -7,7 +7,7 @@ use WordSphere\Core\Application\ContentManagement\Commands\PublishArticleCommand
 use WordSphere\Core\Application\ContentManagement\Exceptions\ArticleNotFoundException;
 use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidArticleStatusException;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
-use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleId;
+use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 
 readonly class PublishArticleService
 {
@@ -19,7 +19,7 @@ readonly class PublishArticleService
     public function execute(PublishArticleCommand $command): void
     {
 
-        $articleId = ArticleId::fromString($command->id);
+        $articleId = ArticleUuid::fromString($command->id);
 
         $article = $this->articleRepository->findById($articleId);
 
@@ -28,7 +28,7 @@ readonly class PublishArticleService
         }
 
         try {
-            $article->publish();
+            $article->publish($command->publisher);
         } catch (InvalidArticleStatusException $e) {
             info($e->getMessage());
             throw $e;

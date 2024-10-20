@@ -28,15 +28,18 @@ readonly class UpdateArticleService
 
         foreach ($command->getUpdatedFields() as $field) {
             match ($field) {
-                'title' => $article->updateTitle($command->title),
-                'content' => $article->updateContent($command->content),
-                'excerpt' => $article->updateExcerpt($command->excerpt),
-                'slug' => $article->updateSlug($this->slugGenerator
-                    ->generateUniqueSlug(
-                        baseSlug: $command->slug,
-                        currentSlug: $article->getSlug()
-                    )),
-                'data' => $article->updateData($command->data),
+                'title' => $article->updateTitle($command->title, $command->updater),
+                'content' => $article->updateContent($command->content, $command->updater),
+                'excerpt' => $article->updateExcerpt($command->excerpt, $command->updater),
+                'slug' => $article->updateSlug(
+                    $this->slugGenerator
+                        ->generateUniqueSlug(
+                            baseSlug: $command->slug,
+                            currentSlug: $article->getSlug()
+                        ),
+                    $command->updater
+                ),
+                'customFields' => $article->updateCustomFields($command->customFields, $command->updater),
                 default => throw new InvalidArgumentException("Unexpected field: $field")
             };
         }

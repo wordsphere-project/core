@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WordSphere\Core;
 
+use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -45,6 +46,10 @@ class WordSphereServiceProvider extends PackageServiceProvider
         $this->app->register(
             provider: EventServiceProvider::class
         );
+
+        if ($this->app->isLocal()) {
+            $this->app->register(IdeHelperServiceProvider::class);
+        }
     }
 
     private function bindCustomFieldsManager(): void

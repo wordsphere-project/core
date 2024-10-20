@@ -36,6 +36,7 @@
         "spatie/laravel-package-tools": "^1.16"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^3.2",
         "larastan/larastan": "^2.9",
         "laravel/pint": "^1.14",
         "laravel/tinker": "^2.9",
@@ -93,6 +94,7 @@
         "serve": [
             "Composer\\Config::disableProcessTimeout",
             "@php vendor/bin/testbench migrate:fresh",
+            "@php vendor/bin/testbench db:seed \"Workbench\\Database\\Seeders\\DatabaseSeeder\" ",
             "@build",
             "@php vendor/bin/testbench serve --ansi"
         ],
@@ -116,7 +118,10 @@
             ],
             "aliases": {
                 "WordSphere": "WordSphere"
-            }
+            },
+            "dont-discover": [
+                "barryvdh/laravel-ide-helper"
+            ]
         }
     },
     "minimum-stability": "dev",

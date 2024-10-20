@@ -46,9 +46,9 @@ use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use Spatie\LaravelSettings\LaravelSettingsServiceProvider;
 use Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository;
 use Spatie\Permission\Models\Role;
+use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 use WordSphere\Core\Legacy\Enums\SystemRole;
 use WordSphere\Core\Legacy\Settings\AppSettings;
-use WordSphere\Core\Models\User;
 use WordSphere\Core\WordSphereDashboardServiceProvider;
 use WordSphere\Core\WordSphereServiceProvider;
 
@@ -61,7 +61,7 @@ class TestCase extends Orchestra
     use LazilyRefreshDatabase;
     use WithWorkbench;
 
-    protected User $superAdmin;
+    protected EloquentUser $superAdmin;
 
     protected function setUp(): void
     {
@@ -82,7 +82,7 @@ class TestCase extends Orchestra
     private function createSuperAdminUSer(): void
     {
 
-        $this->superAdmin = User::factory()->create();
+        $this->superAdmin = EloquentUser::factory()->create();
         $superAdmin = Role::findByName(
             name: SystemRole::SUPER_ADMIN->value
         );

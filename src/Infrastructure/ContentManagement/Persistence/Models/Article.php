@@ -10,7 +10,10 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 use WordSphere\Core\Database\Factories\ArticleFactory;
+use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Shared\Concerns\HasFeaturedImage;
 
 /**
  * @property string $id
@@ -19,8 +22,11 @@ use WordSphere\Core\Database\Factories\ArticleFactory;
  * @property string $content
  * @property string $excerpt
  * @property string $status
- * @property int $media_id
- * @property array $data
+ * @property string $feature_image_id
+ * @property array $custom_fields
+ * @property string $created_by
+ * @property string $updated_by
+ * @property string $featured_image_id
  * @property Carbon|DateTimeImmutable $deleted_at
  * @property Carbon|DateTimeImmutable $created_at
  * @property Carbon|DateTimeImmutable $updated_at
@@ -28,18 +34,30 @@ use WordSphere\Core\Database\Factories\ArticleFactory;
  *
  * @method static ArticleFactory factory($count = null, $state = [])
  */
-final class Article extends Model
+class Article extends Model
 {
     /** @use HasFactory<ArticleFactory> */
     use HasFactory;
 
+    use HasFeaturedImage;
     use HasUuids;
 
+    protected $table = 'articles';
+
     protected $fillable = [
+        'id',
+        'uuid',
         'title',
         'slug',
         'content',
-        'media_id',
+        'excerpt',
+        'custom_fields',
+        'status',
+        'author_id',
+        'featured_image_id',
+        'published_at',
+        'created_by',
+        'updated_by',
     ];
 
     public function casts(): array
@@ -49,10 +67,26 @@ final class Article extends Model
         ];
     }
 
-    public function user(): BelongsTo
+    protected static function boot(): void
     {
-        return $this->belongsTo(
-            related: config('auth.providers.users.model')
-        );
+        parent::boot();
+        /*static::creating(function (EloquentArticle $article) {
+            $article->uuid = (string) Str::uuid();
+        });*/
+    }
+
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(EloquentUser::class, 'created_by', 'uuid');
+    }
+
+    public function updatedBy(): BelongsTo
+    {
+        return $this->belongsTo(EloquentUser::class, 'updated_by', 'uuid');
+    }
+
+    public function featuredImage(): BelongsTo
+    {
+        return $this->belongsTo(EloquentMedia::class, 'featured_image_id', 'uuid');
     }
 }

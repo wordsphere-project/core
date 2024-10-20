@@ -6,9 +6,11 @@ use WordSphere\Core\Application\ContentManagement\Services\UpdateArticleService;
 use WordSphere\Core\Application\Factories\ContentManagement\ArticleFactory;
 use WordSphere\Core\Domain\ContentManagement\Entities\Article;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
-use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleId;
+use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
+use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\EloquentArticleRepository;
+use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 
 beforeEach(function (): void {
 
@@ -21,9 +23,14 @@ beforeEach(function (): void {
         abstract: ArticleRepositoryInterface::class,
     );
 
+    /** @var EloquentUser $user */
+    $user = EloquentUser::factory()
+        ->create();
+
     $this->testArticle = Article::create(
         title: 'Original Title',
         slug: Slug::fromString('original-title'),
+        creator: UserUuid::fromString($user->uuid),
         content: 'Original Content',
         excerpt: 'Original Excerpt',
     );
@@ -37,8 +44,13 @@ test('can update an article', function (): void {
         abstract: UpdateArticleService::class
     );
 
+    /** @var EloquentUser $user */
+    $user = EloquentUser::factory()
+        ->create();
+
     $command = new UpdateArticleCommand(
-        id: ArticleId::fromString($this->testArticle->getId()->toString()),
+        id: ArticleUuid::fromString($this->testArticle->getId()->toString()),
+        updater: UserUuid::fromString($user->uuid),
         title: 'Updated Title',
         content: 'Updated Content',
         excerpt: 'Updated Excerpt',
@@ -69,10 +81,15 @@ test('updating article with existing slug appends number to slug', function (): 
             ]
         );
 
+    /** @var EloquentUser $user */
+    $user = EloquentUser::factory()
+        ->create();
+
     /** @var UpdateArticleService $updateArticleService */
     $updateArticleService = $this->app->make(UpdateArticleService::class);
     $command = new UpdateArticleCommand(
-        id: ArticleId::fromString($this->testArticle->getId()->toString()),
+        id: ArticleUuid::fromString($this->testArticle->getId()->toString()),
+        updater: UserUuid::fromString($user->uuid),
         title: 'Updated title',
         content: 'Updated Content',
         excerpt: 'Updated Excerpt',
@@ -86,16 +103,20 @@ test('updating article with existing slug appends number to slug', function (): 
     expect($updatedArticle->getSlug()->toString())
         ->toStartWith('updated-slug-')
         ->and($updatedArticle->getSlug()->toString())->not
-            ->toBe('updated-slug');
+        ->toBe('updated-slug');
 
 });
 
 test('throws exception when updating non-existing article', function (): void {
 
     $updateArticleService = $this->app->make(UpdateArticleService::class);
+    /** @var EloquentUser $user */
+    $user = EloquentUser::factory()
+        ->create();
 
     $command = new UpdateArticleCommand(
-        id: ArticleId::generate(),
+        id: ArticleUuid::generate(),
+        updater: UserUuid::fromString($user->uuid),
         title: 'Updated Title',
         content: 'Updated Content',
         excerpt: 'Updated Excerpt',

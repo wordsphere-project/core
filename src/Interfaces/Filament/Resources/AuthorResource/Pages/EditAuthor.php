@@ -48,7 +48,6 @@ class EditAuthor extends EditRecord
         $user = $this->auth->user();
 
         /** @var EloquentAuthor $record */
-
         $command = new UpdateAuthorCommand(
             id: Uuid::fromString($record->id),
             updatedBy: Uuid::fromString($user->uuid),

@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace WordSphere\Core\Domain\ContentManagement\Entities;
 
 use InvalidArgumentException;
-use WordSphere\Core\Domain\ContentManagement\ValueObjects\AuthorId;
 use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
 use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\Concerns\HasAuditTrail;
 use WordSphere\Core\Domain\Shared\Concerns\HasFeaturedImage;
+use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
 class Author
 {
     use HasAuditTrail;
     use HasFeaturedImage;
 
-    private AuthorId $id;
+    private Uuid $id;
 
     private string $name;
 
@@ -38,7 +38,7 @@ class Author
     ];
 
     public function __construct(
-        AuthorId $id,
+        Uuid $id,
         string $name,
         string $email,
         UserUuid $creator,
@@ -58,7 +58,7 @@ class Author
         $this->initializeHasAuditTrail($creator);
     }
 
-    public function getId(): AuthorId
+    public function getId(): Uuid
     {
         return $this->id;
     }

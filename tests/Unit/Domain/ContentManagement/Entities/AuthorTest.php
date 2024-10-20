@@ -5,9 +5,10 @@ use WordSphere\Core\Domain\ContentManagement\Entities\Author;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\AuthorId;
 use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
 use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
+use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
 test('can create an author with al properties', function (): void {
-    $authorId = AuthorId::generate();
+    $authorId = Uuid::generate();
     $createdBy = UserUuid::generate();
     $featuredImage = Id::fromInt(0);
     $author = new Author(
@@ -58,7 +59,7 @@ test('can update author and track changes', function (): void {
 
 test('can create an author without optional properties', function (): void {
     $author = new Author(
-        id: AuthorId::generate(),
+        id: Uuid::generate(),
         name: 'Francisco B.',
         email: 'francisco.b@example.com',
         creator: UserUuid::generate(),
@@ -73,7 +74,7 @@ test('can create an author without optional properties', function (): void {
 test('can update author bio', function (): void {
     $createdBy = UserUuid::generate();
     $author = new Author(
-        id: AuthorId::generate(),
+        id: Uuid::generate(),
         name: 'Francisco B.',
         email: 'francisco.b@example.com',
         creator: $createdBy,

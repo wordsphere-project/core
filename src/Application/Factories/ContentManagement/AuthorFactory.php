@@ -11,6 +11,7 @@ use WordSphere\Core\Domain\ContentManagement\Entities\Author as DomainAuthor;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\AuthorId;
 use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
+use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as EloquentArticle;
 
 use function array_key_exists;
@@ -32,7 +33,7 @@ final class AuthorFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => AuthorId::generate(),
+            'id' => Uuid::generate(),
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'creator' => UserUuid::generate(),

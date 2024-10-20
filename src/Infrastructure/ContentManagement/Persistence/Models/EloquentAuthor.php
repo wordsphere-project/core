@@ -43,4 +43,9 @@ class EloquentAuthor extends Model
             'social_links' => 'array',
         ];
     }
+
+    protected static function newFactory(): AuthorFactory
+    {
+        return AuthorFactory::new();
+    }
 }

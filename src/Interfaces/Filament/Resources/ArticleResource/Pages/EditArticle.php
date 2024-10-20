@@ -19,6 +19,7 @@ use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ArticleAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as EloquentArticle;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 use WordSphere\Core\Interfaces\Filament\Resources\ArticleResource;
+
 use function array_key_exists;
 
 class EditArticle extends EditRecord

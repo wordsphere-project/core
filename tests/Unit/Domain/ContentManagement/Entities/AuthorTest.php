@@ -12,9 +12,9 @@ test('can create an author with al properties', function (): void {
     $author = new DomainAuthor(
         id: $authorId,
         name: 'Francisco B.',
-        email: 'francisco.b@example.com',
         createdBy: $createdBy,
         updatedBy: $createdBy,
+        email: 'francisco.b@example.com',
         bio: 'A passionate laravel developer',
         website: 'https://pinkary.com',
         featuredImage: $featuredImage,
@@ -40,7 +40,7 @@ test('can create an author with al properties', function (): void {
 test('can update author and track changes', function (): void {
     $updatedBy = Uuid::generate();
     $author = AuthorFactory::new()
-        ->make();
+        ->makeForDomain();
 
     $author->updateName('John Doe', $updatedBy);
     $author->updateEmail('john.doe@example.com', $updatedBy);
@@ -60,9 +60,9 @@ test('can create an author without optional properties', function (): void {
     $author = new DomainAuthor(
         id: Uuid::generate(),
         name: 'Francisco B.',
-        email: 'francisco.b@example.com',
         createdBy: Uuid::generate(),
         updatedBy: Uuid::generate(),
+        email: 'francisco.b@example.com',
     );
 
     expect($author)->toBeInstanceOf(DomainAuthor::class)
@@ -76,9 +76,9 @@ test('can update author bio', function (): void {
     $author = new DomainAuthor(
         id: Uuid::generate(),
         name: 'Francisco B.',
-        email: 'francisco.b@example.com',
         createdBy: $createdBy,
         updatedBy: $createdBy,
+        email: 'francisco.b@example.com',
     );
 
     $author->updateBio('An experience journalist', $createdBy);
@@ -89,7 +89,7 @@ test('can update author bio', function (): void {
 
 test('can update social links', function (): void {
     $author = AuthorFactory::new()
-        ->make();
+        ->makeForDomain();
 
     $author->updateSocialLinks(
         ['twitter' => 'francisco.b', 'facebook' => 'francisco.b'],
@@ -105,7 +105,7 @@ test('can update social links', function (): void {
 
 test('can add a single social link', function (): void {
     $author = AuthorFactory::new()
-        ->make();
+        ->makeForDomain();
 
     $author->addSocialLink('twitter', 'francisco.b', $author->getCreatedBy());
     $author->addSocialLink('facebook', 'francisco.b', $author->getCreatedBy());
@@ -117,7 +117,7 @@ test('can add a single social link', function (): void {
 
 test('can remove a social link', function (): void {
     $author = AuthorFactory::new()
-        ->make();
+        ->makeForDomain();
 
     $author->addSocialLink('twitter', 'francisco.b', $author->getCreatedBy());
     $author->removeSocialLink('twitter', $author->getCreatedBy());

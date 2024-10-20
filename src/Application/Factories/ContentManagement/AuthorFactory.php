@@ -8,12 +8,14 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 use WordSphere\Core\Domain\ContentManagement\Entities\Author as DomainAuthor;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as EloquentArticle;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentAuthor;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentMedia;
+use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 
 use function array_key_exists;
 
 /**
- * @template TModel of EloquentArticle
+ * @template TModel of EloquentAuthor
  *
  * @extends Factory<TModel>
  */
@@ -24,16 +26,41 @@ final class AuthorFactory extends Factory
      *
      * @var class-string<TModel>
      */
-    protected $model = EloquentArticle::class;
+    protected $model = EloquentAuthor::class;
 
     public function definition(): array
     {
+        /** @var EloquentUser $creator */
+        $creator = EloquentUser::factory()
+            ->create();
+
         return [
             'id' => Uuid::generate(),
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
-            'created_by' => Uuid::generate(),
+            'featured_image_id' => null,
+            'created_by' => Uuid::fromString($creator->uuid),
+            'updated_by' => Uuid::fromString($creator->uuid),
         ];
+    }
+
+    public function configure(): AuthorFactory
+    {
+        return $this->afterMaking(function (EloquentAuthor $author): void {
+            /** @var EloquentMedia $media */
+            $media = MediaFactory::new()->create();
+            $author->featured_image_id = $media->id;
+            $author->save();
+        });
+    }
+
+    public function withoutFeaturedImage(): AuthorFactory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'featured_image_id' => null,
+            ];
+        });
     }
 
     public function withBio(): AuthorFactory
@@ -54,17 +81,19 @@ final class AuthorFactory extends Factory
         });
     }
 
-    public function withSocialLinks(): AuthorFactory
+    public function withSocialLinks(string $key = 'socialLinks'): AuthorFactory
     {
-        return $this->state(function (array $attributes): array {
+
+        return $this->state(function (array $attributes) use ($key): array {
             return [
-                'socialLinks' => [
-                    'facebook' => $this->faker->url(),
-                    'twitter' => $this->faker->url(),
-                    'instagram' => $this->faker->url(),
-                    'youtube' => $this->faker->url(),
-                    'github' => $this->faker->url(),
-                    'pinkary' => $this->faker->url(),
+                $key => [
+                    'facebook' => $this->faker->userName,
+                    'twitter' => $this->faker->userName,
+                    'instagram' => $this->faker->userName,
+                    'youtube' => $this->faker->userName,
+                    'github' => $this->faker->userName,
+                    'pinkary' => $this->faker->userName,
+                    'linkedin' => $this->faker->userName,
                 ],
             ];
         });
@@ -73,29 +102,19 @@ final class AuthorFactory extends Factory
     /**
      * @param  array<string, mixed>  $attributes
      */
-    public function make($attributes = [], null|Model|DomainAuthor $parent = null): Model|DomainAuthor
+    public function makeForDomain($attributes = [], null|Model|DomainAuthor $parent = null): Model|DomainAuthor
     {
-        $articleData = array_merge($this->definition(), $attributes);
+        $authorData = array_merge($this->definition(), $attributes);
 
         return new DomainAuthor(
-            id: $articleData['id'],
-            name: $articleData['name'],
-            email: $articleData['email'],
-            createdBy: $articleData['created_by'],
-            updatedBy: $articleData['created_by'],
-            bio: array_key_exists('bio', $articleData) ? $articleData['bio'] : null,
-            website: array_key_exists('bio', $articleData) ? $articleData['website'] : null,
-            socialLinks: array_key_exists('bio', $articleData) ? $articleData['socialLinks'] : [],
+            id: $authorData['id'],
+            name: $authorData['name'],
+            createdBy: $authorData['created_by'],
+            updatedBy: $authorData['created_by'],
+            email: $authorData['email'],
+            bio: array_key_exists('bio', $authorData) ? $authorData['bio'] : null,
+            website: array_key_exists('bio', $authorData) ? $authorData['website'] : null,
+            socialLinks: array_key_exists('bio', $authorData) ? $authorData['socialLinks'] : [],
         );
     }
-
-    /**
-    public function create($attributes = [], ?Model $parent = null): Model|Collection|EloquentArticle|DomainAuthor
-    {
-        $article = $this->make($attributes, $parent);
-        app(abstract: ArticleRepositoryInterface::class)
-            ->save($article);
-
-        return $article;
-    }*/
 }

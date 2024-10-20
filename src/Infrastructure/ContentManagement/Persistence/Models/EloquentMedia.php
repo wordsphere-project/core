@@ -9,7 +9,7 @@ use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
-use WordSphere\Core\Database\Factories\MediaFactory;
+use WordSphere\Core\Application\Factories\ContentManagement\MediaFactory;
 
 /**
  * @property int $id

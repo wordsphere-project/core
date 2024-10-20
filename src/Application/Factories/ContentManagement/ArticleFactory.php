@@ -64,7 +64,7 @@ final class ArticleFactory extends Factory
     /**
      * @param  array<string, mixed>  $attributes
      */
-    public function make($attributes = [], null|Model|DomainArticle $parent = null): Model|DomainArticle|EloquentArticle|null
+    public function makeForDomain($attributes = [], null|Model|DomainArticle $parent = null): Model|DomainArticle|EloquentArticle|null
     {
         $articleData = array_merge($this->definition(), $attributes);
 
@@ -86,7 +86,7 @@ final class ArticleFactory extends Factory
 
     public function create($attributes = [], ?Model $parent = null): Model|Collection|EloquentArticle|DomainArticle
     {
-        $article = $this->make($attributes, $parent);
+        $article = $this->makeForDomain($attributes, $parent);
         app(abstract: ArticleRepositoryInterface::class)
             ->save($article);
 

@@ -29,7 +29,7 @@ class AuthorAdapter
             email: $eloquentAuthor->email,
             bio: $eloquentAuthor->bio,
             website: $eloquentAuthor->website,
-            featuredImage: $eloquentAuthor->featured_image_id ? Id::fromInt($eloquentAuthor->featured_image_id): null,
+            featuredImage: $eloquentAuthor->featured_image_id ? Id::fromInt($eloquentAuthor->featured_image_id) : null,
             socialLinks: $eloquentAuthor->social_links
         );
     }

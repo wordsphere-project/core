@@ -2,9 +2,9 @@
 
 namespace WordSphere\Core\Interfaces\Filament\Resources\AuthorResource\Pages;
 
-use WordSphere\Core\Interfaces\Filament\Resources\AuthorResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use WordSphere\Core\Interfaces\Filament\Resources\AuthorResource;
 
 class ListAuthors extends ListRecords
 {

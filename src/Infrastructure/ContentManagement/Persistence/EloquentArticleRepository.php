@@ -46,10 +46,7 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
     public function save(DomainArticle $article): void
     {
         $eloquentArticle = EloquentArticle::query()
-            ->findOrNew(
-                $article->getId()->toString(),
-                ['uuid']
-            );
+            ->findOrNew($article->getId()->toString());
         $this->updateModelFromEntity($eloquentArticle, $article);
         $eloquentArticle->save();
     }

@@ -24,7 +24,6 @@ use Spatie\Permission\Models\Role;
 use WordSphere\Core\Database\Factories\UserFactory;
 use WordSphere\Core\Legacy\Enums\SystemRole;
 
-use function DI\string;
 
 /**
  * @property int $id

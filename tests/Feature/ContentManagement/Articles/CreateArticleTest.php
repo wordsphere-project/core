@@ -4,13 +4,13 @@ use WordSphere\Core\Application\ContentManagement\Commands\CreateArticleCommand;
 use WordSphere\Core\Application\ContentManagement\Services\CreateArticleService;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
+use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\EloquentArticleRepository;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 
 use function Pest\Laravel\assertDatabaseHas;
 
-beforeEach(function () {
+beforeEach(function (): void {
     $this->app->bind(
         abstract: ArticleRepositoryInterface::class,
         concrete: EloquentArticleRepository::class
@@ -23,7 +23,7 @@ test('can create a article', function (): void {
     /** @var CreateArticleService $createArticleService */
     $createArticleService = $this->app->make(CreateArticleService::class);
 
-    $createdBy = UserUuid::generate();
+    $createdBy = Uuid::generate();
 
     $command = new CreateArticleCommand(
         createdBy: $createdBy,
@@ -57,7 +57,7 @@ test('creates unique slug when not provided', function (): void {
     /** @var EloquentUser $user */
     $user = EloquentUser::factory()
         ->create();
-    $createdBy = UserUuid::fromString($user->uuid);
+    $createdBy = Uuid::fromString($user->uuid);
     $command = new CreateArticleCommand(
         createdBy: $createdBy,
         title : 'Test Article',
@@ -115,7 +115,7 @@ test('throws exception for empty title', function (): void {
     /** @var EloquentUser $user */
     $user = EloquentUser::factory()
         ->create();
-    $cratedBy = UserUuid::fromString($user->uuid);
+    $cratedBy = Uuid::fromString($user->uuid);
     $command = new CreateArticleCommand(
         createdBy: $cratedBy,
         title: '',

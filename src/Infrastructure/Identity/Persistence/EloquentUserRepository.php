@@ -6,13 +6,13 @@ namespace WordSphere\Core\Infrastructure\Identity\Persistence;
 
 use WordSphere\Core\Domain\Identity\Entities\User as DomainUser;
 use WordSphere\Core\Domain\Identity\Repositories\UserRepositoryInterface;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserId;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
+use WordSphere\Core\Domain\Shared\ValueObjects\Id;
+use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\Identity\Adapters\UserAdapter;
 
 class EloquentUserRepository implements UserRepositoryInterface
 {
-    public function findById(UserId $id): ?DomainUser
+    public function findById(Id $id): ?DomainUser
     {
         $eloquentUser = EloquentUser::query()->find($id->toInt());
 
@@ -20,7 +20,7 @@ class EloquentUserRepository implements UserRepositoryInterface
 
     }
 
-    public function findByUuid(UserUuid $uuid): ?DomainUser
+    public function findByUuid(Uuid $uuid): ?DomainUser
     {
         $eloquentUser = EloquentUser::query()
             ->where('uuid', $uuid->toString())

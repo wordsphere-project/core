@@ -14,10 +14,10 @@ use WordSphere\Core\Domain\ContentManagement\Events\ArticleUpdated;
 use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidArticleStatusException;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
 use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\Concerns\HasAuditTrail;
 use WordSphere\Core\Domain\Shared\Concerns\HasFeaturedImage;
+use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
 use function array_merge;
 
@@ -50,8 +50,8 @@ class Article
         ArticleUuid $id,
         string $title,
         Slug $slug,
-        UserUuid $createdBy,
-        UserUuid $updatedBy,
+        Uuid $createdBy,
+        Uuid $updatedBy,
         ?Author $author = null,
         ?string $content = null,
         ?string $excerpt = null,
@@ -90,7 +90,7 @@ class Article
     public static function create(
         string $title,
         Slug $slug,
-        UserUuid $creator,
+        Uuid $creator,
         ?string $content = null,
         ?string $excerpt = null,
         ?array $customFields = [],
@@ -111,7 +111,7 @@ class Article
     }
 
     public function update(
-        UserUuid $updater,
+        Uuid $updater,
         string $title,
         ?string $content = '',
         ?string $excerpt = '',
@@ -132,31 +132,31 @@ class Article
         $this->domainEvents[] = new ArticleUpdated($this->id);
     }
 
-    public function updateTitle(string $newTitle, UserUuid $updater): void
+    public function updateTitle(string $newTitle, Uuid $updater): void
     {
         $this->title = $newTitle;
         $this->updateAuditTrail($updater);
     }
 
-    public function updateContent(?string $newContent, UserUuid $updater): void
+    public function updateContent(?string $newContent, Uuid $updater): void
     {
         $this->content = $newContent;
         $this->updateAuditTrail($updater);
     }
 
-    public function updateExcerpt(?string $newExcerpt, UserUuid $updater): void
+    public function updateExcerpt(?string $newExcerpt, Uuid $updater): void
     {
         $this->excerpt = $newExcerpt;
         $this->updateAuditTrail($updater);
     }
 
-    public function updateSlug(Slug $newSlug, UserUuid $updater): void
+    public function updateSlug(Slug $newSlug, Uuid $updater): void
     {
         $this->slug = $newSlug;
         $this->updateAuditTrail($updater);
     }
 
-    public function updateCustomFields(?array $newCustomFields, UserUuid $updater): void
+    public function updateCustomFields(?array $newCustomFields, Uuid $updater): void
     {
         if ($newCustomFields === null) {
             $this->customFields = [];
@@ -168,14 +168,14 @@ class Article
 
     }
 
-    public function updateAuthor(?Author $newAuthor, UserUuid $updater): void
+    public function updateAuthor(?Author $newAuthor, Uuid $updater): void
     {
         $this->author = $newAuthor;
         $this->updateAuditTrail($updater);
         $this->domainEvents[] = new ArticleUpdated($this->id);
     }
 
-    public function publish(UserUuid $updater): void
+    public function publish(Uuid $updater): void
     {
         if ($this->status->isPublished()) {
             throw new InvalidArticleStatusException(__('Article is already published'));
@@ -185,7 +185,7 @@ class Article
         $this->domainEvents[] = new ArticlePublished($this->id);
     }
 
-    public function unpublish(UserUuid $updater): void
+    public function unpublish(Uuid $updater): void
     {
         if (! $this->status->isPublished()) {
             throw new InvalidArticleStatusException(__('Cannot unpublish an article that is not published.'));

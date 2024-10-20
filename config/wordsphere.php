@@ -3,7 +3,13 @@
 declare(strict_types=1);
 
 // config for VendorName/Skeleton
+use Awcodes\Curator\Curations\ThumbnailPreset;
+use Awcodes\Curator\Glide\DefaultServerFactory;
+use Awcodes\Curator\Resources\MediaResource;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentMedia;
+use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 use WordSphere\Core\Legacy\Support\CustomFields\CustomFieldsManager;
 
 return [
@@ -22,7 +28,7 @@ return [
     'auth' => [
         'providers' => [
             'user' => [
-                'model' => \WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser::class,
+                'model' => EloquentUser::class,
             ],
         ],
     ],
@@ -39,7 +45,7 @@ return [
              * `Spatie\Permission\Contracts\Permission` contract.
              */
 
-            'permission' => Spatie\Permission\Models\Permission::class,
+            'permission' => Permission::class,
 
             /*
              * When using the "HasRoles" trait from this package, we need to know which
@@ -50,7 +56,7 @@ return [
              * `Spatie\Permission\Contracts\Role` contract.
              */
 
-            'role' => Spatie\Permission\Models\Role::class,
+            'role' => Role::class,
 
         ],
         'table_names' => [
@@ -134,12 +140,12 @@ return [
             'avif',
         ],
         'curation_presets' => [
-            Awcodes\Curator\Curations\ThumbnailPreset::class,
+            ThumbnailPreset::class,
         ],
         'directory' => 'media',
         'disk' => env('FILAMENT_FILESYSTEM_DISK', 'public'),
         'glide' => [
-            'server' => Awcodes\Curator\Glide\DefaultServerFactory::class,
+            'server' => DefaultServerFactory::class,
             'fallbacks' => [],
             'route_path' => 'curator',
         ],
@@ -163,7 +169,7 @@ return [
             'navigation_icon' => 'heroicon-o-photo',
             'navigation_sort' => null,
             'navigation_count_badge' => false,
-            'resource' => Awcodes\Curator\Resources\MediaResource::class,
+            'resource' => MediaResource::class,
         ],
         'should_preserve_filenames' => false,
         'should_register_navigation' => true,

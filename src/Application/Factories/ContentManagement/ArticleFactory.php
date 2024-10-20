@@ -13,7 +13,7 @@ use WordSphere\Core\Domain\ContentManagement\Enums\ArticleStatus;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
+use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as EloquentArticle;
 
 /**
@@ -44,8 +44,8 @@ final class ArticleFactory extends Factory
             'status' => $this->faker->randomElement([ArticleStatus::DRAFT, ArticleStatus::PUBLISHED]),
             'createdAt' => DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year')),
             'updatedAt' => DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 month')),
-            'createdBy' => UserUuid::generate(),
-            'updatedBy' => UserUuid::generate(),
+            'createdBy' => Uuid::generate(),
+            'updatedBy' => Uuid::generate(),
             'publishedAt' => null,
             'customFields' => [],
         ];

@@ -2,20 +2,19 @@
 
 use WordSphere\Core\Application\Factories\ContentManagement\AuthorFactory;
 use WordSphere\Core\Domain\ContentManagement\Entities\Author;
-use WordSphere\Core\Domain\ContentManagement\ValueObjects\AuthorId;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
 use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
 test('can create an author with al properties', function (): void {
     $authorId = Uuid::generate();
-    $createdBy = UserUuid::generate();
+    $createdBy = Uuid::generate();
     $featuredImage = Id::fromInt(0);
     $author = new Author(
         id: $authorId,
         name: 'Francisco B.',
         email: 'francisco.b@example.com',
-        creator: $createdBy,
+        createdBy: $createdBy,
+        updatedBy: $createdBy,
         bio: 'A passionate laravel developer',
         website: 'https://pinkary.com',
         featuredImage: $featuredImage,
@@ -39,7 +38,7 @@ test('can create an author with al properties', function (): void {
 });
 
 test('can update author and track changes', function (): void {
-    $updatedBy = UserUuid::generate();
+    $updatedBy = Uuid::generate();
     $author = AuthorFactory::new()
         ->make();
 
@@ -62,7 +61,8 @@ test('can create an author without optional properties', function (): void {
         id: Uuid::generate(),
         name: 'Francisco B.',
         email: 'francisco.b@example.com',
-        creator: UserUuid::generate(),
+        createdBy: Uuid::generate(),
+        updatedBy: Uuid::generate(),
     );
 
     expect($author)->toBeInstanceOf(Author::class)
@@ -72,12 +72,13 @@ test('can create an author without optional properties', function (): void {
 });
 
 test('can update author bio', function (): void {
-    $createdBy = UserUuid::generate();
+    $createdBy = Uuid::generate();
     $author = new Author(
         id: Uuid::generate(),
         name: 'Francisco B.',
         email: 'francisco.b@example.com',
-        creator: $createdBy,
+        createdBy: $createdBy,
+        updatedBy: $createdBy,
     );
 
     $author->updateBio('An experience journalist', $createdBy);

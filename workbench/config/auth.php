@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Workbench\App\Models\User;
+
 return [
 
     /*
@@ -69,7 +71,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', \Workbench\App\Models\User::class),
+            'model' => env('AUTH_MODEL', User::class),
         ],
 
         // 'users' => [

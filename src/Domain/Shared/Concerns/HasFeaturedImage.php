@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace WordSphere\Core\Domain\Shared\Concerns;
 
-use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
 use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
+use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
 use function method_exists;
 
@@ -18,7 +18,7 @@ trait HasFeaturedImage
         return $this->featuredImageId;
     }
 
-    public function updateFeaturedImage(?Id $featuredImageId, ?UserUuid $updater = null): void
+    public function updateFeaturedImage(?Id $featuredImageId, ?Uuid $updater = null): void
     {
         $this->featuredImageId = $featuredImageId;
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WordSphere\Core\Domain\ContentManagement\Entities;
 
 use InvalidArgumentException;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
 use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\Concerns\HasAuditTrail;
 use WordSphere\Core\Domain\Shared\Concerns\HasFeaturedImage;
@@ -41,7 +40,8 @@ class Author
         Uuid $id,
         string $name,
         string $email,
-        UserUuid $creator,
+        Uuid $createdBy,
+        Uuid $updatedBy,
         ?string $bio = null,
         ?string $website = null,
         ?Id $featuredImage = null,
@@ -55,7 +55,11 @@ class Author
         $this->socialLinks = $socialLinks;
         $this->updateFeaturedImage($featuredImage);
         $this->socialLinks = $socialLinks;
-        $this->initializeHasAuditTrail($creator);
+
+        $this->createdBy = $createdBy;
+        $this->updatedBy = $updatedBy;
+
+        $this->initializeHasAuditTrail($createdBy);
     }
 
     public function getId(): Uuid
@@ -88,7 +92,7 @@ class Author
         return $this->socialLinks;
     }
 
-    public function updateName(string $name, UserUuid $updater): void
+    public function updateName(string $name, Uuid $updater): void
     {
 
         if (empty(trim($name))) {
@@ -99,7 +103,7 @@ class Author
         $this->updateAuditTrail($updater);
     }
 
-    public function updateEmail(string $email, UserUuid $updater): void
+    public function updateEmail(string $email, Uuid $updater): void
     {
 
         if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -110,13 +114,13 @@ class Author
         $this->updateAuditTrail($updater);
     }
 
-    public function updateBio(?string $bio, UserUuid $updater): void
+    public function updateBio(?string $bio, Uuid $updater): void
     {
         $this->bio = $bio;
         $this->updateAuditTrail($updater);
     }
 
-    public function updateWebsite(?string $website, UserUuid $updater): void
+    public function updateWebsite(?string $website, Uuid $updater): void
     {
         if (! $website !== null && ! filter_var($website, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException('Invalid website URL.');
@@ -125,7 +129,7 @@ class Author
         $this->updateAuditTrail($updater);
     }
 
-    public function updateSocialLinks(array $socialLinks, UserUuid $updater): void
+    public function updateSocialLinks(array $socialLinks, Uuid $updater): void
     {
         foreach ($socialLinks as $platform => $username) {
             $this->validateSocialPlatform($platform);
@@ -135,14 +139,14 @@ class Author
         $this->updateAuditTrail($updater);
     }
 
-    public function addSocialLink(string $platform, string $username, UserUuid $updater): void
+    public function addSocialLink(string $platform, string $username, Uuid $updater): void
     {
         $this->validateSocialPlatform($platform);
         $this->socialLinks[$platform] = $username;
         $this->updateAuditTrail($updater);
     }
 
-    public function removeSocialLink(string $platform, UserUuid $updater): void
+    public function removeSocialLink(string $platform, Uuid $updater): void
     {
         unset($this->socialLinks[$platform]);
         $this->updateAuditTrail($updater);

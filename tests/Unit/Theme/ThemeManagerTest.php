@@ -24,9 +24,9 @@ beforeEach(function (): void {
 
 });
 
-describe('theme manager', function () {
+describe('theme manager', function (): void {
 
-    it('returns a list of templates', function () {
+    it('returns a list of templates', function (): void {
         expect($this->themeManager->getCurrentThemeTemplates())
             ->toBeArray()
             ->toMatchArray([
@@ -35,21 +35,21 @@ describe('theme manager', function () {
             ]);
     });
 
-    it('returns a list of themes', function () {
+    it('returns a list of themes', function (): void {
         /* @var TestCase $this */
 
         $themes = $this->themeManager->getThemes();
         expect($themes)->toBeArray();
     });
 
-    it('return a list of themes folders', function () {
+    it('return a list of themes folders', function (): void {
         $themes = $this->themeManager->getThemesFolders();
         expect($themes)->toBeArray()
             ->toContain(base_path('themes/wordsphere/orbit-theme'));
 
     });
 
-    it('can check if themes folder exists', function () {
+    it('can check if themes folder exists', function (): void {
         $exists = $this->themeManager
             ->directoryExists(
                 config('wordsphere.themes.path')
@@ -58,7 +58,7 @@ describe('theme manager', function () {
     });
 });
 
-test('ThemeManager Exists', function () {
+test('ThemeManager Exists', function (): void {
 
     expect($this->themeManager)->toBeInstanceOf(ThemeManager::class);
 

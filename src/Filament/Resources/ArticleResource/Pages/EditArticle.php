@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WordSphere\Core\Filament\Resources\ArticleResource\Pages;
 
 use Exception;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Database\Eloquent\Model;
@@ -13,8 +13,8 @@ use WordSphere\Core\Application\ContentManagement\Commands\UpdateArticleCommand;
 use WordSphere\Core\Application\ContentManagement\Services\UpdateArticleService;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
 use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
+use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Filament\Resources\ArticleResource;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ArticleAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as EloquentArticle;
@@ -45,7 +45,7 @@ class EditArticle extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 
@@ -58,7 +58,7 @@ class EditArticle extends EditRecord
 
         /** @var EloquentUser $updater */
         $updater = $this->auth->user();
-        $updaterId = UserUuid::fromString($updater->uuid);
+        $updaterId = Uuid::fromString($updater->uuid);
         $articleUuid = ArticleUuid::fromString($record->id);
 
         $command = new UpdateArticleCommand(

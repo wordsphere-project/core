@@ -10,7 +10,7 @@ use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
-use Illuminate\Contracts\Auth;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -51,7 +51,7 @@ use WordSphere\Core\Legacy\Enums\SystemRole;
  *
  * @mixin Eloquent
  */
-class EloquentUser extends Authenticatable implements Auth\MustVerifyEmail, FilamentUser
+class EloquentUser extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory;
@@ -104,7 +104,7 @@ class EloquentUser extends Authenticatable implements Auth\MustVerifyEmail, Fila
     protected static function boot(): void
     {
         parent::boot();
-        static::creating(function (EloquentUser $user) {
+        static::creating(function (EloquentUser $user): void {
             $user->uuid = (string) Str::uuid();
         });
     }

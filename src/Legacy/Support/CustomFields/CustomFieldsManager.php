@@ -12,7 +12,7 @@ use function collect;
 class CustomFieldsManager implements CustomFieldsManagerContract
 {
     public function __construct(
-        private CustomFieldsContainer $container,
+        private readonly CustomFieldsContainer $container,
     ) {}
 
     /**

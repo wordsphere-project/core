@@ -37,12 +37,12 @@ class Themes extends Page implements HasActions, HasForms
     {
         return Action::make('activateTheme')
             ->label(__('Activate Theme'))
-            ->action(function (AppSettings $settings, array $arguments) {
+            ->action(function (AppSettings $settings, array $arguments): void {
                 $settings->theme = $arguments['namespace'];
                 $settings->save();
             })
             ->size('sm')
-            ->after(function () {
+            ->after(function (): void {
                 Notification::make()
                     ->title(__('Theme Activated'))
                     ->success()

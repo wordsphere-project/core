@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace WordSphere\Core\Application\Factories\ContentManagement;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 use WordSphere\Core\Domain\ContentManagement\Entities\Author as DomainAuthor;
-use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
-use WordSphere\Core\Domain\ContentManagement\ValueObjects\AuthorId;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as EloquentArticle;
 
@@ -36,7 +32,7 @@ final class AuthorFactory extends Factory
             'id' => Uuid::generate(),
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
-            'creator' => UserUuid::generate(),
+            'created_by' => Uuid::generate(),
         ];
     }
 
@@ -85,7 +81,8 @@ final class AuthorFactory extends Factory
             id: $articleData['id'],
             name: $articleData['name'],
             email: $articleData['email'],
-            creator: $articleData['creator'],
+            createdBy: $articleData['created_by'],
+            updatedBy: $articleData['created_by'],
             bio: array_key_exists('bio', $articleData) ? $articleData['bio'] : null,
             website: array_key_exists('bio', $articleData) ? $articleData['website'] : null,
             socialLinks: array_key_exists('bio', $articleData) ? $articleData['socialLinks'] : [],

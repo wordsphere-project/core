@@ -40,7 +40,7 @@ class EloquentMedia extends CuratorMedia
     protected static function boot(): void
     {
         parent::boot();
-        static::creating(function (EloquentMedia $media) {
+        static::creating(function (EloquentMedia $media): void {
             $media->uuid = (string) Str::uuid();
         });
     }

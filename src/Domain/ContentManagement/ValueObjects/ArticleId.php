@@ -6,7 +6,7 @@ namespace WordSphere\Core\Domain\ContentManagement\ValueObjects;
 
 class ArticleId
 {
-    private int $value;
+    private readonly int $value;
 
     final public function __construct(int $value)
     {

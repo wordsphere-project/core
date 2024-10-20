@@ -126,7 +126,7 @@ describe('custom fields can be registered', function (): void {
 
     });
 
-    it('returns a list of fields to be registered on the general scope', function () {
+    it('returns a list of fields to be registered on the general scope', function (): void {
 
         $fields = [
             TextInput::make('about')
@@ -150,7 +150,7 @@ describe('custom fields can be registered', function (): void {
 
     });
 
-    it('registers a custom field', function () {
+    it('registers a custom field', function (): void {
         $this->manager->registerFields(
             resource: PageResource::class,
             tab: ResourceTab::GENERAL->value,

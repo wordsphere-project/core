@@ -46,7 +46,7 @@ class EloquentPage extends Model
     protected static function boot(): void
     {
         parent::boot();
-        static::creating(function (EloquentPage $model) {
+        static::creating(function (EloquentPage $model): void {
             $model->uuid = (string) Str::uuid();
         });
     }

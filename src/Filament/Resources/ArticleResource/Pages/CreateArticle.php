@@ -9,8 +9,8 @@ use Illuminate\Auth\AuthManager;
 use WordSphere\Core\Application\ContentManagement\Commands\CreateArticleCommand;
 use WordSphere\Core\Application\ContentManagement\Services\CreateArticleService;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
 use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
+use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Filament\Resources\ArticleResource;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ArticleAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article;
@@ -42,7 +42,7 @@ class CreateArticle extends CreateRecord
         $user = $this->auth->user();
 
         $command = new CreateArticleCommand(
-            createdBy: UserUuid::fromString($user->uuid),
+            createdBy: Uuid::fromString($user->uuid),
             title: $data['title'],
             content: $data['content'] ?? null,
             excerpt: $data['excerpt'] ?? null,

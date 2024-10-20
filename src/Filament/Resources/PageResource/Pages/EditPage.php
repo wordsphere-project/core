@@ -2,7 +2,7 @@
 
 namespace WordSphere\Core\Filament\Resources\PageResource\Pages;
 
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use WordSphere\Core\Filament\Resources\PageResource;
 
@@ -13,7 +13,7 @@ class EditPage extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

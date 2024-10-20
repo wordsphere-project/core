@@ -7,15 +7,15 @@ namespace WordSphere\Core\Application\ContentManagement\Commands;
 use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
-readonly class CreateArticleCommand
+readonly class CreateAuthorCommand
 {
     public function __construct(
+        public string $name,
+        public string $email,
         public Uuid $createdBy,
-        public string $title,
-        public ?string $content = null,
-        public ?string $excerpt = null,
-        public ?string $slug = null,
-        public ?array $customFields = [],
-        public ?Id $featuredImage = null
+        public ?string $bio = null,
+        public ?string $website = null,
+        public ?array $socialLinks = [],
+        public ?Id $featuredImage = null,
     ) {}
 }

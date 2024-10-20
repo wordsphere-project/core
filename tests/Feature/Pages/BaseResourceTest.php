@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Filament\Forms\Components\Select;
 use Symfony\Component\HttpFoundation\Response;
 use WordSphere\Core\Filament\Resources\PageResource;
+use WordSphere\Core\Filament\Resources\PageResource\Pages\CreatePage;
 use WordSphere\Core\Filament\Resources\PageResource\Pages\ListPages;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentPage;
 use WordSphere\Core\Legacy\Support\Themes\ThemeManager;
@@ -17,7 +18,7 @@ describe('page admin', tests: function (): void {
 
     test('it shows the content field by default', function (): void {
         $component = livewire(
-            component: \WordSphere\Core\Filament\Resources\PageResource\Pages\CreatePage::class
+            component: CreatePage::class
         );
 
         $component->assertFormFieldExists(
@@ -27,7 +28,7 @@ describe('page admin', tests: function (): void {
 
     test('it show the excerpt field if excerpt support is on', function (): void {
         $component = livewire(
-            component: \WordSphere\Core\Filament\Resources\PageResource\Pages\CreatePage::class
+            component: CreatePage::class
         );
         $component->fillForm(
             state: [
@@ -42,15 +43,15 @@ describe('page admin', tests: function (): void {
 
     test('it shows the excerpt field if the field has content', function (): void {})->todo();
 
-    test('it does not show the excerpt field if excerpt support is off', function () {
+    test('it does not show the excerpt field if excerpt support is off', function (): void {
 
-        $component = livewire(component: \WordSphere\Core\Filament\Resources\PageResource\Pages\CreatePage::class);
+        $component = livewire(component: CreatePage::class);
         $component->assertFormFieldDoesNotExist('excerpt');
     })->skip();
 
     test('template selector has the templates as options', function (): void {
 
-        $component = livewire(component: \WordSphere\Core\Filament\Resources\PageResource\Pages\CreatePage::class);
+        $component = livewire(component: CreatePage::class);
 
         $component->assertFormFieldExists('template', function (Select $input) {
             /** @var ThemeManager $themeManager */
@@ -67,7 +68,7 @@ describe('page admin', tests: function (): void {
 
         $newData = EloquentPage::factory()->make();
 
-        livewire(\WordSphere\Core\Filament\Resources\PageResource\Pages\CreatePage::class)
+        livewire(CreatePage::class)
             ->fillForm(
                 state: [
                     'title' => $newData->title,
@@ -82,12 +83,12 @@ describe('page admin', tests: function (): void {
 
     });
 
-    it('can render the create page', function () {
+    it('can render the create page', function (): void {
         $this->get(uri: PageResource::getUrl('create'))
             ->assertStatus(Response::HTTP_OK);
     });
 
-    it('can render the pages admin', closure: function () {
+    it('can render the pages admin', closure: function (): void {
         $response = $this->get(uri: PageResource::getUrl('index'));
         expect($response->status())
             ->toBe(Response::HTTP_OK);

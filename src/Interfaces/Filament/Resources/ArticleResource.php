@@ -33,6 +33,8 @@ class ArticleResource extends Resource
 {
     protected static ?string $model = EloquentArticle::class;
 
+    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
+
     protected static ?string $navigationGroup = 'CMS';
 
     public static function form(Form $form): Form
@@ -62,6 +64,7 @@ class ArticleResource extends Resource
             ->columns(
                 components: [
                     CuratorColumn::make('featured_image_id')
+                        ->circular()
                         ->label('Feature Image')
                         ->size(60),
                     TextColumn::make('title')

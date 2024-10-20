@@ -18,7 +18,7 @@ class AuthorResource extends Resource
 {
     protected static ?string $model = EloquentAuthor::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $navigationGroup = 'CMS';
 
@@ -39,6 +39,7 @@ class AuthorResource extends Resource
                                         ->disk('public'),
                                     Forms\Components\TextInput::make('name')
                                         ->label(__('Name'))
+                                        ->minLength(3)
                                         ->required()
                                         ->columnSpan(2),
                                     Forms\Components\RichEditor::make('bio')

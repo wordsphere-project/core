@@ -30,4 +30,14 @@ trait HasAuditTrail
         }
         $this->updateTimestamps();
     }
+
+    public function setCreatedBy(Uuid $createdBy): void
+    {
+        $this->createdBy = $createdBy;
+    }
+
+    public function setUpdatedBy(Uuid $updatedBy): void
+    {
+        $this->updatedBy = $updatedBy;
+    }
 }

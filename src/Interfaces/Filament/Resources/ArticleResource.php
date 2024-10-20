@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WordSphere\Core\Filament\Resources;
+namespace WordSphere\Core\Interfaces\Filament\Resources;
 
 use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Awcodes\Curator\Components\Tables\CuratorColumn;
@@ -23,11 +23,11 @@ use WordSphere\Core\Application\ContentManagement\Commands\PublishArticleCommand
 use WordSphere\Core\Application\ContentManagement\Services\PublishArticleService;
 use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidArticleStatusException;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
-use WordSphere\Core\Filament\Resources\ArticleResource\Pages\CreateArticle;
-use WordSphere\Core\Filament\Resources\ArticleResource\Pages\EditArticle;
-use WordSphere\Core\Filament\Resources\ArticleResource\Pages\ListArticles;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as EloquentArticle;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Interfaces\Filament\Resources\ArticleResource\Pages\CreateArticle;
+use WordSphere\Core\Interfaces\Filament\Resources\ArticleResource\Pages\EditArticle;
+use WordSphere\Core\Interfaces\Filament\Resources\ArticleResource\Pages\ListArticles;
 
 class ArticleResource extends Resource
 {

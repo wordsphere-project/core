@@ -1,6 +1,6 @@
 <?php
 
-namespace WordSphere\Core\Filament\Resources;
+namespace WordSphere\Core\Interfaces\Filament\Resources;
 
 use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Awcodes\Curator\PathGenerators\DatePathGenerator;
@@ -17,15 +17,14 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use WordSphere\Core\Filament\Resources\PageResource\Form\FormCompiler;
-use WordSphere\Core\Filament\Resources\PageResource\Pages\CreatePage;
-use WordSphere\Core\Filament\Resources\PageResource\Pages\EditPage;
-use WordSphere\Core\Filament\Resources\PageResource\Pages\ListPages;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentPage;
+use WordSphere\Core\Interfaces\Filament\Resources\PageResource\Form\FormCompiler;
+use WordSphere\Core\Interfaces\Filament\Resources\PageResource\Pages\CreatePage;
+use WordSphere\Core\Interfaces\Filament\Resources\PageResource\Pages\EditPage;
+use WordSphere\Core\Interfaces\Filament\Resources\PageResource\Pages\ListPages;
 use WordSphere\Core\Legacy\Enums\ContentStatus;
 use WordSphere\Core\Legacy\Support\CustomFields\CustomFieldsManager;
 use WordSphere\Core\Legacy\Support\Themes\ThemeManager;
-
 use function __;
 use function now;
 

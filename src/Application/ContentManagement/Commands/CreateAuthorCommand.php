@@ -11,8 +11,8 @@ readonly class CreateAuthorCommand
 {
     public function __construct(
         public string $name,
-        public string $email,
         public Uuid $createdBy,
+        public ?string $email = null,
         public ?string $bio = null,
         public ?string $website = null,
         public ?array $socialLinks = [],

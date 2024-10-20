@@ -48,8 +48,8 @@ class WordSphereDashboardServiceProvider extends PanelProvider
             ->brandName(config('app.name'))
             ->viteTheme('resources/css/filament/admin/wordsphere.css', 'vendor/wordsphere/build')
             ->discoverResources(
-                in: __DIR__.'/Filament/Resources',
-                for: 'WordSphere\\Core\\Filament\\Resources'
+                in: __DIR__.'/Interfaces/Filament/Resources',
+                for: 'WordSphere\\Core\\Interfaces\\Filament\\Resources'
             )
             ->discoverResources(
                 in: app_path('Filament/Resources'),

@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 use Filament\Forms\Components\Select;
 use Symfony\Component\HttpFoundation\Response;
-use WordSphere\Core\Filament\Resources\PageResource;
-use WordSphere\Core\Filament\Resources\PageResource\Pages\CreatePage;
-use WordSphere\Core\Filament\Resources\PageResource\Pages\ListPages;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentPage;
+use WordSphere\Core\Interfaces\Filament\Resources\PageResource;
+use WordSphere\Core\Interfaces\Filament\Resources\PageResource\Pages\CreatePage;
+use WordSphere\Core\Interfaces\Filament\Resources\PageResource\Pages\ListPages;
 use WordSphere\Core\Legacy\Support\Themes\ThemeManager;
-
 use function WordSphere\Tests\livewire;
 
 describe('page admin', tests: function (): void {

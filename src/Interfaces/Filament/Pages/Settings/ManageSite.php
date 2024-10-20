@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WordSphere\Core\Filament\Pages\Settings;
+namespace WordSphere\Core\Interfaces\Filament\Pages\Settings;
 
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MarkdownEditor;

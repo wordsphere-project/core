@@ -24,12 +24,12 @@ class AuthorAdapter
         return new DomainAuthor(
             id: Uuid::fromString($eloquentAuthor->id),
             name: $eloquentAuthor->name,
-            email: $eloquentAuthor->email,
             createdBy: Uuid::fromString($eloquentAuthor->created_by),
             updatedBy: Uuid::fromString($eloquentAuthor->updated_by),
+            email: $eloquentAuthor->email,
             bio: $eloquentAuthor->bio,
             website: $eloquentAuthor->website,
-            featuredImage: Id::fromInt($eloquentAuthor->featured_image_id),
+            featuredImage: $eloquentAuthor->featured_image_id ? Id::fromInt($eloquentAuthor->featured_image_id): null,
             socialLinks: $eloquentAuthor->social_links
         );
     }

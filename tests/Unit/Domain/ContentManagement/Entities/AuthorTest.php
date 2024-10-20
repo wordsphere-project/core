@@ -1,9 +1,9 @@
 <?php
 
 use WordSphere\Core\Application\Factories\ContentManagement\AuthorFactory;
+use WordSphere\Core\Domain\ContentManagement\Entities\Author as DomainAuthor;
 use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
-use WordSphere\Core\Domain\ContentManagement\Entities\Author as DomainAuthor;
 
 test('can create an author with al properties', function (): void {
     $authorId = Uuid::generate();

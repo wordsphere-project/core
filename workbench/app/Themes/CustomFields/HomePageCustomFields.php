@@ -11,11 +11,10 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use WordSphere\Core\Filament\Resources\PageResource;
+use WordSphere\Core\Interfaces\Filament\Resources\PageResource;
 use WordSphere\Core\Legacy\Contracts\CustomFieldsManagerContract;
 use WordSphere\Core\Legacy\Enums\ResourceTab;
 use WordSphere\Core\Legacy\Support\CustomFields\CustomFieldsScope;
-
 use function __;
 use function app;
 

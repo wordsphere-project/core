@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WordSphere\Core\Filament\Resources\ArticleResource\Pages;
+namespace WordSphere\Core\Interfaces\Filament\Resources\ArticleResource\Pages;
 
 use Exception;
 use Filament\Actions\DeleteAction;
@@ -15,11 +15,10 @@ use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInter
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
-use WordSphere\Core\Filament\Resources\ArticleResource;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ArticleAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as EloquentArticle;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
-
+use WordSphere\Core\Interfaces\Filament\Resources\ArticleResource;
 use function array_key_exists;
 
 class EditArticle extends EditRecord

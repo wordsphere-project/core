@@ -1,10 +1,10 @@
 <?php
 
-namespace WordSphere\Core\Filament\Resources\PageResource\Pages;
+namespace WordSphere\Core\Interfaces\Filament\Resources\PageResource\Pages;
 
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
-use WordSphere\Core\Filament\Resources\PageResource;
+use WordSphere\Core\Interfaces\Filament\Resources\PageResource;
 
 class EditPage extends EditRecord
 {

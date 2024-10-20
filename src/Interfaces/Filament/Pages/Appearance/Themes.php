@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WordSphere\Core\Filament\Pages\Appearance;
+namespace WordSphere\Core\Interfaces\Filament\Pages\Appearance;
 
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;

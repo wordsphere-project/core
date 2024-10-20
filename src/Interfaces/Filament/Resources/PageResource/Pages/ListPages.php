@@ -1,10 +1,10 @@
 <?php
 
-namespace WordSphere\Core\Filament\Resources\PageResource\Pages;
+namespace WordSphere\Core\Interfaces\Filament\Resources\PageResource\Pages;
 
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
-use WordSphere\Core\Filament\Resources\PageResource;
+use WordSphere\Core\Interfaces\Filament\Resources\PageResource;
 
 class ListPages extends ListRecords
 {

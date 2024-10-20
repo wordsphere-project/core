@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace WordSphere\Core\Filament\Resources\ArticleResource\Pages;
+namespace WordSphere\Core\Interfaces\Filament\Resources\ArticleResource\Pages;
 
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
-use WordSphere\Core\Filament\Resources\ArticleResource;
+use WordSphere\Core\Interfaces\Filament\Resources\ArticleResource;
 
 class ListArticles extends ListRecords
 {

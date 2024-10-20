@@ -1,6 +1,6 @@
 <?php
 
-namespace WordSphere\Core\Filament\Resources\PageResource\Form;
+namespace WordSphere\Core\Interfaces\Filament\Resources\PageResource\Form;
 
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
@@ -10,11 +10,10 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Get;
-use WordSphere\Core\Filament\Resources\PageResource;
+use WordSphere\Core\Interfaces\Filament\Resources\PageResource;
 use WordSphere\Core\Legacy\Contracts\CustomFieldsManagerContract;
 use WordSphere\Core\Legacy\Enums\ResourceTab;
 use WordSphere\Core\Legacy\Support\CustomFields\CustomFieldsScope;
-
 use function __;
 
 class FormCompiler

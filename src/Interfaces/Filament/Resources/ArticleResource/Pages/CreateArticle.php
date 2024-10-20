@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WordSphere\Core\Filament\Resources\ArticleResource\Pages;
+namespace WordSphere\Core\Interfaces\Filament\Resources\ArticleResource\Pages;
 
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Auth\AuthManager;
@@ -11,10 +11,10 @@ use WordSphere\Core\Application\ContentManagement\Services\CreateArticleService;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
-use WordSphere\Core\Filament\Resources\ArticleResource;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ArticleAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Interfaces\Filament\Resources\ArticleResource;
 
 class CreateArticle extends CreateRecord
 {

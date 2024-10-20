@@ -19,7 +19,7 @@ class Author
 
     private string $name;
 
-    private string $email;
+    private ?string $email;
 
     private ?string $bio;
 
@@ -39,9 +39,9 @@ class Author
     public function __construct(
         Uuid $id,
         string $name,
-        string $email,
         Uuid $createdBy,
         Uuid $updatedBy,
+        ?string $email = null,
         ?string $bio = null,
         ?string $website = null,
         ?Id $featuredImage = null,
@@ -72,7 +72,7 @@ class Author
         return $this->name;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }

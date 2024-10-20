@@ -11,7 +11,7 @@ use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
 interface AuthorRepositoryInterface
 {
-    public function nextIdentity(): AuthorId;
+    public function nextIdentity(): Uuid;
 
     public function findById(Uuid $id): ?Author;
 

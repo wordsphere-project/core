@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Str;
 use WordSphere\Core\Database\Factories\ArticleFactory;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 use WordSphere\Core\Infrastructure\Shared\Concerns\HasFeaturedImage;
@@ -63,16 +62,8 @@ class Article extends Model
     public function casts(): array
     {
         return [
-            'data' => 'json',
+            'customFields' => 'json',
         ];
-    }
-
-    protected static function boot(): void
-    {
-        parent::boot();
-        /*static::creating(function (EloquentArticle $article) {
-            $article->uuid = (string) Str::uuid();
-        });*/
     }
 
     public function createdBy(): BelongsTo

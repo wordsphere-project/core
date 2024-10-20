@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use Awcodes\Curator\Curations\ThumbnailPreset;
+use Awcodes\Curator\Glide\DefaultServerFactory;
+use Awcodes\Curator\Resources\MediaResource;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentMedia;
 
 return [
@@ -25,12 +28,12 @@ return [
         'avif',
     ],
     'curation_presets' => [
-        Awcodes\Curator\Curations\ThumbnailPreset::class,
+        ThumbnailPreset::class,
     ],
     'directory' => 'media',
     'disk' => env('FILAMENT_FILESYSTEM_DISK', 'public'),
     'glide' => [
-        'server' => Awcodes\Curator\Glide\DefaultServerFactory::class,
+        'server' => DefaultServerFactory::class,
         'fallbacks' => [],
         'route_path' => 'curator',
     ],
@@ -54,7 +57,7 @@ return [
         'navigation_icon' => 'heroicon-o-photo',
         'navigation_sort' => null,
         'navigation_count_badge' => false,
-        'resource' => Awcodes\Curator\Resources\MediaResource::class,
+        'resource' => MediaResource::class,
     ],
     'should_preserve_filenames' => false,
     'should_register_navigation' => true,

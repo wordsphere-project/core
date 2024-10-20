@@ -2,23 +2,23 @@
 
 namespace WordSphere\Core\Domain\Identity\Entities;
 
-use WordSphere\Core\Domain\Identity\ValueObjects\UserId;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
 use WordSphere\Core\Domain\Shared\ValueObjects\Email;
+use WordSphere\Core\Domain\Shared\ValueObjects\Id;
+use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
 class User
 {
-    private UserId $id;
+    private readonly Id $id;
 
-    private UserUuid $uuid;
+    private readonly Uuid $uuid;
 
     private ?string $name;
 
     private Email $email;
 
     public function __construct(
-        UserId $id,
-        UserUuid $uuid,
+        Id $id,
+        Uuid $uuid,
         Email $email,
         ?string $name = null
     ) {
@@ -28,12 +28,12 @@ class User
         $this->email = $email;
     }
 
-    public function getId(): UserId
+    public function getId(): Id
     {
         return $this->id;
     }
 
-    public function getUuid(): UserUuid
+    public function getUuid(): Uuid
     {
         return $this->uuid;
     }

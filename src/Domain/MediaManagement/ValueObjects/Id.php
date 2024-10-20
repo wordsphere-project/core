@@ -6,7 +6,7 @@ namespace WordSphere\Core\Domain\MediaManagement\ValueObjects;
 
 class Id
 {
-    private int $value;
+    private readonly int $value;
 
     final public function __construct(int $value)
     {

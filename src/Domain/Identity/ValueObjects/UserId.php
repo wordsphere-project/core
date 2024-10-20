@@ -6,7 +6,7 @@ namespace WordSphere\Core\Domain\Identity\ValueObjects;
 
 class UserId
 {
-    private int $value;
+    private readonly int $value;
 
     final public function __construct(int $value)
     {

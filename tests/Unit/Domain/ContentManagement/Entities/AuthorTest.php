@@ -1,20 +1,20 @@
 <?php
 
 use WordSphere\Core\Application\Factories\ContentManagement\AuthorFactory;
-use WordSphere\Core\Domain\ContentManagement\Entities\Author;
-use WordSphere\Core\Domain\ContentManagement\ValueObjects\AuthorId;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
-use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
+use WordSphere\Core\Domain\ContentManagement\Entities\Author as DomainAuthor;
+use WordSphere\Core\Domain\Shared\ValueObjects\Id;
+use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
 test('can create an author with al properties', function (): void {
-    $authorId = AuthorId::generate();
-    $createdBy = UserUuid::generate();
+    $authorId = Uuid::generate();
+    $createdBy = Uuid::generate();
     $featuredImage = Id::fromInt(0);
-    $author = new Author(
+    $author = new DomainAuthor(
         id: $authorId,
         name: 'Francisco B.',
+        createdBy: $createdBy,
+        updatedBy: $createdBy,
         email: 'francisco.b@example.com',
-        creator: $createdBy,
         bio: 'A passionate laravel developer',
         website: 'https://pinkary.com',
         featuredImage: $featuredImage,
@@ -22,7 +22,7 @@ test('can create an author with al properties', function (): void {
     );
 
     expect($author)
-        ->toBeInstanceOf(Author::class)
+        ->toBeInstanceOf(DomainAuthor::class)
         ->and($author->getId())->toBe($authorId)
         ->and($author->getName())->toBe('Francisco B.')
         ->and($author->getEmail())->toBe('francisco.b@example.com')
@@ -38,9 +38,9 @@ test('can create an author with al properties', function (): void {
 });
 
 test('can update author and track changes', function (): void {
-    $updatedBy = UserUuid::generate();
+    $updatedBy = Uuid::generate();
     $author = AuthorFactory::new()
-        ->make();
+        ->makeForDomain();
 
     $author->updateName('John Doe', $updatedBy);
     $author->updateEmail('john.doe@example.com', $updatedBy);
@@ -57,26 +57,28 @@ test('can update author and track changes', function (): void {
 });
 
 test('can create an author without optional properties', function (): void {
-    $author = new Author(
-        id: AuthorId::generate(),
+    $author = new DomainAuthor(
+        id: Uuid::generate(),
         name: 'Francisco B.',
+        createdBy: Uuid::generate(),
+        updatedBy: Uuid::generate(),
         email: 'francisco.b@example.com',
-        creator: UserUuid::generate(),
     );
 
-    expect($author)->toBeInstanceOf(Author::class)
+    expect($author)->toBeInstanceOf(DomainAuthor::class)
         ->and($author->getBio())->toBeNull()
         ->and($author->getWebsite())->toBeNull()
         ->and($author->getSocialLinks())->toBe([]);
 });
 
 test('can update author bio', function (): void {
-    $createdBy = UserUuid::generate();
-    $author = new Author(
-        id: AuthorId::generate(),
+    $createdBy = Uuid::generate();
+    $author = new DomainAuthor(
+        id: Uuid::generate(),
         name: 'Francisco B.',
+        createdBy: $createdBy,
+        updatedBy: $createdBy,
         email: 'francisco.b@example.com',
-        creator: $createdBy,
     );
 
     $author->updateBio('An experience journalist', $createdBy);
@@ -87,7 +89,7 @@ test('can update author bio', function (): void {
 
 test('can update social links', function (): void {
     $author = AuthorFactory::new()
-        ->make();
+        ->makeForDomain();
 
     $author->updateSocialLinks(
         ['twitter' => 'francisco.b', 'facebook' => 'francisco.b'],
@@ -103,7 +105,7 @@ test('can update social links', function (): void {
 
 test('can add a single social link', function (): void {
     $author = AuthorFactory::new()
-        ->make();
+        ->makeForDomain();
 
     $author->addSocialLink('twitter', 'francisco.b', $author->getCreatedBy());
     $author->addSocialLink('facebook', 'francisco.b', $author->getCreatedBy());
@@ -115,7 +117,7 @@ test('can add a single social link', function (): void {
 
 test('can remove a social link', function (): void {
     $author = AuthorFactory::new()
-        ->make();
+        ->makeForDomain();
 
     $author->addSocialLink('twitter', 'francisco.b', $author->getCreatedBy());
     $author->removeSocialLink('twitter', $author->getCreatedBy());

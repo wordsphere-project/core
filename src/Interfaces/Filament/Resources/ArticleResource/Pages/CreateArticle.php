@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace WordSphere\Core\Filament\Resources\ArticleResource\Pages;
+namespace WordSphere\Core\Interfaces\Filament\Resources\ArticleResource\Pages;
 
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Auth\AuthManager;
 use WordSphere\Core\Application\ContentManagement\Commands\CreateArticleCommand;
 use WordSphere\Core\Application\ContentManagement\Services\CreateArticleService;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
-use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
-use WordSphere\Core\Filament\Resources\ArticleResource;
+use WordSphere\Core\Domain\Shared\ValueObjects\Id;
+use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ArticleAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Interfaces\Filament\Resources\ArticleResource;
 
 class CreateArticle extends CreateRecord
 {
@@ -42,7 +42,7 @@ class CreateArticle extends CreateRecord
         $user = $this->auth->user();
 
         $command = new CreateArticleCommand(
-            createdBy: UserUuid::fromString($user->uuid),
+            createdBy: Uuid::fromString($user->uuid),
             title: $data['title'],
             content: $data['content'] ?? null,
             excerpt: $data['excerpt'] ?? null,

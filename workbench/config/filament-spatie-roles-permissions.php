@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
+use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource;
+use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource;
+use App\Models\User;
+
 return [
 
     'resources' => [
-        'PermissionResource' => Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource::class,
-        'RoleResource' => Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource::class,
+        'PermissionResource' => PermissionResource::class,
+        'RoleResource' => RoleResource::class,
     ],
 
     'preload_roles' => true,
@@ -132,7 +136,7 @@ return [
         ],
 
         'excluded_policy_models' => [
-            App\Models\User::class,
+            User::class,
         ],
 
         /*
@@ -142,7 +146,7 @@ return [
             //'view-log'
         ],
 
-        'user_model' => App\Models\User::class,
+        'user_model' => User::class,
 
         'policies_namespace' => 'App\Policies',
     ],

@@ -8,7 +8,7 @@ use WordSphere\Core\Domain\ContentManagement\Entities\Article;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
+use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\EloquentArticleRepository;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 
@@ -30,7 +30,7 @@ beforeEach(function (): void {
     $this->testArticle = Article::create(
         title: 'Original Title',
         slug: Slug::fromString('original-title'),
-        creator: UserUuid::fromString($user->uuid),
+        creator: Uuid::fromString($user->uuid),
         content: 'Original Content',
         excerpt: 'Original Excerpt',
     );
@@ -50,7 +50,7 @@ test('can update an article', function (): void {
 
     $command = new UpdateArticleCommand(
         id: ArticleUuid::fromString($this->testArticle->getId()->toString()),
-        updatedBy: UserUuid::fromString($user->uuid),
+        updatedBy: Uuid::fromString($user->uuid),
         title: 'Updated Title',
         content: 'Updated Content',
         excerpt: 'Updated Excerpt',
@@ -89,7 +89,7 @@ test('updating article with existing slug appends number to slug', function (): 
     $updateArticleService = $this->app->make(UpdateArticleService::class);
     $command = new UpdateArticleCommand(
         id: ArticleUuid::fromString($this->testArticle->getId()->toString()),
-        updatedBy: UserUuid::fromString($user->uuid),
+        updatedBy: Uuid::fromString($user->uuid),
         title: 'Updated title',
         content: 'Updated Content',
         excerpt: 'Updated Excerpt',
@@ -116,7 +116,7 @@ test('throws exception when updating non-existing article', function (): void {
 
     $command = new UpdateArticleCommand(
         id: ArticleUuid::generate(),
-        updatedBy: UserUuid::fromString($user->uuid),
+        updatedBy: Uuid::fromString($user->uuid),
         title: 'Updated Title',
         content: 'Updated Content',
         excerpt: 'Updated Excerpt',

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use WordSphere\Core\Filament\Resources\PageResource;
+use WordSphere\Core\Interfaces\Filament\Resources\PageResource;
 use WordSphere\Core\Legacy\Contracts\CustomFieldsManagerContract;
 use WordSphere\Core\Legacy\Enums\ResourceTab;
 use WordSphere\Core\Legacy\Support\CustomFields\BaseResourceCustomFieldsScope;
@@ -126,7 +126,7 @@ describe('custom fields can be registered', function (): void {
 
     });
 
-    it('returns a list of fields to be registered on the general scope', function () {
+    it('returns a list of fields to be registered on the general scope', function (): void {
 
         $fields = [
             TextInput::make('about')
@@ -150,7 +150,7 @@ describe('custom fields can be registered', function (): void {
 
     });
 
-    it('registers a custom field', function () {
+    it('registers a custom field', function (): void {
         $this->manager->registerFields(
             resource: PageResource::class,
             tab: ResourceTab::GENERAL->value,

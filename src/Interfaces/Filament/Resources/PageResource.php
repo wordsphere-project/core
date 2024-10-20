@@ -1,6 +1,6 @@
 <?php
 
-namespace WordSphere\Core\Filament\Resources;
+namespace WordSphere\Core\Interfaces\Filament\Resources;
 
 use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Awcodes\Curator\PathGenerators\DatePathGenerator;
@@ -12,11 +12,16 @@ use Filament\Forms\Components\Split;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use WordSphere\Core\Filament\Resources\PageResource\Form\FormCompiler;
-use WordSphere\Core\Filament\Resources\PageResource\Pages;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentPage;
+use WordSphere\Core\Interfaces\Filament\Resources\PageResource\Form\FormCompiler;
+use WordSphere\Core\Interfaces\Filament\Resources\PageResource\Pages\CreatePage;
+use WordSphere\Core\Interfaces\Filament\Resources\PageResource\Pages\EditPage;
+use WordSphere\Core\Interfaces\Filament\Resources\PageResource\Pages\ListPages;
 use WordSphere\Core\Legacy\Enums\ContentStatus;
 use WordSphere\Core\Legacy\Support\CustomFields\CustomFieldsManager;
 use WordSphere\Core\Legacy\Support\Themes\ThemeManager;
@@ -36,7 +41,7 @@ class PageResource extends Resource
     {
 
         return $form
-            ->schema(fn (FormCompiler $compiler) => [
+            ->schema(fn (FormCompiler $compiler): array => [
                 Split::make(
                     schema: [
                         $compiler->compile(),
@@ -91,9 +96,9 @@ class PageResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title'),
-                Tables\Columns\TextColumn::make('path'),
-                Tables\Columns\TextColumn::make('status')
+                TextColumn::make('title'),
+                TextColumn::make('path'),
+                TextColumn::make('status')
                     ->label(__('Status '))
                     ->badge(),
             ])
@@ -101,11 +106,11 @@ class PageResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -120,9 +125,9 @@ class PageResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPages::route('/'),
-            'create' => Pages\CreatePage::route('/create'),
-            'edit' => Pages\EditPage::route('/{record}/edit'),
+            'index' => ListPages::route('/'),
+            'create' => CreatePage::route('/create'),
+            'edit' => EditPage::route('/{record}/edit'),
         ];
     }
 }

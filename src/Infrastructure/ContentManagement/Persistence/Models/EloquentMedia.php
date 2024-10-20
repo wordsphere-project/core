@@ -9,7 +9,7 @@ use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
-use WordSphere\Core\Database\Factories\MediaFactory;
+use WordSphere\Core\Application\Factories\ContentManagement\MediaFactory;
 
 /**
  * @property int $id
@@ -40,7 +40,7 @@ class EloquentMedia extends CuratorMedia
     protected static function boot(): void
     {
         parent::boot();
-        static::creating(function (EloquentMedia $media) {
+        static::creating(function (EloquentMedia $media): void {
             $media->uuid = (string) Str::uuid();
         });
     }

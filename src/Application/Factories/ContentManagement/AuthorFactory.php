@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use WordSphere\Core\Domain\ContentManagement\Entities\Author as DomainAuthor;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\AuthorId;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserId;
+use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as EloquentArticle;
 
 use function array_key_exists;
@@ -35,7 +35,7 @@ final class AuthorFactory extends Factory
             'id' => AuthorId::generate(),
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
-            'creator' => UserId::generate(),
+            'creator' => UserUuid::generate(),
         ];
     }
 
@@ -76,7 +76,7 @@ final class AuthorFactory extends Factory
     /**
      * @param  array<string, mixed>  $attributes
      */
-    public function make($attributes = [], null|Model|DomainAuthor $parent = null): Model|DomainAuthor|EloquentArticle
+    public function make($attributes = [], null|Model|DomainAuthor $parent = null): Model|DomainAuthor
     {
         $articleData = array_merge($this->definition(), $attributes);
 

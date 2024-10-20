@@ -3,13 +3,13 @@
 use WordSphere\Core\Application\Factories\ContentManagement\AuthorFactory;
 use WordSphere\Core\Domain\ContentManagement\Entities\Author;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\AuthorId;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserId;
-use WordSphere\Core\Domain\MediaManagement\ValueObjects\MediaId;
+use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
+use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
 
 test('can create an author with al properties', function (): void {
     $authorId = AuthorId::generate();
-    $createdBy = UserId::generate();
-    $featuredImage = MediaId::generate();
+    $createdBy = UserUuid::generate();
+    $featuredImage = Id::fromInt(0);
     $author = new Author(
         id: $authorId,
         name: 'Francisco B.',
@@ -31,14 +31,14 @@ test('can create an author with al properties', function (): void {
         ->and($author->getSocialLinks())->toBe(['twitter' => 'francisco.b', 'facebook' => 'francisco.b'])
         ->and($author->getFeaturedImage())->toBe($featuredImage)
         ->and($author->getCreatedBy())->toBe($createdBy)
-        ->and($author->getLastUpdatedBy())->toBe($createdBy)
+        ->and($author->getUpdatedBy())->toBe($createdBy)
         ->and($author->getCreatedAt())->toBeInstanceOf(DateTimeImmutable::class)
-        ->and($author->getLastUpdatedAt())->toBeInstanceOf(DateTimeImmutable::class);
+        ->and($author->getUpdatedAt())->toBeInstanceOf(DateTimeImmutable::class);
 
 });
 
 test('can update author and track changes', function (): void {
-    $updatedBy = UserId::generate();
+    $updatedBy = UserUuid::generate();
     $author = AuthorFactory::new()
         ->make();
 
@@ -49,9 +49,9 @@ test('can update author and track changes', function (): void {
         ->toBe('John Doe')
         ->and($author->getEmail())
         ->toBe('john.doe@example.com')
-        ->and($author->getLastUpdatedBy())
+        ->and($author->getUpdatedBy())
         ->toBe($updatedBy)
-        ->and($author->getLastUpdatedAt())
+        ->and($author->getUpdatedAt())
         ->toBeGreaterThan($author->getCreatedAt());
 
 });
@@ -61,7 +61,7 @@ test('can create an author without optional properties', function (): void {
         id: AuthorId::generate(),
         name: 'Francisco B.',
         email: 'francisco.b@example.com',
-        creator: UserId::generate(),
+        creator: UserUuid::generate(),
     );
 
     expect($author)->toBeInstanceOf(Author::class)
@@ -71,7 +71,7 @@ test('can create an author without optional properties', function (): void {
 });
 
 test('can update author bio', function (): void {
-    $createdBy = UserId::generate();
+    $createdBy = UserUuid::generate();
     $author = new Author(
         id: AuthorId::generate(),
         name: 'Francisco B.',

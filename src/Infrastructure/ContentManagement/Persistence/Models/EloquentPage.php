@@ -4,12 +4,15 @@ namespace WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use WordSphere\Core\Database\Factories\PageFactory;
+use WordSphere\Core\Infrastructure\Shared\Concerns\HasFeaturedImage;
 use WordSphere\Core\Legacy\Enums\ContentStatus;
 use WordSphere\Core\Legacy\Enums\ContentVisibility;
 
 /**
  * @property int $id
+ * @property string $uuid
  * @property string $title
  * @property string $path
  * @property string $content
@@ -18,10 +21,14 @@ use WordSphere\Core\Legacy\Enums\ContentVisibility;
  * @property string $data
  * @property string $meta
  */
-class Page extends Model
+class EloquentPage extends Model
 {
     /** @use HasFactory<PageFactory> */
     use HasFactory;
+
+    use HasFeaturedImage;
+
+    protected $table = 'pages';
 
     /**
      * @return array<string, mixed>
@@ -34,6 +41,14 @@ class Page extends Model
             'data' => 'json',
             'meta' => 'json',
         ];
+    }
+
+    protected static function boot(): void
+    {
+        parent::boot();
+        static::creating(function (EloquentPage $model) {
+            $model->uuid = (string) Str::uuid();
+        });
     }
 
     public static function newFactory(): PageFactory

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace WordSphere\Core\Domain\MediaManagement\ValueObjects;
+namespace WordSphere\Core\Domain\ContentManagement\ValueObjects;
 
 use WordSphere\Core\Domain\Shared\ValueObjects\AbstractId;
 
-class MediaId extends AbstractId
+class ArticleUuid extends AbstractId
 {
     protected static function create(string $value): static
     {

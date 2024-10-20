@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace WordSphere\Core\Domain\ContentManagement\ValueObjects;
+namespace WordSphere\Core\Domain\Shared\ValueObjects;
 
-class ArticleId
+class Id
 {
     private int $value;
 

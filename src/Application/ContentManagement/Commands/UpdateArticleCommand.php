@@ -4,22 +4,28 @@ declare(strict_types=1);
 
 namespace WordSphere\Core\Application\ContentManagement\Commands;
 
-use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleId;
+use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
+use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
+use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
 
 final class UpdateArticleCommand
 {
     private array $updatedFields = [];
 
     public function __construct(
-        public ArticleId $id,
+        public ArticleUuid $id,
+        public UserUuid $updatedBy,
         public ?string $title = null,
         public ?string $content = null,
         public ?string $excerpt = null,
         public ?string $slug = null,
-        public ?array $data = null,
+        public ?array $customFields = null,
+        public ?Id $featuredImage = null,
     ) {
         $this->updatedFields = array_keys(array_filter(get_object_vars($this), function ($value, $key) {
-            return $key !== 'id' && $key !== 'updatedFields';
+            return $key !== 'id' &&
+                $key !== 'updatedFields' &&
+                $key !== 'updatedBy';
         }, ARRAY_FILTER_USE_BOTH));
     }
 

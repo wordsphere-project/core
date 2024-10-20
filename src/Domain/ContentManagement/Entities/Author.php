@@ -6,8 +6,8 @@ namespace WordSphere\Core\Domain\ContentManagement\Entities;
 
 use InvalidArgumentException;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\AuthorId;
-use WordSphere\Core\Domain\Identity\ValueObjects\UserId;
-use WordSphere\Core\Domain\MediaManagement\ValueObjects\MediaId;
+use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
+use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\Concerns\HasAuditTrail;
 use WordSphere\Core\Domain\Shared\Concerns\HasFeaturedImage;
 
@@ -41,10 +41,10 @@ class Author
         AuthorId $id,
         string $name,
         string $email,
-        UserId $creator,
+        UserUuid $creator,
         ?string $bio = null,
         ?string $website = null,
-        ?MediaId $featuredImage = null,
+        ?Id $featuredImage = null,
         ?array $socialLinks = [],
     ) {
         $this->id = $id;
@@ -88,7 +88,7 @@ class Author
         return $this->socialLinks;
     }
 
-    public function updateName(string $name, UserId $updater): void
+    public function updateName(string $name, UserUuid $updater): void
     {
 
         if (empty(trim($name))) {
@@ -99,7 +99,7 @@ class Author
         $this->updateAuditTrail($updater);
     }
 
-    public function updateEmail(string $email, UserId $updater): void
+    public function updateEmail(string $email, UserUuid $updater): void
     {
 
         if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -110,13 +110,13 @@ class Author
         $this->updateAuditTrail($updater);
     }
 
-    public function updateBio(?string $bio, UserId $updater): void
+    public function updateBio(?string $bio, UserUuid $updater): void
     {
         $this->bio = $bio;
         $this->updateAuditTrail($updater);
     }
 
-    public function updateWebsite(?string $website, UserId $updater): void
+    public function updateWebsite(?string $website, UserUuid $updater): void
     {
         if (! $website !== null && ! filter_var($website, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException('Invalid website URL.');
@@ -125,7 +125,7 @@ class Author
         $this->updateAuditTrail($updater);
     }
 
-    public function updateSocialLinks(array $socialLinks, UserId $updater): void
+    public function updateSocialLinks(array $socialLinks, UserUuid $updater): void
     {
         foreach ($socialLinks as $platform => $username) {
             $this->validateSocialPlatform($platform);
@@ -135,17 +135,34 @@ class Author
         $this->updateAuditTrail($updater);
     }
 
-    public function addSocialLink(string $platform, string $username, UserId $updater): void
+    public function addSocialLink(string $platform, string $username, UserUuid $updater): void
     {
         $this->validateSocialPlatform($platform);
         $this->socialLinks[$platform] = $username;
         $this->updateAuditTrail($updater);
     }
 
-    public function removeSocialLink(string $platform, UserId $updater): void
+    public function removeSocialLink(string $platform, UserUuid $updater): void
     {
         unset($this->socialLinks[$platform]);
         $this->updateAuditTrail($updater);
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId()->toString(),
+            'name' => $this->getName(),
+            'email' => $this->getEmail(),
+            'bio' => $this->getBio(),
+            'website' => $this->getWebsite(),
+            'socialLinks' => $this->getSocialLinks(),
+            'featuredImageId' => $this->getFeaturedImage()?->toInt(),
+            'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            'updated_at' => $this->getUpdatedAt()->format('Y-m-d H:i:s'),
+            'created_by' => $this->getCreatedBy()->toString(),
+            'last_updated_by' => $this->getUpdatedBy()->toString(),
+        ];
     }
 
     public function validateSocialPlatform(string $platform): void

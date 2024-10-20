@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace WordSphere\Core\Domain\Shared\Concerns;
 
-use WordSphere\Core\Domain\Identity\ValueObjects\UserId;
-use WordSphere\Core\Domain\MediaManagement\ValueObjects\MediaId;
+use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
+use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
 
 use function method_exists;
 
 trait HasFeaturedImage
 {
-    private ?MediaId $featuredImageId = null;
+    private ?Id $featuredImageId = null;
 
-    public function getFeaturedImage(): ?MediaId
+    public function getFeaturedImage(): ?Id
     {
         return $this->featuredImageId;
     }
 
-    public function updateFeaturedImage(?MediaId $featuredImageId, ?UserId $updater = null): void
+    public function updateFeaturedImage(?Id $featuredImageId, ?UserUuid $updater = null): void
     {
         $this->featuredImageId = $featuredImageId;
 

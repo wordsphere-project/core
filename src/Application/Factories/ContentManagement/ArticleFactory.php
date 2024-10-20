@@ -11,8 +11,9 @@ use Illuminate\Database\Eloquent\Model;
 use WordSphere\Core\Domain\ContentManagement\Entities\Article as DomainArticle;
 use WordSphere\Core\Domain\ContentManagement\Enums\ArticleStatus;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
-use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleId;
+use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
+use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as EloquentArticle;
 
 /**
@@ -35,7 +36,7 @@ final class ArticleFactory extends Factory
         $title = $this->faker->sentence;
 
         return [
-            'id' => ArticleId::generate(),
+            'id' => ArticleUuid::generate(),
             'title' => $title,
             'slug' => Slug::fromString($title),
             'content' => $this->faker->paragraphs(5, true),
@@ -43,8 +44,10 @@ final class ArticleFactory extends Factory
             'status' => $this->faker->randomElement([ArticleStatus::DRAFT, ArticleStatus::PUBLISHED]),
             'createdAt' => DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year')),
             'updatedAt' => DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 month')),
+            'createdBy' => UserUuid::generate(),
+            'updatedBy' => UserUuid::generate(),
             'publishedAt' => null,
-            'data' => [],
+            'customFields' => [],
         ];
     }
 
@@ -61,7 +64,7 @@ final class ArticleFactory extends Factory
     /**
      * @param  array<string, mixed>  $attributes
      */
-    public function make($attributes = [], null|Model|DomainArticle $parent = null): Model|DomainArticle|EloquentArticle
+    public function make($attributes = [], null|Model|DomainArticle $parent = null): Model|DomainArticle|EloquentArticle|null
     {
         $articleData = array_merge($this->definition(), $attributes);
 
@@ -69,13 +72,15 @@ final class ArticleFactory extends Factory
             id: $articleData['id'],
             title: $articleData['title'],
             slug: $articleData['slug'],
+            createdBy: $articleData['createdBy'],
+            updatedBy: $articleData['updatedBy'],
             content: $articleData['content'],
             excerpt: $articleData['excerpt'],
-            data: $articleData['data'],
+            customFields: $articleData['customFields'],
             status: $articleData['status'],
+            publishedAt: $articleData['publishedAt'],
             createdAt: $articleData['createdAt'],
             updatedAt: $articleData['updatedAt'],
-            publishedAt: $articleData['publishedAt'],
         );
     }
 

@@ -16,7 +16,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use WordSphere\Core\Filament\Resources\PageResource\Form\FormCompiler;
 use WordSphere\Core\Filament\Resources\PageResource\Pages;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Page;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentPage;
 use WordSphere\Core\Legacy\Enums\ContentStatus;
 use WordSphere\Core\Legacy\Support\CustomFields\CustomFieldsManager;
 use WordSphere\Core\Legacy\Support\Themes\ThemeManager;
@@ -26,7 +26,7 @@ use function now;
 
 class PageResource extends Resource
 {
-    protected static ?string $model = Page::class;
+    protected static ?string $model = EloquentPage::class;
 
     protected static ?string $navigationGroup = 'CMS';
 

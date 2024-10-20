@@ -13,11 +13,14 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Auth\AuthManager;
 use WordSphere\Core\Application\ContentManagement\Commands\PublishArticleCommand;
 use WordSphere\Core\Application\ContentManagement\Services\PublishArticleService;
 use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidArticleStatusException;
+use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
 use WordSphere\Core\Filament\Resources\ArticleResource\Pages;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as EloquentArticle;
+use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 
 class ArticleResource extends Resource
 {
@@ -40,7 +43,8 @@ class ArticleResource extends Resource
                         ->columnSpan(2),
                     Forms\Components\RichEditor::make('content')
                         ->columnSpan(2),
-                    CuratorPicker::make('media_id'),
+                    CuratorPicker::make('featured_image_id')
+                        ->label(__('Featured Image')),
                 ]
             );
     }
@@ -50,9 +54,9 @@ class ArticleResource extends Resource
         return $table
             ->columns(
                 components: [
-                    CuratorColumn::make('media_id')
+                    CuratorColumn::make('featured_image_id')
                         ->label('Feature Image')
-                        ->size(40),
+                        ->size(60),
                     TextColumn::make('title')
                         ->searchable(),
                     TextColumn::make('slug')
@@ -68,7 +72,7 @@ class ArticleResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('publish')
                     ->label(__('Publish'))
-                    ->action(fn (PublishArticleService $publishArticleService, EloquentArticle $record) => static::publishArticle($record, $publishArticleService))
+                    ->action(fn (AuthManager $auth, PublishArticleService $publishArticleService, EloquentArticle $record) => static::publishArticle($auth, $record, $publishArticleService))
                     ->requiresConfirmation()
                     ->visible(fn (EloquentArticle $record): bool => $record->status !== 'published'),
             ])
@@ -79,9 +83,14 @@ class ArticleResource extends Resource
             ]);
     }
 
-    public static function publishArticle(EloquentArticle $record, PublishArticleService $publishArticleService): void
+    public static function publishArticle(AuthManager $auth, EloquentArticle $record, PublishArticleService $publishArticleService): void
     {
-        $command = new PublishArticleCommand($record->id);
+
+        /** @var EloquentUser $user */
+        $user = $auth->user();
+
+        $publisher = UserUuid::fromString($user->uuid);
+        $command = new PublishArticleCommand($record->id, $publisher);
 
         try {
             $publishArticleService->execute($command);

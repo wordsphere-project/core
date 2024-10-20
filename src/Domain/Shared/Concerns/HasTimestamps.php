@@ -10,12 +10,12 @@ trait HasTimestamps
 {
     private DateTimeImmutable $createdAt;
 
-    private DateTimeImmutable $lastUpdatedAt;
+    private DateTimeImmutable $updatedAt;
 
     private function initializeTimestamps(): void
     {
         $this->createdAt = new DateTimeImmutable;
-        $this->lastUpdatedAt = new DateTimeImmutable;
+        $this->updatedAt = new DateTimeImmutable;
     }
 
     public function getCreatedAt(): DateTimeImmutable
@@ -23,13 +23,13 @@ trait HasTimestamps
         return $this->createdAt;
     }
 
-    public function getLastUpdatedAt(): DateTimeImmutable
+    public function getUpdatedAt(): DateTimeImmutable
     {
-        return $this->lastUpdatedAt;
+        return $this->updatedAt;
     }
 
     public function updateTimestamps(): void
     {
-        $this->lastUpdatedAt = new DateTimeImmutable;
+        $this->updatedAt = new DateTimeImmutable;
     }
 }

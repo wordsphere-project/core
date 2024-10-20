@@ -12,134 +12,190 @@ use WordSphere\Core\Domain\ContentManagement\Events\ArticlePublished;
 use WordSphere\Core\Domain\ContentManagement\Events\ArticleUnpublished;
 use WordSphere\Core\Domain\ContentManagement\Events\ArticleUpdated;
 use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidArticleStatusException;
-use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleId;
+use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
+use WordSphere\Core\Domain\Identity\ValueObjects\UserUuid;
+use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
+use WordSphere\Core\Domain\Shared\Concerns\HasAuditTrail;
+use WordSphere\Core\Domain\Shared\Concerns\HasFeaturedImage;
 
 use function array_merge;
 
 class Article
 {
+    use HasAuditTrail;
+    use HasFeaturedImage;
+
+    private ArticleUuid $id;
+
+    private string $title;
+
+    private Slug $slug;
+
+    private ?string $content;
+
+    private ?string $excerpt;
+
+    private array $customFields;
+
+    private ArticleStatus $status;
+
+    private ?DateTimeImmutable $publishedAt;
+
+    private ?Author $author;
+
     private array $domainEvents = [];
 
     public function __construct(
-        private readonly ArticleId $id,
-        private string $title,
-        private Slug $slug,
-        private ?string $content,
-        private ?string $excerpt,
-        private ?array $data,
-        private ArticleStatus $status,
-        public readonly DateTimeImmutable $createdAt,
-        private DateTimeImmutable $updatedAt,
-        private ?DateTimeImmutable $publishedAt = null,
+        ArticleUuid $id,
+        string $title,
+        Slug $slug,
+        UserUuid $createdBy,
+        UserUuid $updatedBy,
+        ?Author $author = null,
+        ?string $content = null,
+        ?string $excerpt = null,
+        ?array $customFields = [],
+        ?Id $featuredImage = null,
+        ArticleStatus $status = ArticleStatus::DRAFT,
+        ?DateTimeImmutable $publishedAt = null,
+        ?DateTimeImmutable $createdAt = null,
+        ?DateTimeImmutable $updatedAt = null,
     ) {
+        $this->id = $id;
+        $this->title = $title;
+        $this->slug = $slug;
+        $this->author = $author;
+        $this->content = $content;
+        $this->excerpt = $excerpt;
+        $this->customFields = $customFields ?? [];
+        $this->status = $status;
+        $this->publishedAt = $publishedAt ?? null;
+        $this->updateFeaturedImage($featuredImage, $updatedBy);
+
+        $this->createdBy = $createdBy;
+        $this->updatedBy = $updatedBy;
+
+        if (! $createdAt && ! $updatedAt) {
+            $this->initializeHasAuditTrail($createdBy);
+        } else {
+            $this->createdAt = $createdAt;
+            $this->updatedAt = $updatedAt;
+        }
+
         $this->ensureValidState();
+        $this->domainEvents[] = new ArticleCreated($this->id);
     }
 
     public static function create(
         string $title,
         Slug $slug,
+        UserUuid $creator,
         ?string $content = null,
         ?string $excerpt = null,
-        ?array $data = [],
+        ?array $customFields = [],
+        ?Id $featuredImage = null,
     ): self {
-
-        $now = new DateTimeImmutable;
-
-        $article = new self(
-            id: ArticleId::generate(),
+        return new self(
+            id: ArticleUuid::generate(),
             title: $title,
             slug: $slug,
+            createdBy: $creator,
+            updatedBy: $creator,
             content: $content,
             excerpt: $excerpt,
-            data: $data,
+            customFields: $customFields,
+            featuredImage: $featuredImage,
             status: ArticleStatus::DRAFT,
-            createdAt: $now,
-            updatedAt: $now,
         );
-
-        $article->domainEvents[] = new ArticleCreated($article->id);
-
-        return $article;
-
     }
 
     public function update(
+        UserUuid $updater,
         string $title,
         ?string $content = '',
         ?string $excerpt = '',
         ?string $slugString = null,
-        ?array $data = [],
+        ?array $customFields = [],
+        ?Author $author = null,
+        ?Id $featuredImage = null,
     ): void {
         $this->title = $title;
         $this->content = $content;
         $this->excerpt = $excerpt;
-        $this->slug = Slug::fromString($slugString ?? $title);
-        $this->data = $data;
-        $this->updatedAt = new DateTimeImmutable;
-
+        $this->slug = $slugString ? Slug::fromString($slugString) : $this->slug;
+        if ($customFields !== null) {
+            $this->customFields = array_merge($this->customFields, $customFields);
+        }
+        $this->author = $author;
+        $this->updateFeaturedImage($featuredImage, $updater);
         $this->domainEvents[] = new ArticleUpdated($this->id);
     }
 
-    public function updateTitle(string $newTitle): void
+    public function updateTitle(string $newTitle, UserUuid $updater): void
     {
         $this->title = $newTitle;
-        $this->updatedAt = new DateTimeImmutable;
+        $this->updateAuditTrail($updater);
     }
 
-    public function updateContent(?string $newContent): void
+    public function updateContent(?string $newContent, UserUuid $updater): void
     {
         $this->content = $newContent;
-        $this->updatedAt = new DateTimeImmutable;
+        $this->updateAuditTrail($updater);
     }
 
-    public function updateExcerpt(?string $newExcerpt): void
+    public function updateExcerpt(?string $newExcerpt, UserUuid $updater): void
     {
         $this->excerpt = $newExcerpt;
-        $this->updatedAt = new DateTimeImmutable;
+        $this->updateAuditTrail($updater);
     }
 
-    public function updateSlug(Slug $newSlug): void
+    public function updateSlug(Slug $newSlug, UserUuid $updater): void
     {
         $this->slug = $newSlug;
-        $this->updatedAt = new DateTimeImmutable;
+        $this->updateAuditTrail($updater);
     }
 
-    public function updateData(?array $newData): void
+    public function updateCustomFields(?array $newCustomFields, UserUuid $updater): void
     {
-        if ($newData === null) {
-            // If null is passed, clear the existing data
-            $this->data = [];
+        if ($newCustomFields === null) {
+            $this->customFields = [];
         } else {
-            // Merge the new data with existing data
-            $this->data = array_merge($this->data, $newData);
+            $this->customFields = array_merge($this->customFields, $newCustomFields);
         }
-        $this->updatedAt = new DateTimeImmutable;
+        $this->updateAuditTrail($updater);
+        $this->domainEvents[] = new ArticleUpdated($this->id);
 
     }
 
-    public function publish(): void
+    public function updateAuthor(?Author $newAuthor, UserUuid $updater): void
+    {
+        $this->author = $newAuthor;
+        $this->updateAuditTrail($updater);
+        $this->domainEvents[] = new ArticleUpdated($this->id);
+    }
+
+    public function publish(UserUuid $updater): void
     {
         if ($this->status->isPublished()) {
             throw new InvalidArticleStatusException(__('Article is already published'));
         }
         $this->status = ArticleStatus::PUBLISHED;
-        $this->updatedAt = new DateTimeImmutable;
-        $this->publishedAt = new DateTimeImmutable;
+        $this->updateAuditTrail($updater);
         $this->domainEvents[] = new ArticlePublished($this->id);
     }
 
-    public function unpublish(): void
+    public function unpublish(UserUuid $updater): void
     {
         if (! $this->status->isPublished()) {
             throw new InvalidArticleStatusException(__('Cannot unpublish an article that is not published.'));
         }
         $this->status = ArticleStatus::DRAFT;
-        $this->updatedAt = new \DateTimeImmutable;
+        $this->updateAuditTrail($updater);
         $this->domainEvents[] = new ArticleUnpublished($this->id);
     }
 
-    public function getId(): ArticleId
+    public function getId(): ArticleUuid
     {
         return $this->id;
     }
@@ -164,9 +220,9 @@ class Article
         return $this->excerpt;
     }
 
-    public function getData(): ?array
+    public function getCustomFields(): ?array
     {
-        return $this->data;
+        return $this->customFields;
     }
 
     public function getStatus(): ArticleStatus
@@ -174,14 +230,9 @@ class Article
         return $this->status;
     }
 
-    public function getCreatedAt(): DateTimeImmutable
+    public function getAuthor(): ?Author
     {
-        return $this->updatedAt;
-    }
-
-    public function getUpdatedAt(): DateTimeImmutable
-    {
-        return $this->updatedAt;
+        return $this->author;
     }
 
     public function getPublishedAt(): ?DateTimeImmutable
@@ -200,11 +251,15 @@ class Article
             'content' => $this->getContent(),
             'excerpt' => $this->getExcerpt(),
             'slug' => $this->getSlug()->toString(),
-            'status' => $this->getStatus()->toString(),
-            'data' => $this->getData(),
-            'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
-            'updated_at' => $this->getUpdatedAt()->format('Y-m-d H:i:s'),
-            'published_at' => $this->getPublishedAt()?->format('Y-m-d H:i:s'),
+            'status' => $this->getStatus()->value,
+            'customFields' => $this->customFields,
+            'author' => $this->getAuthor()?->toArray(),
+            'featuredImageId' => $this->getFeaturedImage()?->toInt(),
+            'createdAt' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            'createdBy' => $this->getCreatedBy()->toString(),
+            'updatedAt' => $this->getUpdatedAt()->format('Y-m-d H:i:s'),
+            'updatedBy' => $this->getUpdatedBy()->toString(),
+            'publishedAt' => $this->getPublishedAt()?->format('Y-m-d H:i:s'),
         ];
     }
 

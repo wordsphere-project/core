@@ -3,7 +3,6 @@
 namespace WordSphere\Core\Infrastructure\ContentManagement\Adapters;
 
 use WordSphere\Core\Domain\ContentManagement\Entities\Author as DomainAuthor;
-use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentAuthor;
 
@@ -29,7 +28,7 @@ class AuthorAdapter
             email: $eloquentAuthor->email,
             bio: $eloquentAuthor->bio,
             website: $eloquentAuthor->website,
-            featuredImage: $eloquentAuthor->featured_image_id ? Id::fromInt($eloquentAuthor->featured_image_id) : null,
+            photo: $eloquentAuthor->photo,
             socialLinks: $eloquentAuthor->social_links
         );
     }

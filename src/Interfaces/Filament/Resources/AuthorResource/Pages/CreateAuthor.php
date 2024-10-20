@@ -7,7 +7,6 @@ use Illuminate\Auth\AuthManager;
 use WordSphere\Core\Application\ContentManagement\Commands\CreateAuthorCommand;
 use WordSphere\Core\Application\ContentManagement\Services\CreateAuthorService;
 use WordSphere\Core\Domain\ContentManagement\Repositories\AuthorRepositoryInterface;
-use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\AuthorAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentAuthor;
@@ -47,7 +46,7 @@ class CreateAuthor extends CreateRecord
             bio: $this->getData('bio', $data),
             website: $this->getData('website', $data),
             socialLinks: $this->getData('social_links', $data),
-            featuredImage: $this->getData('featuredImage', $data) ? Id::fromInt($this->getData('featuredImage', $data)) : null,
+            photo: $this->getData('photo', $data),
         );
 
         $authorId = $this->createAuthorService->execute($command);

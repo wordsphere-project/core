@@ -12,16 +12,22 @@ trait HasAuditTrail
     use HasTimestamps;
     use HasUpdatedBy;
 
-    protected function initializeHasAuditTrail(Uuid $creator): void
+    protected function initializeHasAuditTrail(?Uuid $creator = null): void
     {
         $this->initializeTimestamps();
-        $this->createdBy = $creator;
-        $this->updatedBy = $creator;
+
+        if ($creator !== null) {
+            $this->createdBy = $creator;
+            $this->updatedBy = $creator;
+        }
+
     }
 
-    protected function updateAuditTrail(Uuid $updater): void
+    protected function updateAuditTrail(?Uuid $updater = null): void
     {
-        $this->updatedBy = $updater;
+        if ($updater !== null and property_exists($this, 'updatedBy')) {
+            $this->updatedBy = $updater;
+        }
         $this->updateTimestamps();
     }
 }

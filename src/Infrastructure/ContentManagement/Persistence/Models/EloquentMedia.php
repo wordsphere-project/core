@@ -15,6 +15,7 @@ use WordSphere\Core\Application\Factories\ContentManagement\MediaFactory;
  * @property int $id
  * @property string $uuid
  * @property-read mixed $full_path
+ * @property-read mixed $path
  * @property-read mixed $large_url
  * @property-read mixed $medium_url
  * @property-read mixed $pretty_name

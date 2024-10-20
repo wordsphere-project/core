@@ -2,11 +2,11 @@
 
 namespace WordSphere\Core\Interfaces\Filament\Resources;
 
-use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentAuthor;
@@ -31,13 +31,16 @@ class AuthorResource extends Resource
                         ->tabs([
                             Forms\Components\Tabs\Tab::make('General')
                                 ->schema([
-                                    CuratorPicker::make('featured_image_id')
-                                        ->label(__('Photo'))
-                                        ->buttonLabel(__('Select Photo'))
-                                        ->listDisplay(false),
+                                    Forms\Components\FileUpload::make('photo')
+                                        ->image()
+                                        ->avatar()
+                                        ->directory('author-photos')
+                                        ->maxSize(1024) // 1MB limit
+                                        ->disk('public'),
                                     Forms\Components\TextInput::make('name')
                                         ->label(__('Name'))
-                                        ->required(),
+                                        ->required()
+                                        ->columnSpan(2),
                                     Forms\Components\RichEditor::make('bio')
                                         ->label(__('Bio'))
                                         ->columnSpan(2),
@@ -76,16 +79,6 @@ class AuthorResource extends Resource
                                 ])
                                 ->columns(2),
                         ]),
-                    Forms\Components\Group::make()
-                        ->schema(
-                            components: [
-                                Forms\Components\Section::make()
-                                    ->schema([
-
-                                    ]),
-                            ]
-                        )
-                        ->grow(false),
                 ]
             )->columns(1);
     }
@@ -94,7 +87,13 @@ class AuthorResource extends Resource
     {
         return $table
             ->columns([
+                ImageColumn::make('photo')
+                    ->label(__('Photo'))
+                    ->circular(),
                 TextColumn::make('name')
+                    ->extraAttributes([
+                        'class' => 'font-semibold',
+                    ])
                     ->searchable()
                     ->label(__('Name')),
                 TextColumn::make('website')

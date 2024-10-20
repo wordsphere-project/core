@@ -38,7 +38,7 @@ final class AuthorFactory extends Factory
             'id' => Uuid::generate(),
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
-            'featured_image_id' => null,
+            'photo' => null,
             'created_by' => Uuid::fromString($creator->uuid),
             'updated_by' => Uuid::fromString($creator->uuid),
         ];
@@ -49,7 +49,7 @@ final class AuthorFactory extends Factory
         return $this->afterMaking(function (EloquentAuthor $author): void {
             /** @var EloquentMedia $media */
             $media = MediaFactory::new()->create();
-            $author->featured_image_id = $media->id;
+            $author->photo = $media->path;
             $author->save();
         });
     }
@@ -58,7 +58,7 @@ final class AuthorFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'featured_image_id' => null,
+                'photo' => null,
             ];
         });
     }
@@ -110,7 +110,7 @@ final class AuthorFactory extends Factory
             id: $authorData['id'],
             name: $authorData['name'],
             createdBy: $authorData['created_by'],
-            updatedBy: $authorData['created_by'],
+            updatedBy: $authorData['updated_by'],
             email: $authorData['email'],
             bio: array_key_exists('bio', $authorData) ? $authorData['bio'] : null,
             website: array_key_exists('bio', $authorData) ? $authorData['website'] : null,

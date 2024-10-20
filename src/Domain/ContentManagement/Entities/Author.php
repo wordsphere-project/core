@@ -6,14 +6,11 @@ namespace WordSphere\Core\Domain\ContentManagement\Entities;
 
 use InvalidArgumentException;
 use WordSphere\Core\Domain\Shared\Concerns\HasAuditTrail;
-use WordSphere\Core\Domain\Shared\Concerns\HasFeaturedImage;
-use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
 class Author
 {
     use HasAuditTrail;
-    use HasFeaturedImage;
 
     private Uuid $id;
 
@@ -24,6 +21,8 @@ class Author
     private ?string $bio;
 
     private ?string $website;
+
+    private ?string $photo;
 
     private array $socialLinks;
 
@@ -44,7 +43,7 @@ class Author
         ?string $email = null,
         ?string $bio = null,
         ?string $website = null,
-        ?Id $featuredImage = null,
+        ?string $photo = null,
         ?array $socialLinks = [],
     ) {
         $this->id = $id;
@@ -52,14 +51,13 @@ class Author
         $this->email = $email;
         $this->bio = $bio;
         $this->website = $website;
-        $this->socialLinks = $socialLinks;
-        $this->updateFeaturedImage($featuredImage);
+        $this->photo = $photo;
         $this->socialLinks = $socialLinks;
 
         $this->createdBy = $createdBy;
         $this->updatedBy = $updatedBy;
 
-        $this->initializeHasAuditTrail($createdBy);
+        $this->initializeTimestamps();
     }
 
     public function getId(): Uuid
@@ -87,12 +85,17 @@ class Author
         return $this->website;
     }
 
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
     public function getSocialLinks(): array
     {
         return $this->socialLinks;
     }
 
-    public function updateName(string $name, Uuid $updater): void
+    public function updateName(string $name): void
     {
 
         if (empty(trim($name))) {
@@ -100,10 +103,10 @@ class Author
         }
 
         $this->name = $name;
-        $this->updateAuditTrail($updater);
+        $this->updateAuditTrail();
     }
 
-    public function updateEmail(string $email, Uuid $updater): void
+    public function updateEmail(string $email): void
     {
 
         if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -111,45 +114,51 @@ class Author
         }
 
         $this->email = $email;
-        $this->updateAuditTrail($updater);
+        $this->updateAuditTrail();
     }
 
-    public function updateBio(?string $bio, Uuid $updater): void
+    public function updateBio(?string $bio): void
     {
         $this->bio = $bio;
-        $this->updateAuditTrail($updater);
+        $this->updateAuditTrail();
     }
 
-    public function updateWebsite(?string $website, Uuid $updater): void
+    public function updateWebsite(?string $website): void
     {
         if (! $website !== null && ! filter_var($website, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException('Invalid website URL.');
         }
         $this->website = $website;
-        $this->updateAuditTrail($updater);
+        $this->updateAuditTrail();
     }
 
-    public function updateSocialLinks(array $socialLinks, Uuid $updater): void
+    public function updatePhoto(?string $photo): void
+    {
+        $this->photo = $photo;
+        $this->updateAuditTrail();
+    }
+
+    public function updateSocialLinks(array $socialLinks): void
     {
         foreach ($socialLinks as $platform => $username) {
             $this->validateSocialPlatform($platform);
         }
 
         $this->socialLinks = $socialLinks;
-        $this->updateAuditTrail($updater);
+        $this->updateAuditTrail();
     }
 
-    public function addSocialLink(string $platform, string $username, Uuid $updater): void
+    public function addSocialLink(string $platform, string $username): void
     {
         $this->validateSocialPlatform($platform);
         $this->socialLinks[$platform] = $username;
-        $this->updateAuditTrail($updater);
+        $this->updateAuditTrail();
     }
 
-    public function removeSocialLink(string $platform, Uuid $updater): void
+    public function removeSocialLink(string $platform): void
     {
         unset($this->socialLinks[$platform]);
-        $this->updateAuditTrail($updater);
+        $this->updateAuditTrail();
     }
 
     public function toArray(): array
@@ -160,8 +169,8 @@ class Author
             'email' => $this->getEmail(),
             'bio' => $this->getBio(),
             'website' => $this->getWebsite(),
+            'photo' => $this->getPhoto(),
             'socialLinks' => $this->getSocialLinks(),
-            'featuredImageId' => $this->getFeaturedImage()?->toInt(),
             'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
             'updated_at' => $this->getUpdatedAt()->format('Y-m-d H:i:s'),
             'created_by' => $this->getCreatedBy()->toString(),

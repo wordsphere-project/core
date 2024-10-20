@@ -19,7 +19,7 @@ use WordSphere\Core\Infrastructure\Shared\Concerns\HasFeaturedImage;
  * @property string $bio
  * @property string $website
  * @property array $social_links
- * @property int $featured_image_id
+ * @property string $photo
  * @property string $created_by
  * @property Carbon|DateTimeImmutable $created_at
  * @property string $updated_by

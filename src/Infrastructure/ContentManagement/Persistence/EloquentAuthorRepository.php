@@ -56,7 +56,7 @@ class EloquentAuthorRepository implements AuthorRepositoryInterface
         $eloquentAuthor->updated_by = $domainAuthor->getUpdatedBy()->toString();
         $eloquentAuthor->bio = $domainAuthor->getBio();
         $eloquentAuthor->website = $domainAuthor->getWebsite();
-        $eloquentAuthor->featured_image_id = $domainAuthor->getFeaturedImage()?->toInt();
+        $eloquentAuthor->photo = $domainAuthor->getPhoto();
         $eloquentAuthor->social_links = $domainAuthor->getSocialLinks();
         $eloquentAuthor->created_at = $domainAuthor->getCreatedAt();
         $eloquentAuthor->updated_at = $domainAuthor->getUpdatedAt();

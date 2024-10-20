@@ -21,16 +21,10 @@ return new class extends Migration
             $table->text('bio')->nullable();
             $table->string('website')->nullable();
             $table->json('social_links')->nullable();
-            $table->unsignedInteger('featured_image_id')->nullable();
+            $table->string('photo')->nullable();
             $table->uuid('created_by');
             $table->uuid('updated_by');
             $table->timestamps();
-
-            $table->foreign('featured_image_id')
-                ->references('id')
-                ->on(app(config('wordsphere.curator.model'))
-                    ->getTable())
-                ->onDelete('set null');
 
             $table->foreign('created_by')
                 ->references('uuid')

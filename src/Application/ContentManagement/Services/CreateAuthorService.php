@@ -20,11 +20,12 @@ readonly class CreateAuthorService
         $author = new Author(
             id: $this->authorRepository->nextIdentity(),
             name: $command->name,
-            email: $command->email,
             createdBy: $command->createdBy,
             updatedBy: $command->createdBy,
+            email: $command->email,
             bio: $command->bio,
             website: $command->website,
+            photo: $command->photo,
             socialLinks: $command->socialLinks,
         );
 

@@ -2,13 +2,11 @@
 
 use WordSphere\Core\Application\Factories\ContentManagement\AuthorFactory;
 use WordSphere\Core\Domain\ContentManagement\Entities\Author as DomainAuthor;
-use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
 test('can create an author with al properties', function (): void {
     $authorId = Uuid::generate();
     $createdBy = Uuid::generate();
-    $featuredImage = Id::fromInt(0);
     $author = new DomainAuthor(
         id: $authorId,
         name: 'Francisco B.',
@@ -17,7 +15,7 @@ test('can create an author with al properties', function (): void {
         email: 'francisco.b@example.com',
         bio: 'A passionate laravel developer',
         website: 'https://pinkary.com',
-        featuredImage: $featuredImage,
+        photo: 'profile-photo.jpg',
         socialLinks: ['twitter' => 'francisco.b', 'facebook' => 'francisco.b']
     );
 
@@ -29,7 +27,7 @@ test('can create an author with al properties', function (): void {
         ->and($author->getBio())->toBe('A passionate laravel developer')
         ->and($author->getWebsite())->toBe('https://pinkary.com')
         ->and($author->getSocialLinks())->toBe(['twitter' => 'francisco.b', 'facebook' => 'francisco.b'])
-        ->and($author->getFeaturedImage())->toBe($featuredImage)
+        ->and($author->getPhoto())->toBe('profile-photo.jpg')
         ->and($author->getCreatedBy())->toBe($createdBy)
         ->and($author->getUpdatedBy())->toBe($createdBy)
         ->and($author->getCreatedAt())->toBeInstanceOf(DateTimeImmutable::class)
@@ -40,10 +38,12 @@ test('can create an author with al properties', function (): void {
 test('can update author and track changes', function (): void {
     $updatedBy = Uuid::generate();
     $author = AuthorFactory::new()
-        ->makeForDomain();
+        ->makeForDomain([
+            'updated_by' => $updatedBy
+        ]);
 
-    $author->updateName('John Doe', $updatedBy);
-    $author->updateEmail('john.doe@example.com', $updatedBy);
+    $author->updateName('John Doe');
+    $author->updateEmail('john.doe@example.com');
 
     expect($author->getName())
         ->toBe('John Doe')
@@ -81,7 +81,7 @@ test('can update author bio', function (): void {
         email: 'francisco.b@example.com',
     );
 
-    $author->updateBio('An experience journalist', $createdBy);
+    $author->updateBio('An experience journalist');
 
     expect($author->getBio())
         ->toBe('An experience journalist');
@@ -92,8 +92,7 @@ test('can update social links', function (): void {
         ->makeForDomain();
 
     $author->updateSocialLinks(
-        ['twitter' => 'francisco.b', 'facebook' => 'francisco.b'],
-        $author->getCreatedBy()
+        ['twitter' => 'francisco.b', 'facebook' => 'francisco.b']
     );
 
     expect($author->getSocialLinks())
@@ -107,8 +106,8 @@ test('can add a single social link', function (): void {
     $author = AuthorFactory::new()
         ->makeForDomain();
 
-    $author->addSocialLink('twitter', 'francisco.b', $author->getCreatedBy());
-    $author->addSocialLink('facebook', 'francisco.b', $author->getCreatedBy());
+    $author->addSocialLink('twitter', 'francisco.b');
+    $author->addSocialLink('facebook', 'francisco.b');
 
     expect($author->getSocialLinks())
         ->toBe(['twitter' => 'francisco.b', 'facebook' => 'francisco.b']);
@@ -119,8 +118,8 @@ test('can remove a social link', function (): void {
     $author = AuthorFactory::new()
         ->makeForDomain();
 
-    $author->addSocialLink('twitter', 'francisco.b', $author->getCreatedBy());
-    $author->removeSocialLink('twitter', $author->getCreatedBy());
+    $author->addSocialLink('twitter', 'francisco.b');
+    $author->removeSocialLink('twitter');
 
     expect($author->getSocialLinks())->toBe([]);
 });

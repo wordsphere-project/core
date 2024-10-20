@@ -14,9 +14,9 @@ use WordSphere\Core\Domain\ContentManagement\Events\ArticleUpdated;
 use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidArticleStatusException;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
-use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\Concerns\HasAuditTrail;
 use WordSphere\Core\Domain\Shared\Concerns\HasFeaturedImage;
+use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
 use function array_merge;

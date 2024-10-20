@@ -13,7 +13,7 @@ use WordSphere\Core\Application\ContentManagement\Commands\UpdateArticleCommand;
 use WordSphere\Core\Application\ContentManagement\Services\UpdateArticleService;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
-use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
+use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Filament\Resources\ArticleResource;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ArticleAdapter;

@@ -1,15 +1,15 @@
 <?php
 
 use WordSphere\Core\Application\Factories\ContentManagement\AuthorFactory;
-use WordSphere\Core\Domain\ContentManagement\Entities\Author;
-use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
+use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
+use WordSphere\Core\Domain\ContentManagement\Entities\Author as DomainAuthor;
 
 test('can create an author with al properties', function (): void {
     $authorId = Uuid::generate();
     $createdBy = Uuid::generate();
     $featuredImage = Id::fromInt(0);
-    $author = new Author(
+    $author = new DomainAuthor(
         id: $authorId,
         name: 'Francisco B.',
         email: 'francisco.b@example.com',
@@ -22,7 +22,7 @@ test('can create an author with al properties', function (): void {
     );
 
     expect($author)
-        ->toBeInstanceOf(Author::class)
+        ->toBeInstanceOf(DomainAuthor::class)
         ->and($author->getId())->toBe($authorId)
         ->and($author->getName())->toBe('Francisco B.')
         ->and($author->getEmail())->toBe('francisco.b@example.com')
@@ -57,7 +57,7 @@ test('can update author and track changes', function (): void {
 });
 
 test('can create an author without optional properties', function (): void {
-    $author = new Author(
+    $author = new DomainAuthor(
         id: Uuid::generate(),
         name: 'Francisco B.',
         email: 'francisco.b@example.com',
@@ -65,7 +65,7 @@ test('can create an author without optional properties', function (): void {
         updatedBy: Uuid::generate(),
     );
 
-    expect($author)->toBeInstanceOf(Author::class)
+    expect($author)->toBeInstanceOf(DomainAuthor::class)
         ->and($author->getBio())->toBeNull()
         ->and($author->getWebsite())->toBeNull()
         ->and($author->getSocialLinks())->toBe([]);
@@ -73,7 +73,7 @@ test('can create an author without optional properties', function (): void {
 
 test('can update author bio', function (): void {
     $createdBy = Uuid::generate();
-    $author = new Author(
+    $author = new DomainAuthor(
         id: Uuid::generate(),
         name: 'Francisco B.',
         email: 'francisco.b@example.com',

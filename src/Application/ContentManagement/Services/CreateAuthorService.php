@@ -9,9 +9,8 @@ use WordSphere\Core\Domain\ContentManagement\Entities\Author;
 use WordSphere\Core\Domain\ContentManagement\Repositories\AuthorRepositoryInterface;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
-class CreateAuthorService
+readonly class CreateAuthorService
 {
-
     public function __construct(
         private AuthorRepositoryInterface $authorRepository
     ) {}
@@ -34,5 +33,4 @@ class CreateAuthorService
         return $author->getId();
 
     }
-
 }

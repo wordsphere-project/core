@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace WordSphere\Core\Domain\ContentManagement\Entities;
 
 use InvalidArgumentException;
-use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\Concerns\HasAuditTrail;
 use WordSphere\Core\Domain\Shared\Concerns\HasFeaturedImage;
+use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
 class Author

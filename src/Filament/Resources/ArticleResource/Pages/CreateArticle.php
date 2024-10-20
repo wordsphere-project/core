@@ -9,7 +9,7 @@ use Illuminate\Auth\AuthManager;
 use WordSphere\Core\Application\ContentManagement\Commands\CreateArticleCommand;
 use WordSphere\Core\Application\ContentManagement\Services\CreateArticleService;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
-use WordSphere\Core\Domain\MediaManagement\ValueObjects\Id;
+use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Filament\Resources\ArticleResource;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ArticleAdapter;

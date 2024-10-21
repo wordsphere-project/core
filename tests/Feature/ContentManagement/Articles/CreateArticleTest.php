@@ -3,7 +3,6 @@
 use WordSphere\Core\Application\ContentManagement\Commands\CreateArticleCommand;
 use WordSphere\Core\Application\ContentManagement\Services\CreateArticleService;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
-use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\EloquentArticleRepository;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;

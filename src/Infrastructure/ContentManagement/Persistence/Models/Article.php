@@ -66,6 +66,11 @@ class Article extends Model
         ];
     }
 
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(EloquentUser::class, 'author_id');
+    }
+
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(EloquentUser::class, 'created_by', 'uuid');

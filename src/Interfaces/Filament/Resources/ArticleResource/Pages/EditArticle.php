@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
 use WordSphere\Core\Application\ContentManagement\Commands\UpdateArticleCommand;
 use WordSphere\Core\Application\ContentManagement\Services\UpdateArticleService;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
-use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ArticleAdapter;
@@ -59,10 +58,10 @@ class EditArticle extends EditRecord
         /** @var EloquentUser $updater */
         $updater = $this->auth->user();
         $updaterId = Uuid::fromString($updater->uuid);
-        $articleUuid = ArticleUuid::fromString($record->id);
+        $articleId = Uuid::fromString($record->id);
 
         $command = new UpdateArticleCommand(
-            id: $articleUuid,
+            id: $articleId,
             updatedBy: $updaterId,
             title: $data['title'] ?? null,
             content: array_key_exists('content', $data) ? $data['content'] : null,
@@ -74,7 +73,7 @@ class EditArticle extends EditRecord
 
         $this->updateArticleService->execute($command);
 
-        $updatedDomainArticle = $this->articleRepository->findByUuid($articleUuid);
+        $updatedDomainArticle = $this->articleRepository->findByUuid($articleId);
 
         return ArticleAdapter::toEloquent($updatedDomainArticle);
     }

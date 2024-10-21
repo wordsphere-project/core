@@ -12,7 +12,6 @@ use WordSphere\Core\Domain\ContentManagement\Events\ArticlePublished;
 use WordSphere\Core\Domain\ContentManagement\Events\ArticleUnpublished;
 use WordSphere\Core\Domain\ContentManagement\Events\ArticleUpdated;
 use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidArticleStatusException;
-use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\Concerns\HasAuditTrail;
 use WordSphere\Core\Domain\Shared\Concerns\HasFeaturedImage;
@@ -26,7 +25,7 @@ class Article
     use HasAuditTrail;
     use HasFeaturedImage;
 
-    private ArticleUuid $id;
+    private Uuid $id;
 
     private string $title;
 
@@ -47,7 +46,7 @@ class Article
     private array $domainEvents = [];
 
     public function __construct(
-        ArticleUuid $id,
+        Uuid $id,
         string $title,
         Slug $slug,
         Uuid $createdBy,
@@ -97,7 +96,7 @@ class Article
         ?Id $featuredImage = null,
     ): self {
         return new self(
-            id: ArticleUuid::generate(),
+            id: Uuid::generate(),
             title: $title,
             slug: $slug,
             createdBy: $creator,
@@ -181,6 +180,7 @@ class Article
             throw new InvalidArticleStatusException(__('Article is already published'));
         }
         $this->status = ArticleStatus::PUBLISHED;
+        $this->publishedAt = new DateTimeImmutable;
         $this->updateAuditTrail($updater);
         $this->domainEvents[] = new ArticlePublished($this->id);
     }
@@ -191,11 +191,12 @@ class Article
             throw new InvalidArticleStatusException(__('Cannot unpublish an article that is not published.'));
         }
         $this->status = ArticleStatus::DRAFT;
+        $this->publishedAt = null;
         $this->updateAuditTrail($updater);
         $this->domainEvents[] = new ArticleUnpublished($this->id);
     }
 
-    public function getId(): ArticleUuid
+    public function getId(): Uuid
     {
         return $this->id;
     }

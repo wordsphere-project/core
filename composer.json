@@ -6,7 +6,8 @@
         "wordsphere",
         "laravel",
         "filament",
-        "core"
+        "livewire",
+        "ddd"
     ],
     "homepage": "https://github.com/wordsphere-project/core",
     "license": "MIT",

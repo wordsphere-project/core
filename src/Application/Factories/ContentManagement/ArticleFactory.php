@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 use WordSphere\Core\Domain\ContentManagement\Entities\Article as DomainArticle;
 use WordSphere\Core\Domain\ContentManagement\Enums\ArticleStatus;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
-use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as EloquentArticle;
@@ -36,7 +35,7 @@ final class ArticleFactory extends Factory
         $title = $this->faker->sentence;
 
         return [
-            'id' => ArticleUuid::generate(),
+            'id' => Uuid::generate(),
             'title' => $title,
             'slug' => Slug::fromString($title),
             'content' => $this->faker->paragraphs(5, true),

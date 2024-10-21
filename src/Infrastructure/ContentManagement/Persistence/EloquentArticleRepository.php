@@ -19,12 +19,12 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
         return ArticleUuid::generate();
     }
 
-    public function findById(ArticleUuid $id): ?DomainArticle
+    public function findById(Uuid $id): ?DomainArticle
     {
         return self::findByUuid($id);
     }
 
-    public function findByUuid(ArticleUuid $uuid): ?DomainArticle
+    public function findByUuid(Uuid $uuid): ?DomainArticle
     {
         $eloquentArticle = EloquentArticle::query()->find($uuid);
         if (! $eloquentArticle) {
@@ -66,7 +66,7 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
     {
 
         $article = new DomainArticle(
-            id: ArticleUuid::fromString($eloquentArticle->id),
+            id: Uuid::fromString($eloquentArticle->id),
             title: $eloquentArticle->title,
             slug: Slug::fromString($eloquentArticle->slug),
             createdBy: Uuid::fromString($eloquentArticle->created_by),
@@ -78,10 +78,6 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
             createdAt: DateTimeImmutable::createFromInterface($eloquentArticle->created_at),
             updatedAt: DateTimeImmutable::createFromInterface($eloquentArticle->updated_at)
         );
-
-        if ($eloquentArticle->status === ArticleStatus::PUBLISHED->toString()) {
-            $article->publish(Uuid::fromString($eloquentArticle->updated_by));
-        }
 
         if ($eloquentArticle->feature_image_id) {
             $article->updateFeaturedImage(

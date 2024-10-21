@@ -7,14 +7,15 @@ namespace WordSphere\Core\Domain\ContentManagement\Repositories;
 use WordSphere\Core\Domain\ContentManagement\Entities\Article;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
+use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
 interface ArticleRepositoryInterface
 {
     public function nextIdentity(): ArticleUuid;
 
-    public function findById(ArticleUuid $id): ?Article;
+    public function findById(Uuid $id): ?Article;
 
-    public function findByUuid(ArticleUuid $uuid): ?Article;
+    public function findByUuid(Uuid $uuid): ?Article;
 
     public function findBySlug(Slug $slug): ?Article;
 

@@ -8,7 +8,7 @@ use WordSphere\Core\Application\ContentManagement\Commands\CreateArticleCommand;
 use WordSphere\Core\Domain\ContentManagement\Entities\Article;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\Services\SlugGeneratorService;
-use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
+use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
 readonly class CreateArticleService
 {
@@ -17,7 +17,7 @@ readonly class CreateArticleService
         private SlugGeneratorService $slugGenerator
     ) {}
 
-    public function execute(CreateArticleCommand $command): ArticleUuid
+    public function execute(CreateArticleCommand $command): Uuid
     {
 
         $slug = $this->slugGenerator->generateUniqueSlug(

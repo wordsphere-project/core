@@ -6,9 +6,7 @@ namespace WordSphere\Core\Interfaces\Filament\Resources;
 
 use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Awcodes\Curator\Components\Tables\CuratorColumn;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
+use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
@@ -20,42 +18,129 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Auth\AuthManager;
 use WordSphere\Core\Application\ContentManagement\Commands\PublishArticleCommand;
+use WordSphere\Core\Application\ContentManagement\Services\ContentStatusServiceFactory;
 use WordSphere\Core\Application\ContentManagement\Services\PublishArticleService;
+use WordSphere\Core\Domain\ContentManagement\Entities\Article;
+use WordSphere\Core\Domain\ContentManagement\Enums\ArticleStatus;
 use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidArticleStatusException;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article as EloquentArticle;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Interfaces\Filament\Concerns\InteractsWithStatus;
 use WordSphere\Core\Interfaces\Filament\Resources\ArticleResource\Pages\CreateArticle;
 use WordSphere\Core\Interfaces\Filament\Resources\ArticleResource\Pages\EditArticle;
 use WordSphere\Core\Interfaces\Filament\Resources\ArticleResource\Pages\ListArticles;
 
+use function __;
+
 class ArticleResource extends Resource
 {
+    use InteractsWithStatus;
+
     protected static ?string $model = EloquentArticle::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
     protected static ?string $navigationGroup = 'CMS';
 
+    public static function getContentType(): string
+    {
+        return Article::class;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema(
                 components: [
-                    TextInput::make('title')
-                        ->columnSpan(2)
-                        ->required(),
-                    TextInput::make('slug')
-                        ->columnSpan(2)
-                        ->required(),
-                    Textarea::make('excerpt')
-                        ->columnSpan(2),
-                    RichEditor::make('content')
-                        ->columnSpan(2),
-                    CuratorPicker::make('featured_image_id')
-                        ->label(__('Featured Image')),
-                ]
-            );
+                    Forms\Components\Split::make([
+
+                        Forms\Components\Tabs::make('Main Content')
+                            ->tabs([
+                                Forms\Components\Tabs\Tab::make('General')
+                                    ->label(__('General'))
+                                    ->schema(
+                                        components: [
+                                            Forms\Components\TextInput::make('title')
+                                                ->columnSpan(2)
+                                                ->required(),
+                                            Forms\Components\TextInput::make('slug')
+                                                ->columnSpan(2)
+                                                ->required(),
+                                            Forms\Components\Textarea::make('excerpt')
+                                                ->columnSpan(2),
+                                            Forms\Components\RichEditor::make('content')
+                                                ->columnSpan(2),
+                                        ]
+                                    ),
+                            ]),
+
+                        Forms\Components\Group::make()
+                            ->schema([
+                                Forms\Components\Section::make(__('Publish'))
+                                    ->schema(
+                                        components: [
+                                            Forms\Components\Placeholder::make('status')
+                                                ->label(__('Status'))
+                                                ->content(fn (EloquentArticle $record) => $record->status)
+                                                ->visible(fn (): bool => $form->getRecord() !== null),
+                                            Forms\Components\Select::make('visibility')
+                                                ->options([
+                                                    'public' => 'Public',
+                                                    'private' => 'Private',
+                                                ])
+                                                ->label('Visibility'),
+                                            Forms\Components\DateTimePicker::make('published_at')
+                                                ->label('Publish at')
+                                                ->reactive(),
+                                            Forms\Components\Actions::make([
+                                                Forms\Components\Actions\Action::make('publish')
+                                                    ->label('Publish')
+                                                    ->action(function (EloquentArticle $record, ContentStatusServiceFactory $serviceFactory, AuthManager $authManager, Forms\Get $get, Forms\Set $set): void {
+                                                        static::publishContent($record, $serviceFactory, $authManager, $get, $set);
+                                                    })
+                                                    ->visible(fn (?EloquentArticle $record): bool => $record?->status === ArticleStatus::DRAFT->toString()
+                                                    )
+                                                    ->keyBindings(['command+p', 'ctrl+p'])
+                                                    ->color('success'),
+
+                                                Forms\Components\Actions\Action::make('unpublish')
+                                                    ->label('Unpublish')
+                                                    ->action(function (EloquentArticle $record, ContentStatusServiceFactory $serviceFactory, AuthManager $authManager, Forms\Get $get, Forms\Set $set): void {
+                                                        static::unpublishContent($record, $serviceFactory, $authManager, $get, $set);
+                                                    })
+                                                    ->visible(fn (?EloquentArticle $record): bool => $record?->status === ArticleStatus::PUBLISHED->toString()
+                                                    )
+                                                    ->keyBindings(['command+u', 'ctrl+u'])
+                                                    ->color('danger'),
+                                            ]),
+                                            Forms\Components\Select::make('author_id')
+                                                ->relationship('author', 'name')
+                                                ->searchable(),
+                                        ]
+                                    )
+                                    ->collapsible(),
+                                Forms\Components\Section::make()
+                                    ->heading(__('Featured image'))
+                                    ->schema(
+                                        components: [
+                                            CuratorPicker::make('featured_image_id')
+                                                ->hiddenLabel()
+                                                ->extraAttributes(['class' => 'max-w-xs']),
+                                        ]
+                                    ),
+
+                            ])
+                            ->grow(false)
+                            ->columns(['md' => 2, 'lg' => 1])
+                            ->extraAttributes(['class' => 'min-w-80 lg:max-w-xs']),
+
+                    ])
+                        ->columns(1)
+                        ->from('lg'),
+
+                ])
+            ->columns(1);
     }
 
     public static function table(Table $table): Table
@@ -82,7 +167,9 @@ class ArticleResource extends Resource
                 EditAction::make(),
                 Action::make('publish')
                     ->label(__('Publish'))
-                    ->action(fn (AuthManager $auth, PublishArticleService $publishArticleService, EloquentArticle $record) => static::publishArticle($auth, $record, $publishArticleService))
+                    ->action(function (EloquentArticle $record, ContentStatusServiceFactory $serviceFactory, AuthManager $authManager): void {
+                        static::publishContent($record, $serviceFactory, $authManager);
+                    })
                     ->requiresConfirmation()
                     ->visible(fn (EloquentArticle $record): bool => $record->status !== 'published'),
             ])

@@ -6,7 +6,6 @@ use WordSphere\Core\Application\ContentManagement\Services\UpdateArticleService;
 use WordSphere\Core\Application\Factories\ContentManagement\ArticleFactory;
 use WordSphere\Core\Domain\ContentManagement\Entities\Article;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
-use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\EloquentArticleRepository;
@@ -49,7 +48,7 @@ test('can update an article', function (): void {
         ->create();
 
     $command = new UpdateArticleCommand(
-        id: ArticleUuid::fromString($this->testArticle->getId()->toString()),
+        id: Uuid::fromString($this->testArticle->getId()->toString()),
         updatedBy: Uuid::fromString($user->uuid),
         title: 'Updated Title',
         content: 'Updated Content',
@@ -88,7 +87,7 @@ test('updating article with existing slug appends number to slug', function (): 
     /** @var UpdateArticleService $updateArticleService */
     $updateArticleService = $this->app->make(UpdateArticleService::class);
     $command = new UpdateArticleCommand(
-        id: ArticleUuid::fromString($this->testArticle->getId()->toString()),
+        id: Uuid::fromString($this->testArticle->getId()->toString()),
         updatedBy: Uuid::fromString($user->uuid),
         title: 'Updated title',
         content: 'Updated Content',
@@ -115,7 +114,7 @@ test('throws exception when updating non-existing article', function (): void {
         ->create();
 
     $command = new UpdateArticleCommand(
-        id: ArticleUuid::generate(),
+        id: Uuid::generate(),
         updatedBy: Uuid::fromString($user->uuid),
         title: 'Updated Title',
         content: 'Updated Content',

@@ -1,7 +1,7 @@
 # WordSphere Core
 
 
-<p align="center">
+<p>
     <a href="https://github.com/wordsphere-project/core/actions">
         <img src="https://github.com/wordsphere-project/core/workflows/run-tests/badge.svg" alt="Build Status">
     </a>

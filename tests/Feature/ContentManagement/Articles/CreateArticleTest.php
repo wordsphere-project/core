@@ -38,7 +38,7 @@ test('can create a article', function (): void {
     $articleId = $createArticleService->execute($command);
 
     //Assert
-    expect($articleId)->toBeInstanceOf(ArticleUuid::class);
+    expect($articleId)->toBeInstanceOf(Uuid::class);
 
     assertDatabaseHas('articles', [
         'id' => $articleId->toString(),

@@ -1,24 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WordSphere\Core\Application\ContentManagement\Services;
 
-use Illuminate\Events\Dispatcher;
-use WordSphere\Core\Application\ContentManagement\Commands\PublishArticleCommand;
+use WordSphere\Core\Application\ContentManagement\Commands\ChangeContentStatusCommand;
+use WordSphere\Core\Application\ContentManagement\Contracts\ContentStatusServiceInterface;
 use WordSphere\Core\Application\ContentManagement\Exceptions\ArticleNotFoundException;
+use WordSphere\Core\Domain\ContentManagement\Enums\ArticleStatus;
 use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidArticleStatusException;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
+use WordSphere\Core\Infrastructure\Support\Events\LaravelEventDispatcher;
 
-readonly class PublishArticleService
+use function info;
+
+readonly class ArticleStatusService implements ContentStatusServiceInterface
 {
     public function __construct(
         private ArticleRepositoryInterface $articleRepository,
-        private Dispatcher $dispatcher,
+        private LaravelEventDispatcher $eventDispatcher,
     ) {}
 
-    public function execute(PublishArticleCommand $command): void
+    public function execute(ChangeContentStatusCommand $command): void
     {
-
         $articleId = Uuid::fromString($command->id);
 
         $article = $this->articleRepository->findById($articleId);
@@ -28,7 +33,10 @@ readonly class PublishArticleService
         }
 
         try {
-            $article->publish($command->publishedBy);
+            match ($command->newStatus) {
+                ArticleStatus::DRAFT => $article->unpublish($command->statusChangedBy),
+                ArticleStatus::PUBLISHED => $article->publish($command->statusChangedBy),
+            };
         } catch (InvalidArticleStatusException $e) {
             info($e->getMessage());
             throw $e;
@@ -37,8 +45,7 @@ readonly class PublishArticleService
         $this->articleRepository->save($article);
 
         foreach ($article->pullDomainEvents() as $event) {
-            $this->dispatcher->dispatch($event);
+            $this->eventDispatcher->dispatch($event);
         }
-
     }
 }

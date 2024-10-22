@@ -8,7 +8,6 @@ use WordSphere\Core\Domain\ContentManagement\ValueObjects\ContentType;
 
 class ContentTypeRegistry
 {
-
     private array $contentTypes = [];
 
     public function register(ContentType $contentType): void
@@ -25,5 +24,4 @@ class ContentTypeRegistry
     {
         return $this->contentTypes;
     }
-
 }

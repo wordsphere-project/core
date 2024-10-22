@@ -73,6 +73,8 @@ test('can update an article', function (): void {
 
 test('updating article with existing slug appends number to slug', function (): void {
 
+    $this->travel(5)->days();
+
     ArticleFactory::new()
         ->create(
             attributes: [
@@ -103,6 +105,8 @@ test('updating article with existing slug appends number to slug', function (): 
         ->toStartWith('updated-slug-')
         ->and($updatedArticle->getSlug()->toString())->not
         ->toBe('updated-slug');
+
+    $this->travelBack();
 
 });
 

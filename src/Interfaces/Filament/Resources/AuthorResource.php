@@ -2,15 +2,24 @@
 
 namespace WordSphere\Core\Interfaces\Filament\Resources;
 
-use Filament\Forms;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Tabs\Tab;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentAuthor;
-use WordSphere\Core\Interfaces\Filament\Resources\AuthorResource\Pages;
+use WordSphere\Core\Interfaces\Filament\Resources\AuthorResource\Pages\CreateAuthor;
+use WordSphere\Core\Interfaces\Filament\Resources\AuthorResource\Pages\EditAuthor;
+use WordSphere\Core\Interfaces\Filament\Resources\AuthorResource\Pages\ListAuthors;
 
 use function __;
 
@@ -27,52 +36,52 @@ class AuthorResource extends Resource
         return $form
             ->schema(
                 components: [
-                    Forms\Components\Tabs::make('Tabs')
+                    Tabs::make('Tabs')
                         ->tabs([
-                            Forms\Components\Tabs\Tab::make('General')
+                            Tab::make('General')
                                 ->schema([
-                                    Forms\Components\FileUpload::make('photo')
+                                    FileUpload::make('photo')
                                         ->image()
                                         ->avatar()
                                         ->directory('author-photos')
                                         ->maxSize(1024) // 1MB limit
                                         ->disk('public'),
-                                    Forms\Components\TextInput::make('name')
+                                    TextInput::make('name')
                                         ->label(__('Name'))
                                         ->minLength(3)
                                         ->required()
                                         ->columnSpan(2),
-                                    Forms\Components\RichEditor::make('bio')
+                                    RichEditor::make('bio')
                                         ->label(__('Bio'))
                                         ->columnSpan(2),
-                                    Forms\Components\TextInput::make('email')
+                                    TextInput::make('email')
                                         ->label(__('Email'))
                                         ->prefixIcon('heroicon-o-envelope')
                                         ->email(),
-                                    Forms\Components\TextInput::make('website')
+                                    TextInput::make('website')
                                         ->label(__('Website'))
                                         ->prefixIcon('heroicon-o-globe-alt')
                                         ->url(),
-                                    Forms\Components\Fieldset::make(__('Social Profiles'))
+                                    Fieldset::make(__('Social Profiles'))
                                         ->statePath('social_links')
                                         ->schema([
-                                            Forms\Components\TextInput::make('twitter')
+                                            TextInput::make('twitter')
                                                 ->label(__('Twitter'))
                                                 ->prefixIcon('bi-twitter-x')
                                                 ->maxLength(255),
-                                            Forms\Components\TextInput::make('linkedin')
+                                            TextInput::make('linkedin')
                                                 ->label(__('LinkedIn'))
                                                 ->prefixIcon('bi-linkedin')
                                                 ->maxLength(255),
-                                            Forms\Components\TextInput::make('facebook')
+                                            TextInput::make('facebook')
                                                 ->label(__('Facebook'))
                                                 ->prefixIcon('bi-facebook')
                                                 ->maxLength(255),
-                                            Forms\Components\TextInput::make('instagram')
+                                            TextInput::make('instagram')
                                                 ->label(__('Instagram'))
                                                 ->prefixIcon('bi-instagram')
                                                 ->maxLength(255),
-                                            Forms\Components\TextInput::make('github')
+                                            TextInput::make('github')
                                                 ->label(__('Github'))
                                                 ->prefixIcon('bi-github')
                                                 ->maxLength(255),
@@ -105,11 +114,11 @@ class AuthorResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -124,9 +133,9 @@ class AuthorResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAuthors::route('/'),
-            'create' => Pages\CreateAuthor::route('/create'),
-            'edit' => Pages\EditAuthor::route('/{record}/edit'),
+            'index' => ListAuthors::route('/'),
+            'create' => CreateAuthor::route('/create'),
+            'edit' => EditAuthor::route('/{record}/edit'),
         ];
     }
 

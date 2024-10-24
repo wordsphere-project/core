@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace WordSphere\Core\Infrastructure\Support\Concerns;
 
 use Illuminate\Database\Eloquent\Model;
-
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+
 use function auth;
-use function property_exists;
 
 trait CreatedUpdatedBy
 {
@@ -17,7 +16,7 @@ trait CreatedUpdatedBy
         /** @var EloquentUser $user */
         $user = auth()->user();
 
-        static::creating(function (Model $model) use ($user) : void {
+        static::creating(function (Model $model) use ($user): void {
             if (! $model->isDirty('created_by')) {
                 /** @phpstan-ignore-next-line  */
                 $model->created_by = $user->uuid;

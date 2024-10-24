@@ -43,11 +43,12 @@ class EloquentPage extends Model
 {
     use CreatedUpdatedBy;
 
+    use CreatedUpdatedBy;
+
     /** @use HasFactory<PageFactory> */
     use HasFactory;
-    use HasUuids;
     use HasFeaturedImage;
-    use CreatedUpdatedBy;
+    use HasUuids;
 
     protected $table = 'pages';
 

@@ -32,6 +32,7 @@ class PageFactory extends Factory
         return [
             'title' => $title = $this->faker->unique()->words(4, true),
             'path' => '/'.Str::slug($title),
+            'slug' => Str::slug($title),
             'content' => $this->faker->paragraphs(4, true),
             'excerpt' => $this->faker->paragraph(),
             'template' => 'default',

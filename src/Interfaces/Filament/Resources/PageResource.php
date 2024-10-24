@@ -3,7 +3,6 @@
 namespace WordSphere\Core\Interfaces\Filament\Resources;
 
 use Awcodes\Curator\Components\Forms\CuratorPicker;
-use Awcodes\Curator\PathGenerators\DatePathGenerator;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
@@ -80,10 +79,9 @@ class PageResource extends Resource
                                         ->label('')
                                         ->schema(
                                             components: [
-                                                CuratorPicker::make('media_id')
+                                                CuratorPicker::make('featured_image_id')
                                                     ->label(__('Featured Image'))
                                                     ->buttonLabel(__('Add Feature Image'))
-                                                    ->pathGenerator(DatePathGenerator::class)
                                                     ->size('lg')->listDisplay(true),
                                             ]
                                         ),

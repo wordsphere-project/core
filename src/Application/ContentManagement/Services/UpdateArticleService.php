@@ -40,7 +40,7 @@ readonly class UpdateArticleService
                     $command->updatedBy
                 ),
                 'customFields' => $article->updateCustomFields($command->customFields, $command->updatedBy),
-                'featuredImage' => $article->updateFeaturedImage($command->featuredImage, $command->updatedBy),
+                'featuredImage' => $article->updateFeaturedImageId($command->featuredImage, $command->updatedBy),
                 default => throw new InvalidArgumentException("Unexpected field: $field")
             };
         }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Filament\Forms\Components\Select;
 use Symfony\Component\HttpFoundation\Response;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentPage;
+use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 use WordSphere\Core\Interfaces\Filament\Resources\PageResource;
 use WordSphere\Core\Interfaces\Filament\Resources\PageResource\Pages\CreatePage;
 use WordSphere\Core\Interfaces\Filament\Resources\PageResource\Pages\ListPages;
@@ -66,19 +67,29 @@ describe('page admin', tests: function (): void {
 
     it('can create', function (): void {
 
-        $newData = EloquentPage::factory()->make();
+        /** @var EloquentUser $user */
+        $user = EloquentUser::factory()->create();
+
+        /** @var EloquentPage $newData */
+        $newData = EloquentPage::factory()
+            ->for($user, 'createdBy')
+            ->for($user, 'updatedBy')
+            ->make();
+
+        $this->actingAs($user);
 
         livewire(CreatePage::class)
             ->fillForm(
                 state: [
                     'title' => $newData->title,
-                    'path' => $newData->path,
+                    'path' => 'dsds',
+                    'slug' => 'dscd',
                     'content' => $newData->content,
                     'template' => $newData->template,
                     'status' => $newData->status,
+                    'customFields' => [],
                 ]
-            )
-            ->call('create')
+            )->call('create')
             ->assertHasNoFormErrors();
 
     });
@@ -96,7 +107,13 @@ describe('page admin', tests: function (): void {
     });
 
     it('can list pages', function (): void {
+
+        /** @var EloquentUser $user */
+        $user = EloquentUser::factory()->create();
+
         $pages = EloquentPage::factory()
+            ->for($user, 'createdBy')
+            ->for($user, 'updatedBy')
             ->count(10)
             ->create();
 

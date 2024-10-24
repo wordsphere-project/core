@@ -47,6 +47,16 @@ class FormCompiler
                     ->columnSpan(2)
                     ->required(),
 
+                TextInput::make('slug')
+                    ->label(__('Slug'))
+                    ->columnSpan(2)
+                    ->required()
+                    ->unique(
+                        table: 'pages',
+                        column: 'slug',
+                        ignoreRecord: true
+                    ),
+
                 TextInput::make('path')
                     ->label(__('Path'))
                     ->columnSpan(2)
@@ -92,7 +102,7 @@ class FormCompiler
             ->schema(fn (CustomFieldsManagerContract $customFields, Get $get): array => [
 
                 Section::make(__('Supported Features'))
-                    ->statePath('meta.support')
+                    ->statePath('custom_fields.support')
                     ->schema(
                         components: [
                             Toggle::make('excerptSupport')

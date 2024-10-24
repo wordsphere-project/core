@@ -80,7 +80,7 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
         );
 
         if ($eloquentArticle->feature_image_id) {
-            $article->updateFeaturedImage(
+            $article->updateFeaturedImageId(
                 featuredImageId: Id::fromInt($eloquentArticle->feature_image_id),
                 updater: Uuid::fromString($eloquentArticle->updated_by)
             );
@@ -103,7 +103,7 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
         $eloquentArticle->published_at = $article->getPublishedAt();
         $eloquentArticle->created_by = $article->getCreatedBy();
         $eloquentArticle->updated_by = $article->getUpdatedBy();
-        $eloquentArticle->featured_image_id = $article->getFeaturedImage();
+        $eloquentArticle->featured_image_id = $article->getFeaturedImageId();
 
     }
 }

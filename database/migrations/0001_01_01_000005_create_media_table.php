@@ -12,7 +12,6 @@ return new class extends Migration
     {
         Schema::create(app(config('wordsphere.curator.model'))->getTable(), function (Blueprint $table): void {
             $table->id();
-            $table->uuid()->unique();
             $table->string('disk')->default('public');
             $table->string('directory')->default('media');
             $table->string('visibility')->default('public');

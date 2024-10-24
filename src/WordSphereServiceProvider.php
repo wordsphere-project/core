@@ -92,6 +92,7 @@ class WordSphereServiceProvider extends PackageServiceProvider
             ->hasViews()
             ->hasAssets()
             ->hasRoute('web')
+            ->hasRoute('api')
             ->hasMigration('create_migration_table_name_table')
             ->hasCommands(
                 InstallCommand::class,

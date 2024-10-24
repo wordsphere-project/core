@@ -93,8 +93,8 @@ class ArticleResource extends Resource
                                 Section::make(__('Publish'))
                                     ->schema(
                                         components: [
-                                            Placeholder::make('status')
-                                                ->label(__('Status'))
+                                            Forms\Components\Placeholder::make('status')
+                                                ->label(__('status.label'))
                                                 ->content(fn (EloquentArticle $record) => $record->status)
                                                 ->visible(fn (): bool => $form->getRecord() !== null),
                                             Select::make('visibility')

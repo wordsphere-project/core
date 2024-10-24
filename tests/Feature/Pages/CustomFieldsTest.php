@@ -19,11 +19,13 @@ describe('page resource supports custom fields', function (): void {
                     'title' => 'Home Page',
                     'template' => 'home.blade.php',
                     'status' => ContentStatus::PUBLISHED->value,
+                    'created_by' => auth()->id(),
+                    'updated_by' => auth()->id(),
                 ]
             );
 
         livewire(component: CreatePage::class)
-            ->assertFormFieldExists('data.about.title');
+            ->assertFormFieldExists('custom_fields.about.title');
 
     });
 

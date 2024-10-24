@@ -70,7 +70,7 @@ class Content
         $this->customFields = $customFields ?? [];
         $this->status = $status;
         $this->publishedAt = $publishedAt ?? null;
-        $this->updateFeaturedImage($featuredImage, $updatedBy);
+        $this->updateFeaturedImageId($featuredImage);
 
         $this->createdBy = $createdBy;
         $this->updatedBy = $updatedBy;
@@ -127,7 +127,7 @@ class Content
             $this->customFields = array_merge($this->customFields, $customFields);
         }
         $this->author = $author;
-        $this->updateFeaturedImage($featuredImage, $updater);
+        $this->updateFeaturedImageId($featuredImage, $updater);
         $this->domainEvents[] = new ArticleUpdated($this->id);
     }
 
@@ -255,7 +255,7 @@ class Content
             'status' => $this->getStatus()->value,
             'customFields' => $this->customFields,
             'author' => $this->getAuthor()?->toArray(),
-            'featuredImageId' => $this->getFeaturedImage()?->toInt(),
+            'featuredImageId' => $this->getFeaturedImageId()?->toInt(),
             'createdAt' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
             'createdBy' => $this->getCreatedBy()->toString(),
             'updatedAt' => $this->getUpdatedAt()->format('Y-m-d H:i:s'),

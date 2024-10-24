@@ -39,7 +39,7 @@ readonly class HomePageCustomFields
             tab: ResourceTab::GENERAL->value,
             fields: [
                 Section::make(__('About us'))
-                    ->statePath('data.about')
+                    ->statePath('custom_fields.about')
                     ->schema(
                         components: [
                             TextInput::make('title')
@@ -72,7 +72,7 @@ readonly class HomePageCustomFields
             fields: [
                 Tab::make('about-us')
                     ->label(__('About us'))
-                    ->statePath('data.about')
+                    ->statePath('custom_fields.about')
                     ->schema(
                         components: [
                             TextInput::make('title')

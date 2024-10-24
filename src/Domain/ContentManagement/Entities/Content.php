@@ -6,12 +6,12 @@ namespace WordSphere\Core\Domain\ContentManagement\Entities;
 
 use DateTimeImmutable;
 use InvalidArgumentException;
-use WordSphere\Core\Domain\ContentManagement\Enums\ArticleStatus;
-use WordSphere\Core\Domain\ContentManagement\Events\ArticleCreated;
-use WordSphere\Core\Domain\ContentManagement\Events\ArticlePublished;
-use WordSphere\Core\Domain\ContentManagement\Events\ArticleUnpublished;
-use WordSphere\Core\Domain\ContentManagement\Events\ArticleUpdated;
-use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidArticleStatusException;
+use WordSphere\Core\Domain\ContentManagement\Enums\ContentStatus;
+use WordSphere\Core\Domain\ContentManagement\Events\ContentCreated;
+use WordSphere\Core\Domain\ContentManagement\Events\ContentPublished;
+use WordSphere\Core\Domain\ContentManagement\Events\ContentUnpublished;
+use WordSphere\Core\Domain\ContentManagement\Events\ContentUpdated;
+use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidContentStatusException;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\Concerns\HasAuditTrail;
 use WordSphere\Core\Domain\Shared\Concerns\HasFeaturedImage;
@@ -37,7 +37,7 @@ class Content
 
     private array $customFields;
 
-    private ArticleStatus $status;
+    private ContentStatus $status;
 
     private ?DateTimeImmutable $publishedAt;
 
@@ -56,7 +56,7 @@ class Content
         ?string $excerpt = null,
         ?array $customFields = [],
         ?Id $featuredImage = null,
-        ArticleStatus $status = ArticleStatus::DRAFT,
+        ContentStatus $status = ContentStatus::DRAFT,
         ?DateTimeImmutable $publishedAt = null,
         ?DateTimeImmutable $createdAt = null,
         ?DateTimeImmutable $updatedAt = null,
@@ -83,7 +83,7 @@ class Content
         }
 
         $this->ensureValidState();
-        $this->domainEvents[] = new ArticleCreated($this->id);
+        $this->domainEvents[] = new ContentCreated($this->id);
     }
 
     public static function create(
@@ -105,7 +105,7 @@ class Content
             excerpt: $excerpt,
             customFields: $customFields,
             featuredImage: $featuredImage,
-            status: ArticleStatus::DRAFT,
+            status: ContentStatus::DRAFT,
         );
     }
 
@@ -128,7 +128,7 @@ class Content
         }
         $this->author = $author;
         $this->updateFeaturedImageId($featuredImage, $updater);
-        $this->domainEvents[] = new ArticleUpdated($this->id);
+        $this->domainEvents[] = new ContentUpdated($this->id);
     }
 
     public function updateTitle(string $newTitle, Uuid $updater): void
@@ -163,7 +163,7 @@ class Content
             $this->customFields = array_merge($this->customFields, $newCustomFields);
         }
         $this->updateAuditTrail($updater);
-        $this->domainEvents[] = new ArticleUpdated($this->id);
+        $this->domainEvents[] = new ContentUpdated($this->id);
 
     }
 
@@ -171,29 +171,29 @@ class Content
     {
         $this->author = $newAuthor;
         $this->updateAuditTrail($updater);
-        $this->domainEvents[] = new ArticleUpdated($this->id);
+        $this->domainEvents[] = new ContentUpdated($this->id);
     }
 
     public function publish(Uuid $updater): void
     {
         if ($this->status->isPublished()) {
-            throw new InvalidArticleStatusException(__('Article is already published'));
+            throw new InvalidContentStatusException(__('EloquentContent is already published'));
         }
-        $this->status = ArticleStatus::PUBLISHED;
+        $this->status = ContentStatus::PUBLISHED;
         $this->publishedAt = new DateTimeImmutable;
         $this->updateAuditTrail($updater);
-        $this->domainEvents[] = new ArticlePublished($this->id);
+        $this->domainEvents[] = new ContentPublished($this->id);
     }
 
     public function unpublish(Uuid $updater): void
     {
         if (! $this->status->isPublished()) {
-            throw new InvalidArticleStatusException(__('Cannot unpublish an article that is not published.'));
+            throw new InvalidContentStatusException(__('Cannot unpublish an article that is not published.'));
         }
-        $this->status = ArticleStatus::DRAFT;
+        $this->status = ContentStatus::DRAFT;
         $this->publishedAt = null;
         $this->updateAuditTrail($updater);
-        $this->domainEvents[] = new ArticleUnpublished($this->id);
+        $this->domainEvents[] = new ContentUnpublished($this->id);
     }
 
     public function getId(): Uuid
@@ -226,7 +226,7 @@ class Content
         return $this->customFields;
     }
 
-    public function getStatus(): ArticleStatus
+    public function getStatus(): ContentStatus
     {
         return $this->status;
     }

@@ -1,25 +1,25 @@
 <?php
 
-use WordSphere\Core\Application\ContentManagement\Commands\UpdateArticleCommand;
-use WordSphere\Core\Application\ContentManagement\Exceptions\ArticleNotFoundException;
-use WordSphere\Core\Application\ContentManagement\Services\UpdateArticleService;
-use WordSphere\Core\Application\Factories\ContentManagement\ArticleFactory;
+use WordSphere\Core\Application\ContentManagement\Commands\UpdateContentCommand;
+use WordSphere\Core\Application\ContentManagement\Exceptions\ContentNotFoundException;
+use WordSphere\Core\Application\ContentManagement\Services\UpdateContentService;
+use WordSphere\Core\Application\Factories\ContentManagement\ContentFactory;
 use WordSphere\Core\Domain\ContentManagement\Entities\Content;
-use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
+use WordSphere\Core\Domain\ContentManagement\Repositories\ContentRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\EloquentArticleRepository;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\EloquentContentRepository;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 
 beforeEach(function (): void {
 
     $this->app->bind(
-        abstract: ArticleRepositoryInterface::class,
-        concrete: EloquentArticleRepository::class
+        abstract: ContentRepositoryInterface::class,
+        concrete: EloquentContentRepository::class
     );
 
     $this->articleRepository = $this->app->make(
-        abstract: ArticleRepositoryInterface::class,
+        abstract: ContentRepositoryInterface::class,
     );
 
     /** @var EloquentUser $user */
@@ -40,14 +40,14 @@ beforeEach(function (): void {
 
 test('can update an article', function (): void {
     $updateArticleService = $this->app->make(
-        abstract: UpdateArticleService::class
+        abstract: UpdateContentService::class
     );
 
     /** @var EloquentUser $user */
     $user = EloquentUser::factory()
         ->create();
 
-    $command = new UpdateArticleCommand(
+    $command = new UpdateContentCommand(
         id: Uuid::fromString($this->testArticle->getId()->toString()),
         updatedBy: Uuid::fromString($user->uuid),
         title: 'Updated Title',
@@ -75,7 +75,7 @@ test('updating article with existing slug appends number to slug', function (): 
 
     $this->travel(5)->days();
 
-    ArticleFactory::new()
+    ContentFactory::new()
         ->create(
             attributes: [
                 'slug' => Slug::fromString('updated-slug'),
@@ -86,9 +86,9 @@ test('updating article with existing slug appends number to slug', function (): 
     $user = EloquentUser::factory()
         ->create();
 
-    /** @var UpdateArticleService $updateArticleService */
-    $updateArticleService = $this->app->make(UpdateArticleService::class);
-    $command = new UpdateArticleCommand(
+    /** @var UpdateContentService $updateArticleService */
+    $updateArticleService = $this->app->make(UpdateContentService::class);
+    $command = new UpdateContentCommand(
         id: Uuid::fromString($this->testArticle->getId()->toString()),
         updatedBy: Uuid::fromString($user->uuid),
         title: 'Updated title',
@@ -112,12 +112,12 @@ test('updating article with existing slug appends number to slug', function (): 
 
 test('throws exception when updating non-existing article', function (): void {
 
-    $updateArticleService = $this->app->make(UpdateArticleService::class);
+    $updateArticleService = $this->app->make(UpdateContentService::class);
     /** @var EloquentUser $user */
     $user = EloquentUser::factory()
         ->create();
 
-    $command = new UpdateArticleCommand(
+    $command = new UpdateContentCommand(
         id: Uuid::generate(),
         updatedBy: Uuid::fromString($user->uuid),
         title: 'Updated Title',
@@ -126,7 +126,7 @@ test('throws exception when updating non-existing article', function (): void {
         slug: Slug::fromString('updated-slug')
     );
 
-    $this->expectException(ArticleNotFoundException::class);
+    $this->expectException(ContentNotFoundException::class);
 
     $updateArticleService->execute($command);
 

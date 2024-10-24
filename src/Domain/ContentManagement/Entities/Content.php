@@ -20,7 +20,7 @@ use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
 use function array_merge;
 
-class Article
+class Content
 {
     use HasAuditTrail;
     use HasFeaturedImage;

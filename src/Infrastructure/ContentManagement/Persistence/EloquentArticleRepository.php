@@ -3,7 +3,7 @@
 namespace WordSphere\Core\Infrastructure\ContentManagement\Persistence;
 
 use DateTimeImmutable;
-use WordSphere\Core\Domain\ContentManagement\Entities\Article as DomainArticle;
+use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 use WordSphere\Core\Domain\ContentManagement\Enums\ArticleStatus;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ArticleUuid;
@@ -19,12 +19,12 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
         return ArticleUuid::generate();
     }
 
-    public function findById(Uuid $id): ?DomainArticle
+    public function findById(Uuid $id): ?Content
     {
         return self::findByUuid($id);
     }
 
-    public function findByUuid(Uuid $uuid): ?DomainArticle
+    public function findByUuid(Uuid $uuid): ?Content
     {
         $eloquentArticle = EloquentArticle::query()->find($uuid);
         if (! $eloquentArticle) {
@@ -34,7 +34,7 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
         return $this->toDomainEntity($eloquentArticle);
     }
 
-    public function findBySlug(Slug $slug): ?DomainArticle
+    public function findBySlug(Slug $slug): ?Content
     {
         $eloquentArticle = EloquentArticle::query()
             ->where('slug', $slug->toString())
@@ -43,7 +43,7 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
         return $eloquentArticle ? $this->toDomainEntity($eloquentArticle) : null;
     }
 
-    public function save(DomainArticle $article): void
+    public function save(Content $article): void
     {
         $eloquentArticle = EloquentArticle::query()
             ->findOrNew($article->getId()->toString());
@@ -62,10 +62,10 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
             ->where('slug', $slug->toString())->exists();
     }
 
-    private function toDomainEntity(EloquentArticle $eloquentArticle): DomainArticle
+    private function toDomainEntity(EloquentArticle $eloquentArticle): Content
     {
 
-        $article = new DomainArticle(
+        $article = new Content(
             id: Uuid::fromString($eloquentArticle->id),
             title: $eloquentArticle->title,
             slug: Slug::fromString($eloquentArticle->slug),
@@ -90,7 +90,7 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
 
     }
 
-    private function updateModelFromEntity(EloquentArticle $eloquentArticle, DomainArticle $article): void
+    private function updateModelFromEntity(EloquentArticle $eloquentArticle, Content $article): void
     {
         $eloquentArticle->id = $article->getId();
         $eloquentArticle->title = $article->getTitle();

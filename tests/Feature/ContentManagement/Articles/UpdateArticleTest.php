@@ -4,7 +4,7 @@ use WordSphere\Core\Application\ContentManagement\Commands\UpdateArticleCommand;
 use WordSphere\Core\Application\ContentManagement\Exceptions\ArticleNotFoundException;
 use WordSphere\Core\Application\ContentManagement\Services\UpdateArticleService;
 use WordSphere\Core\Application\Factories\ContentManagement\ArticleFactory;
-use WordSphere\Core\Domain\ContentManagement\Entities\Article;
+use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
@@ -26,7 +26,7 @@ beforeEach(function (): void {
     $user = EloquentUser::factory()
         ->create();
 
-    $this->testArticle = Article::create(
+    $this->testArticle = Content::create(
         title: 'Original Title',
         slug: Slug::fromString('original-title'),
         creator: Uuid::fromString($user->uuid),
@@ -58,12 +58,12 @@ test('can update an article', function (): void {
 
     $updateArticleService->execute($command);
 
-    /** @var Article $updatedArticle */
+    /** @var Content $updatedArticle */
     $updatedArticle = $this->articleRepository
         ->findById($this->testArticle->getId());
 
     expect($updatedArticle)
-        ->toBeInstanceOf(Article::class)
+        ->toBeInstanceOf(Content::class)
         ->and($updatedArticle->getTitle())->toBe('Updated Title')
         ->and($updatedArticle->getContent())->toBe('Updated Content')
         ->and($updatedArticle->getExcerpt())->toBe('Updated Excerpt')

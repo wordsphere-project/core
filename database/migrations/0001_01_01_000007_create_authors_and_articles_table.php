@@ -35,7 +35,7 @@ return new class extends Migration
                 ->on('users');
         });
 
-        Schema::create('articles', function (Blueprint $table): void {
+        Schema::create('contents', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('title');
             $table->string('slug')->unique();

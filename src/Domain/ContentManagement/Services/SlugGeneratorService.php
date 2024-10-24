@@ -2,13 +2,13 @@
 
 namespace WordSphere\Core\Domain\ContentManagement\Services;
 
-use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
+use WordSphere\Core\Domain\ContentManagement\Repositories\ContentRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 
 readonly class SlugGeneratorService
 {
     public function __construct(
-        private ArticleRepositoryInterface $articleRepository,
+        private ContentRepositoryInterface $articleRepository,
     ) {}
 
     public function generateUniqueSlug(string $baseSlug, ?Slug $currentSlug = null): Slug

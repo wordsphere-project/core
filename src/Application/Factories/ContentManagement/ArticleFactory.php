@@ -8,7 +8,7 @@ use DateTimeImmutable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
-use WordSphere\Core\Domain\ContentManagement\Entities\Article as DomainArticle;
+use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 use WordSphere\Core\Domain\ContentManagement\Enums\ArticleStatus;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
@@ -63,11 +63,11 @@ final class ArticleFactory extends Factory
     /**
      * @param  array<string, mixed>  $attributes
      */
-    public function makeForDomain($attributes = [], null|Model|DomainArticle $parent = null): Model|DomainArticle|EloquentArticle|null
+    public function makeForDomain($attributes = [], null|Model|Content $parent = null): Model|Content|EloquentArticle|null
     {
         $articleData = array_merge($this->definition(), $attributes);
 
-        return new DomainArticle(
+        return new Content(
             id: $articleData['id'],
             title: $articleData['title'],
             slug: $articleData['slug'],
@@ -83,7 +83,7 @@ final class ArticleFactory extends Factory
         );
     }
 
-    public function create($attributes = [], ?Model $parent = null): Model|Collection|EloquentArticle|DomainArticle
+    public function create($attributes = [], ?Model $parent = null): Model|Collection|EloquentArticle|Content
     {
         $article = $this->makeForDomain($attributes, $parent);
         app(abstract: ArticleRepositoryInterface::class)

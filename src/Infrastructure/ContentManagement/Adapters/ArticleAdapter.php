@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WordSphere\Core\Infrastructure\ContentManagement\Adapters;
 
 use DateTimeImmutable;
-use WordSphere\Core\Domain\ContentManagement\Entities\Article as DomainArticle;
+use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 use WordSphere\Core\Domain\ContentManagement\Enums\ArticleStatus;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
@@ -13,7 +13,7 @@ use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article 
 
 class ArticleAdapter
 {
-    public static function toEloquent(DomainArticle $domainArticle): EloquentArticle
+    public static function toEloquent(Content $domainArticle): EloquentArticle
     {
 
         $eloquentArticle = new EloquentArticle;
@@ -23,9 +23,9 @@ class ArticleAdapter
 
     }
 
-    public static function toDomain(EloquentArticle $eloquentArticle): DomainArticle
+    public static function toDomain(EloquentArticle $eloquentArticle): Content
     {
-        return new DomainArticle(
+        return new Content(
             id: Uuid::fromString($eloquentArticle->id),
             title: $eloquentArticle->title,
             slug: Slug::fromString($eloquentArticle->slug),

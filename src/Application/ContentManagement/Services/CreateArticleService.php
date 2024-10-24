@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WordSphere\Core\Application\ContentManagement\Services;
 
 use WordSphere\Core\Application\ContentManagement\Commands\CreateArticleCommand;
-use WordSphere\Core\Domain\ContentManagement\Entities\Article;
+use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\Services\SlugGeneratorService;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
@@ -24,7 +24,7 @@ readonly class CreateArticleService
             baseSlug: $command->slug ?? $command->title,
         );
 
-        $article = Article::create(
+        $article = Content::create(
             title: $command->title,
             slug: $slug,
             creator: $command->createdBy,

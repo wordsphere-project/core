@@ -2,7 +2,7 @@
 
 namespace WordSphere\Core\Interfaces\Filament\Resources\AuthorResource\Pages;
 
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Database\Eloquent\Model;
@@ -38,7 +38,7 @@ class EditAuthor extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 

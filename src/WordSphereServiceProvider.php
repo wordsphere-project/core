@@ -64,12 +64,12 @@ class WordSphereServiceProvider extends PackageServiceProvider
 
     private function setCuratorConfig(): void
     {
-        config()->set('curator', config('wordsphere.curator'));
+        //config()->set('curator', config('wordsphere.curator'));
     }
 
     private function setPermissionsConfig(): void
     {
-        config()->set('permission', config('wordsphere.permission'));
+        //config()->set('permission', config('wordsphere.permission'));
     }
 
     private function publishAssets(): void
@@ -88,7 +88,12 @@ class WordSphereServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('wordsphere')
-            ->hasConfigFile()
+            ->hasConfigFile([
+                'wordsphere',
+                'content-types',
+                'permission',
+                'curator',
+            ])
             ->hasViews()
             ->hasAssets()
             ->hasRoute('web')

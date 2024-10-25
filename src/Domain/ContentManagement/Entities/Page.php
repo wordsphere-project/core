@@ -6,10 +6,10 @@ namespace WordSphere\Core\Domain\ContentManagement\Entities;
 
 use DateTimeImmutable;
 use WordSphere\Core\Domain\ContentManagement\Events\PageCreated;
+use WordSphere\Core\Domain\ContentManagement\ValueObjects\Media;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\Concerns\HasAuditTrail;
 use WordSphere\Core\Domain\Shared\Concerns\HasFeaturedImage;
-use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Legacy\Enums\ContentStatus;
 use WordSphere\Core\Legacy\Enums\ContentVisibility;
@@ -60,8 +60,7 @@ class Page
         ?string $template = null,
         ?int $sortOrder = null,
         ?string $redirectUrl = null,
-        ?Id $featuredImageId = null,
-        ?string $featuredImageUrl = null,
+        ?Media $featuredImage = null,
         ContentStatus $status = ContentStatus::DRAFT,
         ContentVisibility $visibility = ContentVisibility::PUBLIC,
         ?DateTimeImmutable $publishedAt = null,
@@ -85,8 +84,7 @@ class Page
         $this->publishedAt = $publishedAt;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
-        $this->featuredImageId = $featuredImageId;
-        $this->featuredImageUrl = $featuredImageUrl;
+        $this->featuredImage = $featuredImage;
 
         if (! $createdAt && ! $updatedAt) {
             $this->initializeHasAuditTrail($createdBy);
@@ -110,7 +108,7 @@ class Page
         ?string $template = null,
         ?int $sortOrder = null,
         ?string $redirectUrl = null,
-        ?Id $featuredImage = null,
+        ?Media $featuredImage = null,
     ): Page {
         return new self(
             id: Uuid::generate(),
@@ -125,7 +123,7 @@ class Page
             template: $template,
             sortOrder: $sortOrder,
             redirectUrl: $redirectUrl,
-            featuredImageId: $featuredImage,
+            featuredImage: $featuredImage,
             status: ContentStatus::DRAFT,
             visibility: ContentVisibility::PUBLIC,
         );
@@ -269,8 +267,7 @@ class Page
             'excerpt' => $this->excerpt,
             'customFields' => $this->customFields,
             'template' => $this->template,
-            'featuredImageId' => $this->featuredImageId,
-            'featuredImageUrl' => $this->featuredImageUrl,
+            'featuredImage' => $this->getFeaturedImage()->getId(),
             'sortOrder' => $this->sortOrder,
             'redirectUrl' => $this->redirectUrl,
             'status' => $this->status,

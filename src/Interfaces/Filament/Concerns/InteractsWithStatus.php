@@ -12,16 +12,16 @@ use Illuminate\Auth\AuthManager;
 use Illuminate\Database\Eloquent\Model;
 use WordSphere\Core\Application\ContentManagement\Commands\ChangeContentStatusCommand;
 use WordSphere\Core\Application\ContentManagement\Services\ContentStatusServiceFactory;
-use WordSphere\Core\Domain\ContentManagement\Enums\ArticleStatus;
+use WordSphere\Core\Domain\ContentManagement\Enums\ContentStatus;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\Article;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentContent;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 
 trait InteractsWithStatus
 {
     public static function changeContentStatus(
-        Model|Article $record,
-        ArticleStatus $newStatus,
+        Model|EloquentContent $record,
+        ContentStatus $newStatus,
         ContentStatusServiceFactory $serviceFactory,
         AuthManager $auth,
         ?Get $get = null,
@@ -31,7 +31,7 @@ trait InteractsWithStatus
         /** @var EloquentUser $user */
         $user = $auth->user();
 
-        if (! $record instanceof Article) {
+        if (! $record instanceof EloquentContent) {
             return;
         }
 
@@ -43,7 +43,7 @@ trait InteractsWithStatus
 
         try {
 
-            $contentType = static::getContentType();
+            $contentType = static::getEntityClass();
             $statusService = $serviceFactory->create($contentType);
             $statusService->execute($command);
 
@@ -77,7 +77,7 @@ trait InteractsWithStatus
         ?Get $get = null,
         ?Set $set = null
     ): void {
-        static::changeContentStatus($record, ArticleStatus::PUBLISHED, $serviceFactory, $auth, $get, $set);
+        static::changeContentStatus($record, ContentStatus::PUBLISHED, $serviceFactory, $auth, $get, $set);
     }
 
     public static function unpublishContent(
@@ -87,8 +87,8 @@ trait InteractsWithStatus
         ?Get $get = null,
         ?Set $set = null
     ): void {
-        static::changeContentStatus($record, ArticleStatus::DRAFT, $serviceFactory, $auth, $get, $set);
+        static::changeContentStatus($record, ContentStatus::DRAFT, $serviceFactory, $auth, $get, $set);
     }
 
-    abstract protected static function getContentType(): string;
+    abstract protected static function getEntityClass(): string;
 }

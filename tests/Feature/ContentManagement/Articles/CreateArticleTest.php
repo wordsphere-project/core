@@ -1,34 +1,35 @@
 <?php
 
-use WordSphere\Core\Application\ContentManagement\Commands\CreateArticleCommand;
-use WordSphere\Core\Application\ContentManagement\Services\CreateArticleService;
-use WordSphere\Core\Domain\ContentManagement\Repositories\ArticleRepositoryInterface;
+use WordSphere\Core\Application\ContentManagement\Commands\CreateContentCommand;
+use WordSphere\Core\Application\ContentManagement\Services\CreateContentService;
+use WordSphere\Core\Domain\ContentManagement\Repositories\ContentRepositoryInterface;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\EloquentArticleRepository;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\EloquentContentRepository;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 
 use function Pest\Laravel\assertDatabaseHas;
 
 beforeEach(function (): void {
     $this->app->bind(
-        abstract: ArticleRepositoryInterface::class,
-        concrete: EloquentArticleRepository::class
+        abstract: ContentRepositoryInterface::class,
+        concrete: EloquentContentRepository::class
     );
 });
 
 test('can create a article', function (): void {
 
     //Arrange
-    /** @var CreateArticleService $createArticleService */
-    $createArticleService = $this->app->make(CreateArticleService::class);
+    /** @var CreateContentService $createArticleService */
+    $createArticleService = $this->app->make(CreateContentService::class);
 
     $createdBy = Uuid::generate();
 
-    $command = new CreateArticleCommand(
+    $command = new CreateContentCommand(
+        type: 'blog-posts',
         createdBy: $createdBy,
-        title: 'Test Article',
-        content: 'Test Article',
-        excerpt: 'Test Article',
+        title: 'Test EloquentContent',
+        content: 'Test EloquentContent',
+        excerpt: 'Test EloquentContent',
         slug: 'test-article',
         customFields: ['featured' => true]
     );
@@ -39,11 +40,11 @@ test('can create a article', function (): void {
     //Assert
     expect($articleId)->toBeInstanceOf(Uuid::class);
 
-    assertDatabaseHas('articles', [
+    assertDatabaseHas('contents', [
         'id' => $articleId->toString(),
-        'title' => 'Test Article',
-        'content' => 'Test Article',
-        'excerpt' => 'Test Article',
+        'title' => 'Test EloquentContent',
+        'content' => 'Test EloquentContent',
+        'excerpt' => 'Test EloquentContent',
         'slug' => 'test-article',
     ]);
 
@@ -51,15 +52,16 @@ test('can create a article', function (): void {
 
 test('creates unique slug when not provided', function (): void {
     //Arrange
-    /** @var CreateArticleService $createArticleService */
-    $createArticleService = $this->app->make(CreateArticleService::class);
+    /** @var CreateContentService $createArticleService */
+    $createArticleService = $this->app->make(CreateContentService::class);
     /** @var EloquentUser $user */
     $user = EloquentUser::factory()
         ->create();
     $createdBy = Uuid::fromString($user->uuid);
-    $command = new CreateArticleCommand(
+    $command = new CreateContentCommand(
+        type: 'blog-posts',
         createdBy: $createdBy,
-        title : 'Test Article',
+        title : 'Test Content',
         content: 'Content',
         excerpt: 'Excerpt'
     );
@@ -67,18 +69,19 @@ test('creates unique slug when not provided', function (): void {
     //Act
     $articleId = $createArticleService->execute($command);
 
-    /** @var EloquentArticleRepository $repository */
-    $repository = $this->app->make(EloquentArticleRepository::class);
+    /** @var EloquentContentRepository $repository */
+    $repository = $this->app->make(EloquentContentRepository::class);
     $article = $repository->findById($articleId);
 
     //Assert
     expect($article->getSlug()->toString())
-        ->toBe('test-article');
+        ->toBe('test-content');
 
     //Arrange part II
-    $command2 = new CreateArticleCommand(
+    $command2 = new CreateContentCommand(
+        type: 'blog-posts',
         createdBy: $createdBy,
-        title: 'Test Article',
+        title: 'Test Content',
         content: 'Different Content',
         excerpt: 'Different Excerpt',
     );
@@ -88,14 +91,15 @@ test('creates unique slug when not provided', function (): void {
 
     expect($articleII->getSlug())
         ->not
-        ->toBe('test-article')
+        ->toBe('test-content')
         ->and($articleII->getSlug()->toString())
-        ->toStartWith('test-article-1');
+        ->toStartWith('test-content-1');
 
     // Create third article with same title
-    $command3 = new CreateArticleCommand(
+    $command3 = new CreateContentCommand(
+        type: 'blog-posts',
         createdBy: $createdBy,
-        title: 'Test Article',
+        title: 'Test Content',
         content: 'Content 3',
         excerpt: 'Excerpt 3'
     );
@@ -104,18 +108,19 @@ test('creates unique slug when not provided', function (): void {
     $articleIII = $repository->findById($articleIdIII);
 
     expect($articleIII->getSlug()->toString())
-        ->toBe('test-article-2');
+        ->toBe('test-content-2');
 
 });
 
 test('throws exception for empty title', function (): void {
-    /** @var CreateArticleService $createArticleService */
-    $createArticleService = $this->app->make(CreateArticleService::class);
+    /** @var CreateContentService $createArticleService */
+    $createArticleService = $this->app->make(CreateContentService::class);
     /** @var EloquentUser $user */
     $user = EloquentUser::factory()
         ->create();
     $cratedBy = Uuid::fromString($user->uuid);
-    $command = new CreateArticleCommand(
+    $command = new CreateContentCommand(
+        type: 'blog-posts',
         createdBy: $cratedBy,
         title: '',
         content: 'Content',

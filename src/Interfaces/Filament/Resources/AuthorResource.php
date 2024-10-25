@@ -44,7 +44,7 @@ class AuthorResource extends Resource
                                         ->image()
                                         ->avatar()
                                         ->directory('author-photos')
-                                        ->maxSize(1024) // 1MB limit
+                                        ->maxSize(1024)
                                         ->disk('public'),
                                     TextInput::make('name')
                                         ->label(__('Name'))

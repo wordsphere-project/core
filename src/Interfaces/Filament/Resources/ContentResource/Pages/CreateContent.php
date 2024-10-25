@@ -38,7 +38,6 @@ class CreateContent extends CreateRecord
         $this->auth = $auth;
     }
 
-
     public function handleRecordCreation(array $data): EloquentContent
     {
         /** @var EloquentUser $user */

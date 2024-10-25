@@ -8,7 +8,6 @@ use WordSphere\Core\Domain\ContentManagement\Repositories\MediaRepositoryInterfa
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\EloquentMediaRepository;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentPage;
 
 class PageAdapter

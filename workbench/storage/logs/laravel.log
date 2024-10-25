@@ -6,3 +6,5 @@
 [stacktrace]
 #0 {main}
 "} 
+[2024-10-25 22:43:49] testing.DEBUG: Content type middleware {"path":"admin/pages/create","content_type":null,"registered_types":["blog-posts","news","press-releases","blocks","pages"]} 
+[2024-10-25 22:43:49] testing.DEBUG: Content type middleware {"path":"admin/pages","content_type":null,"registered_types":["blog-posts","news","press-releases","blocks","pages"]} 

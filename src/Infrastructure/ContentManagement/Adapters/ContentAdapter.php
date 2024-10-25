@@ -20,7 +20,6 @@ use function property_exists;
 
 class ContentAdapter
 {
-
     public static function toEloquent(Content $domainContent): EloquentContent
     {
 
@@ -70,7 +69,6 @@ class ContentAdapter
         );
 
         if ($eloquentArticle->feature_image_id) {
-
 
             $content->updateFeaturedImage(
                 featuredImage: app(MediaRepositoryInterface::class)

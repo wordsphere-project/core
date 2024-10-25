@@ -30,24 +30,32 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Auth\AuthManager;
+use Illuminate\Database\Eloquent\Builder;
 use WordSphere\Core\Application\ContentManagement\Commands\PublishContentCommand;
 use WordSphere\Core\Application\ContentManagement\Services\ContentStatusServiceFactory;
 use WordSphere\Core\Application\ContentManagement\Services\PublishContentService;
+use WordSphere\Core\Domain\ContentManagement\ContentTypeRegistry;
 use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 use WordSphere\Core\Domain\ContentManagement\Enums\ContentStatus;
 use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidContentStatusException;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentContent as EloquentArticle;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Interfaces\Filament\Concerns\InteractsWithContentType;
 use WordSphere\Core\Interfaces\Filament\Concerns\InteractsWithStatus;
+use WordSphere\Core\Interfaces\Filament\Hooks\ContentTypeFieldsHook;
+use WordSphere\Core\Interfaces\Filament\Resolvers\ContentTypeRouteResolver;
 use WordSphere\Core\Interfaces\Filament\Resources\ContentResource\Pages\CreateContent;
 use WordSphere\Core\Interfaces\Filament\Resources\ContentResource\Pages\EditContent;
 use WordSphere\Core\Interfaces\Filament\Resources\ContentResource\Pages\ListContents;
 
 use function __;
+use function app;
+use function request;
 
 class ContentResource extends Resource
 {
+    use InteractsWithContentType;
     use InteractsWithStatus;
 
     protected static ?string $model = EloquentArticle::class;
@@ -56,13 +64,19 @@ class ContentResource extends Resource
 
     protected static ?string $navigationGroup = 'CMS';
 
-    public static function getContentType(): string
+    protected static bool $shouldRegisterNavigation = true;
+
+    public static function getEntityClass(): string
     {
         return Content::class;
     }
 
     public static function form(Form $form): Form
     {
+
+        /** @var string $contentType */
+        $contentType = app(ContentTypeRouteResolver::class)->resolve(request());
+
         return $form
             ->schema(
                 components: [
@@ -73,6 +87,8 @@ class ContentResource extends Resource
                                     ->label(__('General'))
                                     ->schema(
                                         components: [
+                                            Forms\Components\Hidden::make('type')
+                                                ->default($contentType),
                                             TextInput::make('title')
                                                 ->columnSpan(2)
                                                 ->required(),
@@ -85,6 +101,20 @@ class ContentResource extends Resource
                                                 ->columnSpan(2),
                                         ]
                                     ),
+
+                                Tab::make('Media')
+                                    ->schema([
+                                        CuratorPicker::make('media_ids')
+                                            ->label('Media Gallery')
+                                            ->multiple()
+                                            ->relationship('media', 'id')
+                                            ->buttonLabel('Add Media')
+                                            ->columnSpanFull()
+                                            ->acceptedFileTypes(['image/*'])
+                                            ->helperText('Add images to the media gallery')
+                                            ->orderColumn('order')
+                                            ->reactive(),
+                                    ]),
                             ]),
 
                         Group::make()
@@ -219,12 +249,57 @@ class ContentResource extends Resource
         ];
     }
 
+    public static function getNavigationItems(): array
+    {
+        $registry = app(ContentTypeRegistry::class);
+        $items = [];
+
+        foreach ($registry->all() as $contentType) {
+            $items[] = \Filament\Navigation\NavigationItem::make()
+                ->label($contentType->pluralName)
+                ->icon($contentType->icon)
+                ->group($contentType->navigationGroup)
+                // Direct path construction is more reliable in this case
+                ->url("/admin/contents/{$contentType->key}");
+        }
+
+        return $items;
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => ListContents::route('/'),
-            'create' => CreateContent::route('/create'),
-            'edit' => EditContent::route('/{record}/edit'),
+            'index' => ListContents::route('/{contentType}'),
+            'create' => CreateContent::route('/{contentType}/create'),
+            'edit' => EditContent::route('/{contentType}/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $contentType = app(ContentTypeRouteResolver::class)->resolve(request());
+
+        return parent::getEloquentQuery()
+            ->where('type', $contentType);
+    }
+
+    protected static function getCustomFields(string $contentType, string $location): array
+    {
+        return app(ContentTypeFieldsHook::class)->getCustomFields($contentType, $location);
+    }
+
+    protected static function getCustomTabs(string $contentType): array
+    {
+        $fieldsHook = app(ContentTypeFieldsHook::class);
+        $tabs = [];
+        foreach ($fieldsHook->getAvailableLocations($contentType) as $location) {
+            if (str_starts_with($location, 'tab.')) {
+                $tabName = substr($location, 4);
+                $tabs[] = Forms\Components\Tabs\Tab::make($tabName)
+                    ->schema($fieldsHook->getCustomFields($contentType, $location));
+            }
+        }
+
+        return $tabs;
     }
 }

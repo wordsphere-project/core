@@ -25,6 +25,7 @@ test('can create a article', function (): void {
     $createdBy = Uuid::generate();
 
     $command = new CreateContentCommand(
+        type: 'blog-posts',
         createdBy: $createdBy,
         title: 'Test EloquentContent',
         content: 'Test EloquentContent',
@@ -58,6 +59,7 @@ test('creates unique slug when not provided', function (): void {
         ->create();
     $createdBy = Uuid::fromString($user->uuid);
     $command = new CreateContentCommand(
+        type: 'blog-posts',
         createdBy: $createdBy,
         title : 'Test Content',
         content: 'Content',
@@ -77,6 +79,7 @@ test('creates unique slug when not provided', function (): void {
 
     //Arrange part II
     $command2 = new CreateContentCommand(
+        type: 'blog-posts',
         createdBy: $createdBy,
         title: 'Test Content',
         content: 'Different Content',
@@ -94,6 +97,7 @@ test('creates unique slug when not provided', function (): void {
 
     // Create third article with same title
     $command3 = new CreateContentCommand(
+        type: 'blog-posts',
         createdBy: $createdBy,
         title: 'Test Content',
         content: 'Content 3',
@@ -116,6 +120,7 @@ test('throws exception for empty title', function (): void {
         ->create();
     $cratedBy = Uuid::fromString($user->uuid);
     $command = new CreateContentCommand(
+        type: 'blog-posts',
         createdBy: $cratedBy,
         title: '',
         content: 'Content',

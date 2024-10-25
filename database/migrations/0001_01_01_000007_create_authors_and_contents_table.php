@@ -37,11 +37,12 @@ return new class extends Migration
 
         Schema::create('contents', function (Blueprint $table): void {
             $table->uuid('id')->primary();
+            $table->string('type')->index();
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('content')->nullable();
             $table->text('excerpt')->nullable();
-            $table->json('custom_fields')->nullable();
+            $table->jsonb('custom_fields')->nullable();
             $table->string('status');
             $table->uuid('author_id')->nullable();
             $table->unsignedInteger('featured_image_id')->nullable();
@@ -57,7 +58,7 @@ return new class extends Migration
 
             $table->foreign('featured_image_id')
                 ->references('id')
-                ->on(app(config('wordsphere.curator.model'))
+                ->on(app(config('curator.model'))
                     ->getTable());
 
             $table->foreign('created_by')
@@ -68,6 +69,27 @@ return new class extends Migration
                 ->references('uuid')
                 ->on('users');
         });
+
+        Schema::create('content_media', function (Blueprint $table): void {
+            $table->id();
+            $table->uuid('content_id');
+            $table->unsignedInteger('media_id');
+            $table->integer('order')->default(0);
+            $table->jsonb('attributes')->nullable();
+            $table->timestamps();
+
+            $table->foreign('content_id')
+                ->references('id')
+                ->on('contents')
+                ->onDelete('cascade');
+
+            $table->foreign('media_id')
+                ->references('id')
+                ->on('media')
+                ->onDelete('cascade');
+
+        });
+
     }
 
     /**
@@ -75,7 +97,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('articles');
+        Schema::dropIfExists('content_media');
+        Schema::dropIfExists('contents');
         Schema::dropIfExists('authors');
     }
 };

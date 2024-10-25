@@ -4,49 +4,25 @@ declare(strict_types=1);
 
 namespace WordSphere\Core\Domain\Shared\Concerns;
 
-use WordSphere\Core\Domain\Shared\ValueObjects\Id;
-use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
+use WordSphere\Core\Domain\ContentManagement\ValueObjects\Media;
 
 use function method_exists;
 
 trait HasFeaturedImage
 {
-    private ?Id $featuredImageId = null;
+    private ?Media $featuredImage = null;
 
-    private ?string $featuredImageUrl = null;
-
-    public function getFeaturedImageUrl(): ?string
+    public function getFeaturedImage(): ?Media
     {
-        return $this->featuredImageUrl;
+        return $this->featuredImage;
     }
 
-    public function getFeaturedImageId(): ?Id
+    public function updateFeaturedImage(?Media $featuredImage): void
     {
-        return $this->featuredImageId;
-    }
-
-    public function updateFeaturedImageUrl(?string $featuredImageUrl): void
-    {
-        $this->featuredImageUrl = $featuredImageUrl;
+        $this->featuredImage = $featuredImage;
 
         if (method_exists($this, 'updateAuditTrail')) {
             $this->updateAuditTrail();
-
-            return;
-        }
-
-        if (method_exists($this, 'updateTimestamps')) {
-            $this->updateTimestamps();
-        }
-
-    }
-
-    public function updateFeaturedImageId(?Id $featuredImageId, ?Uuid $updater = null): void
-    {
-        $this->featuredImageId = $featuredImageId;
-
-        if (method_exists($this, 'updateAuditTrail') && $updater !== null) {
-            $this->updateAuditTrail($updater);
 
             return;
         }

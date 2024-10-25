@@ -9,45 +9,49 @@ use InvalidArgumentException;
 use WordSphere\Core\Application\ContentManagement\Commands\UpdateContentCommand;
 use WordSphere\Core\Application\ContentManagement\Exceptions\ContentNotFoundException;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ContentRepositoryInterface;
+use WordSphere\Core\Domain\ContentManagement\Repositories\MediaRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\Services\SlugGeneratorService;
 
 readonly class UpdateContentService
 {
     public function __construct(
-        private ContentRepositoryInterface $articleRepository,
+        private ContentRepositoryInterface $contentRepository,
+        private MediaRepositoryInterface $mediaRepository,
         private SlugGeneratorService $slugGenerator,
         private Dispatcher $dispatcher
     ) {}
 
     public function execute(UpdateContentCommand $command): void
     {
-        $article = $this->articleRepository->findById($command->id);
-        if (! $article) {
+        $content = $this->contentRepository->findById($command->id);
+
+        if (! $content) {
             throw new ContentNotFoundException($command->id);
         }
 
         foreach ($command->getUpdatedFields() as $field) {
             match ($field) {
-                'title' => $article->updateTitle($command->title, $command->updatedBy),
-                'content' => $article->updateContent($command->content, $command->updatedBy),
-                'excerpt' => $article->updateExcerpt($command->excerpt, $command->updatedBy),
-                'slug' => $article->updateSlug(
+                'title' => $content->updateTitle($command->title, $command->updatedBy),
+                'content' => $content->updateContent($command->content, $command->updatedBy),
+                'excerpt' => $content->updateExcerpt($command->excerpt, $command->updatedBy),
+                'slug' => $content->updateSlug(
                     $this->slugGenerator
                         ->generateUniqueSlug(
                             baseSlug: $command->slug,
-                            currentSlug: $article->getSlug()
+                            currentSlug: $content->getSlug()
                         ),
                     $command->updatedBy
                 ),
-                'customFields' => $article->updateCustomFields($command->customFields, $command->updatedBy),
-                'featuredImage' => $article->updateFeaturedImageId($command->featuredImage, $command->updatedBy),
+                'customFields' => $content->updateCustomFields($command->customFields, $command->updatedBy),
+                'featuredImage' => $content->updateFeaturedImage($this->mediaRepository->findById($command->featuredImage)),
+                'media' => $content->updateMedia($command->media, $command->updatedBy),
                 default => throw new InvalidArgumentException("Unexpected field: $field")
             };
         }
 
-        $this->articleRepository->save($article);
+        $this->contentRepository->save($content);
 
-        foreach ($article->pullDomainEvents() as $event) {
+        foreach ($content->pullDomainEvents() as $event) {
             $this->dispatcher->dispatch($event);
         }
     }

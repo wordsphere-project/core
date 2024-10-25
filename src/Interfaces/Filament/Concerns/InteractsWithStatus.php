@@ -43,7 +43,7 @@ trait InteractsWithStatus
 
         try {
 
-            $contentType = static::getContentType();
+            $contentType = static::getEntityClass();
             $statusService = $serviceFactory->create($contentType);
             $statusService->execute($command);
 
@@ -90,5 +90,5 @@ trait InteractsWithStatus
         static::changeContentStatus($record, ContentStatus::DRAFT, $serviceFactory, $auth, $get, $set);
     }
 
-    abstract protected static function getContentType(): string;
+    abstract protected static function getEntityClass(): string;
 }

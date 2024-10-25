@@ -15,7 +15,17 @@ class ListContents extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->url(fn (): string => static::getResource()::getUrl('create', [
+                    'contentType' => request()->route('contentType'),
+                ])),
         ];
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return static::getResource()::getUrl('index', [
+            'contentType' => request()->route('contentType'),
+        ]);
     }
 }

@@ -2,14 +2,16 @@
 
 namespace WordSphere\Core\Infrastructure\ContentManagement\Persistence;
 
-use DateTimeImmutable;
+use Illuminate\Support\Facades\DB;
 use WordSphere\Core\Domain\ContentManagement\Entities\Content;
-use WordSphere\Core\Domain\ContentManagement\Enums\ContentStatus;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ContentRepositoryInterface;
+use WordSphere\Core\Domain\ContentManagement\ValueObjects\Media;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
-use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentContent as EloquentArticle;
+use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ContentAdapter;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentContent;
+
+use function collect;
 
 class EloquentContentRepository implements ContentRepositoryInterface
 {
@@ -25,84 +27,94 @@ class EloquentContentRepository implements ContentRepositoryInterface
 
     public function findByUuid(Uuid $uuid): ?Content
     {
-        $eloquentArticle = EloquentArticle::query()->find($uuid);
-        if (! $eloquentArticle) {
-            return null;
-        }
+        $eloquentContent = EloquentContent::query()
+            ->with(['media' => function ($query) {
+                $query->orderBy('order');
+            }])
+            ->find($uuid);
 
-        return $this->toDomainEntity($eloquentArticle);
+        return $eloquentContent ? ContentAdapter::toDomain($eloquentContent) : null;
     }
 
     public function findBySlug(Slug $slug): ?Content
     {
-        $eloquentArticle = EloquentArticle::query()
+        $eloquentContent = EloquentContent::query()
+            ->with(['media' => function ($query) {
+                $query->orderBy('order');
+            }])
             ->where('slug', $slug->toString())
             ->first();
 
-        return $eloquentArticle ? $this->toDomainEntity($eloquentArticle) : null;
+        return $eloquentContent ? ContentAdapter::toDomain($eloquentContent) : null;
     }
 
-    public function save(Content $article): void
+    public function save(Content $content): void
     {
-        $eloquentArticle = EloquentArticle::query()
-            ->findOrNew($article->getId()->toString());
-        $this->updateModelFromEntity($eloquentArticle, $article);
-        $eloquentArticle->save();
+        $eloquentContent = ContentAdapter::toEloquent($content);
+
+        DB::transaction(function () use ($eloquentContent, $content) {
+            $this->updateModelFromEntity($eloquentContent, $content);
+            $eloquentContent->save();
+            $this->saveMediaRelations($eloquentContent, $content);
+            $eloquentContent->refresh();
+        });
+
     }
 
     public function delete(Uuid $id): void
     {
-        EloquentArticle::destroy($id->toString());
+        EloquentContent::destroy($id->toString());
     }
 
     public function isSlugUnique(Slug $slug): bool
     {
-        return ! EloquentArticle::query()
-            ->where('slug', $slug->toString())->exists();
+        return ! EloquentContent::query()
+            ->where('slug', $slug->toString())
+            ->exists();
     }
 
-    private function toDomainEntity(EloquentArticle $eloquentArticle): Content
+    private function updateModelFromEntity(EloquentContent $eloquentContent, Content $content): void
     {
 
-        $article = new Content(
-            id: Uuid::fromString($eloquentArticle->id),
-            title: $eloquentArticle->title,
-            slug: Slug::fromString($eloquentArticle->slug),
-            createdBy: Uuid::fromString($eloquentArticle->created_by),
-            updatedBy: Uuid::fromString($eloquentArticle->updated_by),
-            content: $eloquentArticle->content,
-            excerpt: $eloquentArticle->excerpt,
-            customFields: $eloquentArticle->custom_fields,
-            status: ContentStatus::from($eloquentArticle->status),
-            createdAt: DateTimeImmutable::createFromInterface($eloquentArticle->created_at),
-            updatedAt: DateTimeImmutable::createFromInterface($eloquentArticle->updated_at)
-        );
-
-        if ($eloquentArticle->feature_image_id) {
-            $article->updateFeaturedImageId(
-                featuredImageId: Id::fromInt($eloquentArticle->feature_image_id),
-                updater: Uuid::fromString($eloquentArticle->updated_by)
-            );
-        }
-
-        return $article;
+        $eloquentContent->id = $content->getId();
+        $eloquentContent->type = $content->getType()->toString();
+        $eloquentContent->title = $content->getTitle();
+        $eloquentContent->slug = $content->getSlug();
+        $eloquentContent->content = $content->getContent();
+        $eloquentContent->excerpt = $content->getExcerpt();
+        $eloquentContent->status = $content->getStatus()->toString();
+        $eloquentContent->created_at = $content->getCreatedAt();
+        $eloquentContent->updated_at = $content->getUpdatedAt();
+        $eloquentContent->published_at = $content->getPublishedAt();
+        $eloquentContent->created_by = $content->getCreatedBy();
+        $eloquentContent->updated_by = $content->getUpdatedBy();
+        $eloquentContent->featured_image_id = $content->getFeaturedImage()?->getId();
 
     }
 
-    private function updateModelFromEntity(EloquentArticle $eloquentArticle, Content $article): void
+    private function saveMediaRelations(EloquentContent $eloquentContent, Content $content): void
     {
-        $eloquentArticle->id = $article->getId();
-        $eloquentArticle->title = $article->getTitle();
-        $eloquentArticle->slug = $article->getSlug();
-        $eloquentArticle->content = $article->getContent();
-        $eloquentArticle->excerpt = $article->getExcerpt();
-        $eloquentArticle->status = $article->getStatus()->toString();
-        $eloquentArticle->created_at = $article->getCreatedAt();
-        $eloquentArticle->updated_at = $article->getUpdatedAt();
-        $eloquentArticle->published_at = $article->getPublishedAt();
-        $eloquentArticle->created_by = $article->getCreatedBy();
-        $eloquentArticle->updated_by = $article->getUpdatedBy();
-        $eloquentArticle->featured_image_id = $article->getFeaturedImageId();
+        $mediaItems = collect($content->getMedia())->map(function (Media $media, $index) {
+
+            return [
+                'media_id' => $media->id,
+                'order' => $index,
+                'attributes' => json_encode([
+                    'width' => $media->width,
+                    'height' => $media->height,
+                    'curations' => $media->curations,
+                    'exif' => $media->exif,
+                    'largeUrl' => $media->largeUrl,
+                    'mediumUrl' => $media->mediumUrl,
+                    'thumbnailUrl' => $media->thumbnailUrl,
+                    'prettyName' => $media->prettyName,
+                    'sizeForHumans' => $media->sizeForHumans,
+                ]),
+            ];
+        })->toArray();
+
+        $eloquentContent->media()->detach();
+        $eloquentContent->media()->sync($mediaItems);
 
     }
 }

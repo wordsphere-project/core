@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WordSphere\Core\Interfaces\Filament\Resources\ContentResource\Pages;
 
+use Awcodes\Curator\Models\Media;
 use Exception;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
@@ -15,7 +16,8 @@ use WordSphere\Core\Domain\ContentManagement\Repositories\ContentRepositoryInter
 use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ContentAdapter;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentContent as EloquentArticle;
+use WordSphere\Core\Infrastructure\ContentManagement\Adapters\MediaAdapter;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentContent;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 use WordSphere\Core\Interfaces\Filament\Resources\ContentResource;
 
@@ -48,11 +50,24 @@ class EditContent extends EditRecord
         ];
     }
 
-    protected function handleRecordUpdate(EloquentArticle|Model $record, array $data): EloquentArticle
+    protected function handleRecordUpdate(EloquentContent|Model $record, array $data): EloquentContent
     {
 
-        if (! $record instanceof EloquentArticle) {
+        if (! $record instanceof EloquentContent) {
             throw new Exception(__('EloquentContent not found.'));
+        }
+
+        // Only process media if it's different from current media
+        $media = [];
+        if (! empty($record->media)) {
+            $media = $record->media
+                ->unique()
+                ->values() // Reset array keys
+                ->map(function ($media) {
+                    /** @var Media $media */
+                    return MediaAdapter::fromCurator($media);
+                })
+                ->toArray();
         }
 
         /** @var EloquentUser $updater */
@@ -60,8 +75,13 @@ class EditContent extends EditRecord
         $updaterId = Uuid::fromString($updater->uuid);
         $articleId = Uuid::fromString($record->id);
 
+        if (! isset($data['type'])) {
+            $data['type'] = $record->type;
+        }
+
         $command = new UpdateContentCommand(
             id: $articleId,
+            type: $data['type'],
             updatedBy: $updaterId,
             title: $data['title'] ?? null,
             content: array_key_exists('content', $data) ? $data['content'] : null,
@@ -69,6 +89,7 @@ class EditContent extends EditRecord
             slug: array_key_exists('slug', $data) ? $data['slug'] : null,
             customFields: array_key_exists('data', $data) ? $data['data'] : null,
             featuredImage: array_key_exists('featured_image_id', $data) ? ($data['featured_image_id'] ? Id::fromInt($data['featured_image_id']) : null) : null,
+            media: $media,
         );
 
         $this->updateArticleService->execute($command);
@@ -78,7 +99,7 @@ class EditContent extends EditRecord
         return ContentAdapter::toEloquent($updatedDomainArticle);
     }
 
-    protected function getUpdatedValue(array $data, EloquentArticle $record, string $field, $default = null)
+    protected function getUpdatedValue(array $data, EloquentContent $record, string $field, $default = null)
     {
         return array_key_exists($field, $data) ? $data[$field] : $record->{$field};
     }

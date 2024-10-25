@@ -6,6 +6,7 @@ use WordSphere\Core\Application\ContentManagement\Services\UpdateContentService;
 use WordSphere\Core\Application\Factories\ContentManagement\ContentFactory;
 use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ContentRepositoryInterface;
+use WordSphere\Core\Domain\ContentManagement\ValueObjects\ContentType;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\EloquentContentRepository;
@@ -22,11 +23,21 @@ beforeEach(function (): void {
         abstract: ContentRepositoryInterface::class,
     );
 
+    $this->contentType = new ContentType(
+        key: 'blog-posts',
+        singularName: 'Post',
+        pluralName: 'Posts',
+        navigationGroup: '',
+        description: '',
+        icon: ''
+    );
+
     /** @var EloquentUser $user */
     $user = EloquentUser::factory()
         ->create();
 
     $this->testArticle = Content::create(
+        type: $this->contentType,
         title: 'Original Title',
         slug: Slug::fromString('original-title'),
         creator: Uuid::fromString($user->uuid),
@@ -49,6 +60,7 @@ test('can update an article', function (): void {
 
     $command = new UpdateContentCommand(
         id: Uuid::fromString($this->testArticle->getId()->toString()),
+        type: $this->contentType,
         updatedBy: Uuid::fromString($user->uuid),
         title: 'Updated Title',
         content: 'Updated Content',
@@ -90,6 +102,7 @@ test('updating article with existing slug appends number to slug', function (): 
     $updateArticleService = $this->app->make(UpdateContentService::class);
     $command = new UpdateContentCommand(
         id: Uuid::fromString($this->testArticle->getId()->toString()),
+        type: $this->contentType,
         updatedBy: Uuid::fromString($user->uuid),
         title: 'Updated title',
         content: 'Updated Content',
@@ -119,6 +132,7 @@ test('throws exception when updating non-existing article', function (): void {
 
     $command = new UpdateContentCommand(
         id: Uuid::generate(),
+        type: $this->contentType,
         updatedBy: Uuid::fromString($user->uuid),
         title: 'Updated Title',
         content: 'Updated Content',

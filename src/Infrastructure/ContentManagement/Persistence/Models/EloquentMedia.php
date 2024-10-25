@@ -8,13 +8,14 @@ use Awcodes\Curator\Models\Media as CuratorMedia;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Str;
 use WordSphere\Core\Application\Factories\ContentManagement\MediaFactory;
 
 /**
  * @property int $id
  * @property string $uuid
  * @property-read mixed $full_path
+ * @property-read mixed $width
+ * @property-read mixed $height
  * @property-read mixed $path
  * @property-read mixed $large_url
  * @property-read mixed $medium_url
@@ -37,14 +38,6 @@ class EloquentMedia extends CuratorMedia
     use HasFactory;
 
     protected $table = 'media';
-
-    protected static function boot(): void
-    {
-        parent::boot();
-        static::creating(function (EloquentMedia $media): void {
-            $media->uuid = (string) Str::uuid();
-        });
-    }
 
     public static function newFactory(): MediaFactory
     {

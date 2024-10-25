@@ -13,6 +13,7 @@ final class UpdateContentCommand
 
     public function __construct(
         public Uuid $id,
+        public string $type,
         public Uuid $updatedBy,
         public ?string $title = null,
         public ?string $content = null,
@@ -20,12 +21,13 @@ final class UpdateContentCommand
         public ?string $slug = null,
         public ?array $customFields = null,
         public ?Id $featuredImage = null,
+        public ?array $media = []
     ) {
-        $this->updatedFields = array_keys(array_filter(get_object_vars($this), function ($value, $key) {
-            return $key !== 'id' &&
-                $key !== 'updatedFields' &&
-                $key !== 'updatedBy';
-        }, ARRAY_FILTER_USE_BOTH));
+        foreach (['title', 'content', 'excerpt', 'slug', 'customFields', 'featuredImage', 'media'] as $field) {
+            if ($this->$field !== null) {
+                $this->updatedFields[] = $field;
+            }
+        }
     }
 
     public function getUpdatedFields(): array

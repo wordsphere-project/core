@@ -23,6 +23,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use WordSphere\Core\Interfaces\Filament\Middleware\ValidateContentType;
 
 use function __;
 use function app_path;
@@ -36,9 +37,9 @@ class WordSphereDashboardServiceProvider extends PanelProvider
     {
         return $panel
             ->id('wordsphere')
+            ->default()
             ->font('switzer', 'https://fonts.cdnfonts.com/css/switzer')
             ->path('admin')
-            ->default()
             ->login()
             ->authPasswordBroker('users')
             ->emailVerification()
@@ -67,6 +68,10 @@ class WordSphereDashboardServiceProvider extends PanelProvider
                     ->label(__('CMS'))
                     ->collapsed(false)
                     ->icon('heroicon-o-newspaper'),
+                NavigationGroup::make('Content')
+                    ->label(__('content.content'))
+                    ->collapsible(true)
+                    ->icon('heroicon-o-newspaper'),
                 NavigationGroup::make('Appearance')
                     ->label(__('Appearance'))
                     ->collapsed(true)
@@ -75,7 +80,6 @@ class WordSphereDashboardServiceProvider extends PanelProvider
                     ->label(__('Settings'))
                     ->collapsed(true)
                     ->icon('heroicon-o-cog-6-tooth'),
-
             ])
             ->discoverWidgets(
                 in: __DIR__.'/Filament/Widgets',
@@ -95,6 +99,7 @@ class WordSphereDashboardServiceProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                ValidateContentType::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
@@ -105,7 +110,7 @@ class WordSphereDashboardServiceProvider extends PanelProvider
                     ->pluralLabel('Media')
                     ->navigationIcon('heroicon-o-photo')
                     ->navigationSort(3)
-                    ->navigationCountBadge()
+                    ->navigationCountBadge(true)
                     ->registerNavigation(true)
                     ->resource(MediaResource::class)
                     ->defaultListView('grid'),

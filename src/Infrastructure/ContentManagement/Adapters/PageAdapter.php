@@ -4,9 +4,11 @@ namespace WordSphere\Core\Infrastructure\ContentManagement\Adapters;
 
 use DateTimeImmutable;
 use WordSphere\Core\Domain\ContentManagement\Entities\Page as DomainPage;
+use WordSphere\Core\Domain\ContentManagement\Repositories\MediaRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\EloquentMediaRepository;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentPage;
 
 class PageAdapter
@@ -23,6 +25,9 @@ class PageAdapter
 
     public static function toDomain(EloquentPage $eloquentPage): DomainPage
     {
+
+        $mediaRepository = app(MediaRepositoryInterface::class);
+
         return new DomainPage(
             id: Uuid::fromString($eloquentPage->id),
             title: $eloquentPage->title,
@@ -36,8 +41,7 @@ class PageAdapter
             template: $eloquentPage->template,
             sortOrder: $eloquentPage->sort_order,
             redirectUrl: $eloquentPage->redirect_url,
-            featuredImageId: $eloquentPage->featuredImage !== null ? Id::fromInt($eloquentPage->featuredImage->id) : null,
-            featuredImageUrl: $eloquentPage->featuredImage !== null ? $eloquentPage->featuredImage->path : null,
+            featuredImage: $eloquentPage->featuredImage !== null ? $mediaRepository->findById(Id::fromInt($eloquentPage->featuredImage->id)) : null,
             status: $eloquentPage->status,
             visibility: $eloquentPage->visibility,
             publishedAt: $eloquentPage->published_at !== null ? new DateTimeImmutable($eloquentPage->published_at->toString()) : null,

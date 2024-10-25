@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 use WordSphere\Core\Domain\ContentManagement\Enums\ContentStatus;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ContentRepositoryInterface;
+use WordSphere\Core\Domain\ContentManagement\ValueObjects\ContentType;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentContent as EloquentArticle;
@@ -34,8 +35,18 @@ final class ContentFactory extends Factory
 
         $title = $this->faker->sentence;
 
+        $contentType = new ContentType(
+            key: 'blog-posts',
+            singularName: 'Post',
+            pluralName: 'Posts',
+            navigationGroup: '',
+            description: '',
+            icon: ''
+        );
+
         return [
             'id' => Uuid::generate(),
+            'type' => $contentType,
             'title' => $title,
             'slug' => Slug::fromString($title),
             'content' => $this->faker->paragraphs(5, true),
@@ -69,6 +80,7 @@ final class ContentFactory extends Factory
 
         return new Content(
             id: $articleData['id'],
+            type: $articleData['type'],
             title: $articleData['title'],
             slug: $articleData['slug'],
             createdBy: $articleData['createdBy'],

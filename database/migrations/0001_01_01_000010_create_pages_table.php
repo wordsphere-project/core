@@ -46,7 +46,7 @@ return new class extends Migration
 
             $table->foreign('featured_image_id')
                 ->references('id')
-                ->on(app(config('wordsphere.curator.model'))
+                ->on(app(config('curator.model'))
                     ->getTable());
 
             $table->foreign('created_by')

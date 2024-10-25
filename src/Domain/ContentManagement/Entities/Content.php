@@ -8,14 +8,16 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 use WordSphere\Core\Domain\ContentManagement\Enums\ContentStatus;
 use WordSphere\Core\Domain\ContentManagement\Events\ContentCreated;
+use WordSphere\Core\Domain\ContentManagement\Events\ContentMediaUpdated;
 use WordSphere\Core\Domain\ContentManagement\Events\ContentPublished;
 use WordSphere\Core\Domain\ContentManagement\Events\ContentUnpublished;
 use WordSphere\Core\Domain\ContentManagement\Events\ContentUpdated;
 use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidContentStatusException;
+use WordSphere\Core\Domain\ContentManagement\ValueObjects\ContentType;
+use WordSphere\Core\Domain\ContentManagement\ValueObjects\Media;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\Concerns\HasAuditTrail;
 use WordSphere\Core\Domain\Shared\Concerns\HasFeaturedImage;
-use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 
 use function array_merge;
@@ -26,6 +28,8 @@ class Content
     use HasFeaturedImage;
 
     private Uuid $id;
+
+    private ContentType $type;
 
     private string $title;
 
@@ -43,10 +47,13 @@ class Content
 
     private ?Author $author;
 
+    private array $media = [];
+
     private array $domainEvents = [];
 
     public function __construct(
         Uuid $id,
+        ContentType $type,
         string $title,
         Slug $slug,
         Uuid $createdBy,
@@ -55,13 +62,15 @@ class Content
         ?string $content = null,
         ?string $excerpt = null,
         ?array $customFields = [],
-        ?Id $featuredImage = null,
+        ?Media $featuredImage = null,
+        ?array $media = [],
         ContentStatus $status = ContentStatus::DRAFT,
         ?DateTimeImmutable $publishedAt = null,
         ?DateTimeImmutable $createdAt = null,
         ?DateTimeImmutable $updatedAt = null,
     ) {
         $this->id = $id;
+        $this->type = $type;
         $this->title = $title;
         $this->slug = $slug;
         $this->author = $author;
@@ -70,7 +79,8 @@ class Content
         $this->customFields = $customFields ?? [];
         $this->status = $status;
         $this->publishedAt = $publishedAt ?? null;
-        $this->updateFeaturedImageId($featuredImage);
+        $this->featuredImage = $featuredImage;
+        $this->media = $media ?? [];
 
         $this->createdBy = $createdBy;
         $this->updatedBy = $updatedBy;
@@ -87,16 +97,19 @@ class Content
     }
 
     public static function create(
+        ContentType $type,
         string $title,
         Slug $slug,
         Uuid $creator,
         ?string $content = null,
         ?string $excerpt = null,
         ?array $customFields = [],
-        ?Id $featuredImage = null,
+        ?Media $featuredImage = null,
+        ?array $media = [],
     ): self {
         return new self(
             id: Uuid::generate(),
+            type: $type,
             title: $title,
             slug: $slug,
             createdBy: $creator,
@@ -105,11 +118,14 @@ class Content
             excerpt: $excerpt,
             customFields: $customFields,
             featuredImage: $featuredImage,
+            media: $media,
             status: ContentStatus::DRAFT,
         );
     }
 
     public function update(
+        Uuid $id,
+        ContentType $type,
         Uuid $updater,
         string $title,
         ?string $content = '',
@@ -117,8 +133,10 @@ class Content
         ?string $slugString = null,
         ?array $customFields = [],
         ?Author $author = null,
-        ?Id $featuredImage = null,
+        ?Media $featuredImage = null,
     ): void {
+        $this->id = $id;
+        $this->type = $type;
         $this->title = $title;
         $this->content = $content;
         $this->excerpt = $excerpt;
@@ -127,8 +145,43 @@ class Content
             $this->customFields = array_merge($this->customFields, $customFields);
         }
         $this->author = $author;
-        $this->updateFeaturedImageId($featuredImage, $updater);
+        $this->featuredImage = $featuredImage;
         $this->domainEvents[] = new ContentUpdated($this->id);
+    }
+
+    public function addMedia(Media $media): void
+    {
+        $this->media[] = $media;
+    }
+
+    public function removeMedia(int $mediaId): void
+    {
+        $this->media = array_filter(
+            $this->media,
+            fn (Media $media) => $media->id !== $mediaId
+        );
+    }
+
+    public function updateMedia(array $media, Uuid $updatedBy): void
+    {
+        $this->media = $media;
+        $this->updatedBy = $updatedBy;
+        $this->updatedAt = new \DateTimeImmutable;
+
+        $this->domainEvents[] = new ContentMediaUpdated($this->getId());
+    }
+
+    /**
+     * @return array<int, Media>
+     */
+    public function getMedia(): array
+    {
+        return $this->media;
+    }
+
+    public function clearMedia(): void
+    {
+        $this->media = [];
     }
 
     public function updateTitle(string $newTitle, Uuid $updater): void
@@ -201,6 +254,11 @@ class Content
         return $this->id;
     }
 
+    public function getType(): ContentType
+    {
+        return $this->type;
+    }
+
     public function getTitle(): string
     {
         return $this->title;
@@ -248,6 +306,7 @@ class Content
     {
         return [
             'id' => $this->getId()->toString(),
+            'type' => $this->getType()->toString(),
             'title' => $this->getTitle(),
             'content' => $this->getContent(),
             'excerpt' => $this->getExcerpt(),
@@ -255,7 +314,7 @@ class Content
             'status' => $this->getStatus()->value,
             'customFields' => $this->customFields,
             'author' => $this->getAuthor()?->toArray(),
-            'featuredImageId' => $this->getFeaturedImageId()?->toInt(),
+            'featuredImage' => $this->getFeaturedImage()->getId(),
             'createdAt' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
             'createdBy' => $this->getCreatedBy()->toString(),
             'updatedAt' => $this->getUpdatedAt()->format('Y-m-d H:i:s'),

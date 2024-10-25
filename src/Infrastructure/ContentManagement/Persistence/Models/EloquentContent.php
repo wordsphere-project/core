@@ -4,18 +4,23 @@ declare(strict_types=1);
 
 namespace WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models;
 
+use Awcodes\Curator\Models\Media;
 use Carbon\Carbon;
 use DateTimeImmutable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Query\Builder;
 use WordSphere\Core\Database\Factories\ArticleFactory;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 use WordSphere\Core\Infrastructure\Support\Concerns\HasFeaturedImage;
 
 /**
  * @property string $id
+ * @property string $type
  * @property string $title
  * @property string $slug
  * @property string $content
@@ -25,7 +30,8 @@ use WordSphere\Core\Infrastructure\Support\Concerns\HasFeaturedImage;
  * @property array $custom_fields
  * @property string $created_by
  * @property string $updated_by
- * @property string $featured_image_id
+ * @property int $featured_image_id
+ * @property null|Collection<Media>|Builder $media
  * @property Carbon|DateTimeImmutable $deleted_at
  * @property Carbon|DateTimeImmutable $created_at
  * @property Carbon|DateTimeImmutable $updated_at
@@ -62,7 +68,9 @@ class EloquentContent extends Model
     public function casts(): array
     {
         return [
-            'customFields' => 'json',
+            'custom_fields' => 'json',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 
@@ -84,5 +92,12 @@ class EloquentContent extends Model
     public function featuredImage(): BelongsTo
     {
         return $this->belongsTo(EloquentMedia::class, 'featured_image_id', 'uuid');
+    }
+
+    public function media(): BelongsToMany
+    {
+        return $this->belongsToMany(Media::class, 'content_media', 'content_id', 'media_id')
+            ->withPivot('order', 'attributes')
+            ->orderBy('order');
     }
 }

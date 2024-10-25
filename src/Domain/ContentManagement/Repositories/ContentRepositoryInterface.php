@@ -18,7 +18,7 @@ interface ContentRepositoryInterface
 
     public function findBySlug(Slug $slug): ?Content;
 
-    public function save(Content $article): void;
+    public function save(Content $content): void;
 
     public function delete(Uuid $id): void;
 

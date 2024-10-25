@@ -40,7 +40,6 @@ use Illuminate\Validation\ValidationServiceProvider;
 use Illuminate\View\ViewServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\Attributes\WithEnv;
-use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use Spatie\LaravelSettings\LaravelSettingsServiceProvider;
@@ -59,7 +58,6 @@ use function Orchestra\Testbench\package_path;
 class TestCase extends Orchestra
 {
     use LazilyRefreshDatabase;
-    use WithWorkbench;
 
     protected EloquentUser $superAdmin;
 

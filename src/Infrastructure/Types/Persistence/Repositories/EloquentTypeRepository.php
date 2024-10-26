@@ -19,8 +19,8 @@ class EloquentTypeRepository implements TypeRepositoryInterface
     {
         $model = TypeModel::query()->with('allowedRelations')
             ->where('id', $id->toString())
-            ->where('tenantId', $tenantId->toString())
-            ->where('projectId', $projectId->toString())
+            ->where('tenant_id', $tenantId->toString())
+            ->where('project_id', $projectId->toString())
             ->first();
 
         return $model ? $this->toDomainEntity($model) : null;

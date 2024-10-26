@@ -17,12 +17,6 @@ readonly class ValidateContentType
     {
         $contentType = $request->route('contentType');
 
-        Log::debug('Content type middleware', [
-            'path' => $request->path(),
-            'content_type' => $contentType,
-            'registered_types' => array_keys($this->contentTypeRegistry->all()),
-        ]);
-
         if (! $contentType) {
             return $next($request);
         }

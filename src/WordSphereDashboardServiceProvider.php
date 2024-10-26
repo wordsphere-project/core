@@ -33,6 +33,8 @@ use function app_path;
 
 class WordSphereDashboardServiceProvider extends PanelProvider
 {
+    public function boot(): void {}
+
     /**
      * @throws Exception
      */

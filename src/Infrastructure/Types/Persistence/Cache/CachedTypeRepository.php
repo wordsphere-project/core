@@ -9,6 +9,7 @@ use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Domain\Types\Entities\Type;
 use WordSphere\Core\Domain\Types\TypeRepositoryInterface;
 use WordSphere\Core\Domain\Types\ValueObjects\TypeKey;
+
 use function count;
 
 readonly class CachedTypeRepository implements TypeRepositoryInterface
@@ -144,13 +145,11 @@ readonly class CachedTypeRepository implements TypeRepositoryInterface
 
         $cachedKeys = $this->cache->get($keysListCacheKey, []);
 
-        if(count($cachedKeys) > 0) {
+        if (count($cachedKeys) > 0) {
             foreach ($cachedKeys as $key) {
                 $this->cache->forget($key);
             }
         }
-
-
 
         $this->cache->forget($keysListCacheKey);
     }

@@ -24,7 +24,7 @@ class ContentAdapter
     {
 
         $eloquentContent = EloquentContent::query()
-            ->with(['media' => function ($query) {
+            ->with(['media' => function ($query): void {
                 $query->orderBy('order');
             }])
             ->findOrNew($domainContent->getId()->toString());

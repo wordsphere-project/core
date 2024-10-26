@@ -28,7 +28,7 @@ class EloquentContentRepository implements ContentRepositoryInterface
     public function findByUuid(Uuid $uuid): ?Content
     {
         $eloquentContent = EloquentContent::query()
-            ->with(['media' => function ($query) {
+            ->with(['media' => function ($query): void {
                 $query->orderBy('order');
             }])
             ->find($uuid);
@@ -39,7 +39,7 @@ class EloquentContentRepository implements ContentRepositoryInterface
     public function findBySlug(Slug $slug): ?Content
     {
         $eloquentContent = EloquentContent::query()
-            ->with(['media' => function ($query) {
+            ->with(['media' => function ($query): void {
                 $query->orderBy('order');
             }])
             ->where('slug', $slug->toString())
@@ -52,7 +52,7 @@ class EloquentContentRepository implements ContentRepositoryInterface
     {
         $eloquentContent = ContentAdapter::toEloquent($content);
 
-        DB::transaction(function () use ($eloquentContent, $content) {
+        DB::transaction(function () use ($eloquentContent, $content): void {
             $this->updateModelFromEntity($eloquentContent, $content);
             $eloquentContent->save();
             $this->saveMediaRelations($eloquentContent, $content);

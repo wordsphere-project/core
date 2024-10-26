@@ -57,7 +57,7 @@ class TenantProjectSelection extends Page
                 ->options(EloquentTenant::query()->pluck('name', 'id'))
                 ->required()
                 ->reactive()
-                ->afterStateUpdated(fn () => $this->project_id = null),
+                ->afterStateUpdated(fn (): null => $this->project_id = null),
 
             Select::make('project_id')
                 ->label('Project')

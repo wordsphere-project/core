@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WordSphere\Core\Domain\Relationships\Concerns;
+namespace WordSphere\Core\Domain\Types\Concerns;
 
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 

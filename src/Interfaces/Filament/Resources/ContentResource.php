@@ -10,6 +10,8 @@ use Filament\Forms;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -21,6 +23,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Navigation\NavigationItem;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
@@ -87,7 +90,7 @@ class ContentResource extends Resource
                                     ->label(__('General'))
                                     ->schema(
                                         components: [
-                                            Forms\Components\Hidden::make('type')
+                                            Hidden::make('type')
                                                 ->default($contentType),
                                             TextInput::make('title')
                                                 ->columnSpan(2)
@@ -122,7 +125,7 @@ class ContentResource extends Resource
                                 Section::make(__('Publish'))
                                     ->schema(
                                         components: [
-                                            Forms\Components\Placeholder::make('status')
+                                            Placeholder::make('status')
                                                 ->label(__('status.label'))
                                                 ->content(fn (EloquentArticle $record) => $record->status)
                                                 ->visible(fn (): bool => $form->getRecord() !== null),
@@ -255,7 +258,7 @@ class ContentResource extends Resource
         $items = [];
 
         foreach ($registry->all() as $contentType) {
-            $items[] = \Filament\Navigation\NavigationItem::make()
+            $items[] = NavigationItem::make()
                 ->label($contentType->pluralName)
                 ->icon($contentType->icon)
                 ->group($contentType->navigationGroup)
@@ -295,7 +298,7 @@ class ContentResource extends Resource
         foreach ($fieldsHook->getAvailableLocations($contentType) as $location) {
             if (str_starts_with($location, 'tab.')) {
                 $tabName = substr($location, 4);
-                $tabs[] = Forms\Components\Tabs\Tab::make($tabName)
+                $tabs[] = Tab::make($tabName)
                     ->schema($fieldsHook->getCustomFields($contentType, $location));
             }
         }

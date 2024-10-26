@@ -6,8 +6,6 @@ use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\CodeQuality\Rector\Property\TypedPropertyFromColumnTypeRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\TypeDeclaration\Rector\Class_\PropertyTypeFromStrictSetterGetterRector;
-use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -21,15 +19,10 @@ return RectorConfig::configure()
     ])
     ->withRules([
         RenameClassRector::class,
-        InlineConstructorDefaultToPropertyRector::class,
-        TypedPropertyFromColumnTypeRector::class,
-        PropertyTypeFromStrictSetterGetterRector::class,
     ])
     ->withConfiguredRule(
         RenameClassRector::class,
-        [
-            Content::class => 'WordSphere\Core\Domain\ContentManagement\Entities\Content',
-        ]
+        []
     )
     ->withSkip([
         TypedPropertyFromColumnTypeRector::class => [

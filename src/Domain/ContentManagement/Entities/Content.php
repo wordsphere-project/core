@@ -158,7 +158,7 @@ class Content
     {
         $this->media = array_filter(
             $this->media,
-            fn (Media $media) => $media->id !== $mediaId
+            fn (Media $media): bool => $media->id !== $mediaId
         );
     }
 
@@ -166,7 +166,7 @@ class Content
     {
         $this->media = $media;
         $this->updatedBy = $updatedBy;
-        $this->updatedAt = new \DateTimeImmutable;
+        $this->updatedAt = new DateTimeImmutable;
 
         $this->domainEvents[] = new ContentMediaUpdated($this->getId());
     }

@@ -10,6 +10,7 @@ use Exception;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
@@ -23,7 +24,9 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use WordSphere\Core\Interfaces\Filament\Middleware\RequireTenantAndProject;
 use WordSphere\Core\Interfaces\Filament\Middleware\ValidateContentType;
+use WordSphere\Core\Interfaces\Filament\Pages\Tenancy\TenantProjectSelection;
 
 use function __;
 use function app_path;
@@ -45,6 +48,12 @@ class WordSphereDashboardServiceProvider extends PanelProvider
             ->emailVerification()
             ->passwordReset()
             ->profile()
+            /*->userMenuItems([
+                'switch-context' => MenuItem::make()
+                    ->label(__('Switch Tenant/Project'))
+                    ->url(fn() => TenantProjectSelection::getUrl())
+                    ->icon('heroicon-o-arrows-right-left'),
+            ])*/
             ->sidebarCollapsibleOnDesktop()
             ->brandName(config('app.name'))
             ->viteTheme('resources/css/filament/admin/wordsphere.css', 'vendor/wordsphere/build')
@@ -57,8 +66,8 @@ class WordSphereDashboardServiceProvider extends PanelProvider
                 for: 'App\\Filament\\Resources'
             )
             ->discoverPages(
-                in: __DIR__.'/Filament/Pages',
-                for: 'WordSphere\\Core\\Filament\\Pages'
+                in: __DIR__.'/Interfaces/Filament/Pages',
+                for: 'WordSphere\\Core\\Interfaces\\Filament\\Pages'
             )
             ->pages([
                 Dashboard::class,
@@ -70,6 +79,10 @@ class WordSphereDashboardServiceProvider extends PanelProvider
                     ->icon('heroicon-o-newspaper'),
                 NavigationGroup::make('Content')
                     ->label(__('content.content'))
+                    ->collapsible(true)
+                    ->icon('heroicon-o-newspaper'),
+                NavigationGroup::make('Pages')
+                    ->label(__('pages.pages'))
                     ->collapsible(true)
                     ->icon('heroicon-o-newspaper'),
                 NavigationGroup::make('Appearance')
@@ -103,6 +116,7 @@ class WordSphereDashboardServiceProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                RequireTenantAndProject::class,
             ])
             ->plugins([
                 CuratorPlugin::make()

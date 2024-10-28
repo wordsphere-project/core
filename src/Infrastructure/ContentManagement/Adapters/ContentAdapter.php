@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace WordSphere\Core\Infrastructure\ContentManagement\Adapters;
 
 use DateTimeImmutable;
-use WordSphere\Core\Domain\ContentManagement\ContentTypeRegistry;
 use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 use WordSphere\Core\Domain\ContentManagement\Enums\ContentStatus;
 use WordSphere\Core\Domain\ContentManagement\Repositories\MediaRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentContent;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\ContentModel;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentMedia;
 
 use function app;
@@ -20,10 +19,10 @@ use function property_exists;
 
 class ContentAdapter
 {
-    public static function toEloquent(Content $domainContent): EloquentContent
+    public static function toEloquent(Content $domainContent): ContentModel
     {
 
-        $eloquentContent = EloquentContent::query()
+        $eloquentContent = ContentModel::query()
             ->with(['media' => function ($query): void {
                 $query->orderBy('order');
             }])
@@ -31,7 +30,7 @@ class ContentAdapter
 
         $eloquentContent->forceFill([
             'id' => $domainContent->getId()->toString(),
-            'type' => $domainContent->getType()->key,
+            'type' => $domainContent->getType(),
             'title' => $domainContent->getTitle(),
             'slug' => $domainContent->getSlug(),
             'content' => $domainContent->getContent(),
@@ -49,12 +48,12 @@ class ContentAdapter
 
     }
 
-    public static function toDomain(EloquentContent $eloquentArticle): Content
+    public static function toDomain(ContentModel $eloquentArticle): Content
     {
 
         $content = new Content(
             id: Uuid::fromString($eloquentArticle->id),
-            type: app(ContentTypeRegistry::class)->get($eloquentArticle->type),
+            type: $eloquentArticle->type,
             title: $eloquentArticle->title,
             slug: Slug::fromString($eloquentArticle->slug),
             createdBy: Uuid::fromString($eloquentArticle->created_by),

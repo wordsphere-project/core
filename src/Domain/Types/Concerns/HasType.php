@@ -24,5 +24,8 @@ trait HasType
         return $this->typeKey;
     }
 
-    public function getTypeEntityClass(): string {}
+    public function getTypeEntityClass(): string
+    {
+        return $this->typeEntityClassName;
+    }
 }

@@ -12,6 +12,7 @@ enum RelationType: string
     case MANY_TO_MANY = 'many_to_many';
     case BELONGS_TO_MANY = 'belongs_to_many';
     case BELONGS_TO = 'belongs_to';
+    case HAS_MANY = 'has_many';
 
     public function isInverse(): bool
     {

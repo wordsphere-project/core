@@ -11,7 +11,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use WordSphere\Core\Infrastructure\Tenancy\Persistence\Models\EloquentProject;
-use WordSphere\Core\Interfaces\Filament\Pages\Tenancy\TenantProjectSelection;
 
 class RequireTenantAndProject
 {

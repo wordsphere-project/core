@@ -6,7 +6,7 @@ namespace WordSphere\Core\Domain\Types\Queries;
 
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Domain\Types\Entities\Type;
-use WordSphere\Core\Domain\Types\TypeRepositoryInterface;
+use WordSphere\Core\Domain\Types\Repositories\TypeRepositoryInterface;
 use WordSphere\Core\Domain\Types\ValueObjects\TypeKey;
 use WordSphere\Core\Infrastructure\Types\Services\TenantProjectProvider;
 

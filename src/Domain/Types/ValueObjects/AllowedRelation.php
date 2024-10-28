@@ -19,6 +19,7 @@ class AllowedRelation
         private ?int $minItems = null,
         private ?int $maxItems = null,
         private ?string $inverseRelationName = null,
+        private ?string $orderColumn = 'sort_order',
     ) {
         $this->validate();
     }
@@ -72,5 +73,10 @@ class AllowedRelation
     public function getInverseRelationName(): ?string
     {
         return $this->inverseRelationName;
+    }
+
+    public function getOrderColumn(): ?string
+    {
+        return $this->orderColumn;
     }
 }

@@ -8,9 +8,9 @@ use Carbon\Carbon;
 use DateTimeImmutable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use WordSphere\Core\Application\Factories\ContentManagement\AuthorFactory;
-use WordSphere\Core\Infrastructure\Support\Concerns\HasFeaturedImage;
+use WordSphere\Core\Infrastructure\Shared\Concerns\HasFeaturedImage;
+use WordSphere\Core\Infrastructure\Shared\Models\TenantProjectModel;
 
 /**
  * @property string $id
@@ -25,7 +25,7 @@ use WordSphere\Core\Infrastructure\Support\Concerns\HasFeaturedImage;
  * @property string $updated_by
  * @property Carbon|DateTimeImmutable $updated_at
  */
-class EloquentAuthor extends Model
+class EloquentAuthor extends TenantProjectModel
 {
     /** @use HasFactory<AuthorFactory> */
     use HasFactory;

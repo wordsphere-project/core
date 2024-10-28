@@ -10,7 +10,6 @@ use Exception;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
@@ -24,25 +23,25 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use WordSphere\Core\Interfaces\Filament\Builders\TypeNavigationBuilder;
 use WordSphere\Core\Interfaces\Filament\Middleware\RequireTenantAndProject;
-use WordSphere\Core\Interfaces\Filament\Middleware\ValidateContentType;
-use WordSphere\Core\Interfaces\Filament\Pages\Tenancy\TenantProjectSelection;
+use WordSphere\Core\Interfaces\Filament\Middleware\ValidateType;
 
 use function __;
-use function app_path;
 
 class WordSphereDashboardServiceProvider extends PanelProvider
 {
-    public function boot(): void {}
-
     /**
      * @throws Exception
      */
     public function panel(Panel $panel): Panel
     {
+        $typeNavigationBuilder = app(TypeNavigationBuilder::class);
+
         return $panel
             ->id('wordsphere')
             ->default()
+            ->spa()
             ->font('switzer', 'https://fonts.cdnfonts.com/css/switzer')
             ->path('admin')
             ->login()
@@ -50,30 +49,28 @@ class WordSphereDashboardServiceProvider extends PanelProvider
             ->emailVerification()
             ->passwordReset()
             ->profile()
-            /*->userMenuItems([
-                'switch-context' => MenuItem::make()
-                    ->label(__('Switch Tenant/Project'))
-                    ->url(fn() => TenantProjectSelection::getUrl())
-                    ->icon('heroicon-o-arrows-right-left'),
-            ])*/
             ->sidebarCollapsibleOnDesktop()
             ->brandName(config('app.name'))
             ->viteTheme('resources/css/filament/admin/wordsphere.css', 'vendor/wordsphere/build')
-            ->discoverResources(
-                in: __DIR__.'/Interfaces/Filament/Resources',
-                for: 'WordSphere\\Core\\Interfaces\\Filament\\Resources'
-            )
-            ->discoverResources(
-                in: app_path('Filament/Resources'),
-                for: 'App\\Filament\\Resources'
-            )
-            ->discoverPages(
-                in: __DIR__.'/Interfaces/Filament/Pages',
-                for: 'WordSphere\\Core\\Interfaces\\Filament\\Pages'
-            )
+            ->discoverClusters(in: __DIR__.'/Interfaces/Filament/Clusters', for: 'WordSphere\\Core\\Interfaces\\Filament\\Clusters')
+            ->discoverResources(in: __DIR__.'/Interfaces/Filament/Resources', for: 'WordSphere\\Core\\Interfaces\\Filament\\Resources')
+            ->discoverPages(in: __DIR__.'/Interfaces/Filament/Pages', for: 'WordSphere\\Core\\Interfaces\\Filament\\Pages')
             ->pages([
                 Dashboard::class,
             ])
+            ->discoverWidgets(
+                in: __DIR__.'/Filament/Widgets',
+                for: 'WordSphere\\Core\\Filament\\Widgets'
+            )
+            ->widgets([
+                AccountWidget::class,
+                FilamentInfoWidget::class,
+            ])
+            ->navigationItems(
+                items: [
+                    //...$typeNavigationBuilder->build()
+                ]
+            )
             ->navigationGroups([
                 NavigationGroup::make('CMS')
                     ->label(__('CMS'))
@@ -91,18 +88,6 @@ class WordSphereDashboardServiceProvider extends PanelProvider
                     ->label(__('Appearance'))
                     ->collapsed(true)
                     ->icon('heroicon-o-paint-brush'),
-                NavigationGroup::make('Settings')
-                    ->label(__('Settings'))
-                    ->collapsed(true)
-                    ->icon('heroicon-o-cog-6-tooth'),
-            ])
-            ->discoverWidgets(
-                in: __DIR__.'/Filament/Widgets',
-                for: 'WordSphere\\Core\\Filament\\Widgets'
-            )
-            ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -114,7 +99,7 @@ class WordSphereDashboardServiceProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-                ValidateContentType::class,
+                ValidateType::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
@@ -131,5 +116,6 @@ class WordSphereDashboardServiceProvider extends PanelProvider
                     ->resource(MediaResource::class)
                     ->defaultListView('grid'),
             ]);
+
     }
 }

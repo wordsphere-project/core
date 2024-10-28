@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
-use WordSphere\Core\Interfaces\Filament\Pages\Tenancy\TenantProjectSelection;
+use WordSphere\Core\Interfaces\Filament\Clusters\Settings\Pages\Tenancy\TenantProjectSelection;
 use WordSphere\Core\Legacy\Livewire\Pages\ManageTheme;
 
 Route::middleware(['auth'])->group(function (): void {

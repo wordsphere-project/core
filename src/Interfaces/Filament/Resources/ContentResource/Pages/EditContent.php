@@ -17,7 +17,7 @@ use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ContentAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\MediaAdapter;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentContent;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\ContentModel;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 use WordSphere\Core\Interfaces\Filament\Resources\ContentResource;
 
@@ -50,10 +50,10 @@ class EditContent extends EditRecord
         ];
     }
 
-    protected function handleRecordUpdate(EloquentContent|Model $record, array $data): EloquentContent
+    protected function handleRecordUpdate(ContentModel|Model $record, array $data): ContentModel
     {
 
-        if (! $record instanceof EloquentContent) {
+        if (! $record instanceof ContentModel) {
             throw new Exception(__('EloquentContent not found.'));
         }
 
@@ -99,7 +99,7 @@ class EditContent extends EditRecord
         return ContentAdapter::toEloquent($updatedDomainArticle);
     }
 
-    protected function getUpdatedValue(array $data, EloquentContent $record, string $field, $default = null)
+    protected function getUpdatedValue(array $data, ContentModel $record, string $field, $default = null)
     {
         return array_key_exists($field, $data) ? $data[$field] : $record->{$field};
     }

@@ -14,13 +14,13 @@ use WordSphere\Core\Application\ContentManagement\Commands\ChangeContentStatusCo
 use WordSphere\Core\Application\ContentManagement\Services\ContentStatusServiceFactory;
 use WordSphere\Core\Domain\ContentManagement\Enums\ContentStatus;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentContent;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\ContentModel;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 
 trait InteractsWithStatus
 {
     public static function changeContentStatus(
-        Model|EloquentContent $record,
+        Model|ContentModel $record,
         ContentStatus $newStatus,
         ContentStatusServiceFactory $serviceFactory,
         AuthManager $auth,
@@ -31,7 +31,7 @@ trait InteractsWithStatus
         /** @var EloquentUser $user */
         $user = $auth->user();
 
-        if (! $record instanceof EloquentContent) {
+        if (! $record instanceof ContentModel) {
             return;
         }
 

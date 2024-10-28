@@ -15,7 +15,7 @@ use WordSphere\Core\Domain\Types\Events\AllowedRelationAdded;
 use WordSphere\Core\Domain\Types\Events\TypeCreated;
 use WordSphere\Core\Domain\Types\Events\TypeUpdated;
 use WordSphere\Core\Domain\Types\Exceptions\TypeNotFoundException;
-use WordSphere\Core\Domain\Types\TypeRepositoryInterface;
+use WordSphere\Core\Domain\Types\Repositories\TypeRepositoryInterface;
 use WordSphere\Core\Domain\Types\ValueObjects\AllowedRelation;
 use WordSphere\Core\Infrastructure\Types\Services\TenantProjectProvider;
 

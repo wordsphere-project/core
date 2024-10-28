@@ -2,7 +2,6 @@
 
 namespace WordSphere\Core\Application\ContentManagement\ContentTypes;
 
-use WordSphere\Core\Domain\ContentManagement\Support\BaseContentTypeRegistrar;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ContentType;
 
 class NewsArticleContentTypeRegistrar extends BaseContentTypeRegistrar

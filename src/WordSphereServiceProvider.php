@@ -8,15 +8,16 @@ use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use WordSphere\Core\Infrastructure\Support\ServiceProviders\ContentManagementServiceProvider;
-use WordSphere\Core\Infrastructure\Support\ServiceProviders\EventServiceProvider;
+use WordSphere\Core\Infrastructure\Shared\Providers\ContentManagementServiceProvider;
+use WordSphere\Core\Infrastructure\Shared\Providers\EventServiceProvider;
+use WordSphere\Core\Infrastructure\Shared\Providers\TypeServiceProvider;
+use WordSphere\Core\Interfaces\Filament\Providers\FilamentTypeFieldServiceProvider;
 use WordSphere\Core\Legacy\Commands\InstallCommand;
 use WordSphere\Core\Legacy\Commands\MakeThemeCommand;
 use WordSphere\Core\Legacy\Contracts\CustomFieldsManagerContract;
 use WordSphere\Core\Legacy\Livewire\Pages\ManageTheme;
 use WordSphere\Core\Legacy\Support\CustomFields\CustomFieldsManager;
 
-use function config;
 use function public_path;
 
 class WordSphereServiceProvider extends PackageServiceProvider
@@ -31,8 +32,6 @@ class WordSphereServiceProvider extends PackageServiceProvider
     public function boot(): void
     {
         parent::boot();
-        $this->setPermissionsConfig();
-        $this->setCuratorConfig();
         $this->registerResources();
         $this->publishAssets();
 
@@ -40,13 +39,11 @@ class WordSphereServiceProvider extends PackageServiceProvider
 
     private function registerProviders(): void
     {
-        $this->app->register(
-            provider: ContentManagementServiceProvider::class
-        );
 
-        $this->app->register(
-            provider: EventServiceProvider::class
-        );
+        $this->app->register(provider: EventServiceProvider::class);
+        $this->app->register(provider: FilamentTypeFieldServiceProvider::class);
+        $this->app->register(provider: TypeServiceProvider::class);
+        $this->app->register(provider: ContentManagementServiceProvider::class);
 
         if ($this->app->isLocal()) {
             $this->app->register(IdeHelperServiceProvider::class);
@@ -60,16 +57,6 @@ class WordSphereServiceProvider extends PackageServiceProvider
             abstract: CustomFieldsManagerContract::class,
             concrete: CustomFieldsManager::class,
         );
-    }
-
-    private function setCuratorConfig(): void
-    {
-        //config()->set('curator', config('wordsphere.curator'));
-    }
-
-    private function setPermissionsConfig(): void
-    {
-        //config()->set('permission', config('wordsphere.permission'));
     }
 
     private function publishAssets(): void
@@ -90,7 +77,7 @@ class WordSphereServiceProvider extends PackageServiceProvider
             ->name('wordsphere')
             ->hasConfigFile([
                 'wordsphere',
-                'content-types',
+                'types',
                 'permission',
                 'curator',
             ])

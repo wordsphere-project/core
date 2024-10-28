@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WordSphere\Core\Application\ContentManagement\Services;
 
 use WordSphere\Core\Application\ContentManagement\Commands\CreateContentCommand;
-use WordSphere\Core\Domain\ContentManagement\ContentTypeRegistry;
 use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ContentRepositoryInterface;
 use WordSphere\Core\Domain\ContentManagement\Repositories\MediaRepositoryInterface;
@@ -19,7 +18,6 @@ readonly class CreateContentService
         private ContentRepositoryInterface $repository,
         private MediaRepositoryInterface $mediaRepository,
         private SlugGeneratorService $slugGenerator,
-        private ContentTypeRegistry $contentTypeRegistry,
     ) {}
 
     public function execute(CreateContentCommand $command): Uuid
@@ -30,7 +28,7 @@ readonly class CreateContentService
         );
 
         $content = Content::create(
-            type: $this->contentTypeRegistry->get($command->type),
+            type: $command->type,
             title: $command->title,
             slug: $slug,
             creator: $command->createdBy,

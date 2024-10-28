@@ -11,18 +11,35 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use WordSphere\Core\Domain\Types\Enums\RelationType;
 use WordSphere\Core\Infrastructure\Types\Persistence\Models\TypeModel;
-use WordSphere\Core\Interfaces\Filament\Clusters\SettingsCluster;
+use WordSphere\Core\Interfaces\Filament\Clusters\Settings;
+use WordSphere\Core\Interfaces\Filament\Clusters\Settings\Resources\TypeResource\Pages;
+
+use function __;
 
 class TypeResource extends Resource
 {
     protected static ?string $model = TypeModel::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-square-3-stack-3d';
+    protected static ?string $cluster = Settings::class;
 
-    /** @phpstan-ignore-next-line   */
-    protected static ?string $cluster = SettingsCluster::class;
+    //protected static ?string $navigationIcon = 'heroicon-o-square-3-stack-3d';
 
     protected static ?string $navigationLabel = 'Content Types';
+
+    public static function getLabel(): string
+    {
+        return __('Custom Type');
+    }
+
+    public static function getPluralLabel(): string
+    {
+        return __('Custom Types');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Manage Custom Types');
+    }
 
     public static function form(Form $form): Form
     {
@@ -126,7 +143,8 @@ class TypeResource extends Resource
                             ]),
                     ])
                     ->persistTabInQueryString(),
-            ]);
+            ])
+            ->columns(1);
     }
 
     public static function table(Table $table): Table
@@ -176,9 +194,12 @@ class TypeResource extends Resource
             ]);
     }
 
-    public static function getNavigationBadge(): ?string
+    public static function getPages(): array
     {
-
-        return static::getModel()::count();
+        return [
+            'index' => Pages\ListTypes::route('/'),
+            'create' => Pages\CreateType::route('/create'),
+            'edit' => Pages\EditType::route('/{record}/edit'),
+        ];
     }
 }

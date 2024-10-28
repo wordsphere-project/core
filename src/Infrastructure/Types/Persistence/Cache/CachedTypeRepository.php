@@ -7,7 +7,7 @@ namespace WordSphere\Core\Infrastructure\Types\Persistence\Cache;
 use Illuminate\Cache\Repository as Cache;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Domain\Types\Entities\Type;
-use WordSphere\Core\Domain\Types\TypeRepositoryInterface;
+use WordSphere\Core\Domain\Types\Repositories\TypeRepositoryInterface;
 use WordSphere\Core\Domain\Types\ValueObjects\TypeKey;
 
 use function count;
@@ -44,6 +44,16 @@ readonly class CachedTypeRepository implements TypeRepositoryInterface
         ];
     }
 
+    public function findAll(Uuid $tenantId, Uuid $projectId): array
+    {
+        $cacheKey = $this->getCacheKey('list', 'all', $tenantId, $projectId);
+
+        return $this->cache->remember($cacheKey, self::CACHE_TTL, function () use ($tenantId, $projectId) {
+            return $this->repository->findAll($tenantId, $projectId);
+        });
+
+    }
+
     public function findById(Uuid $id, Uuid $tenantId, Uuid $projectId): ?Type
     {
         $cacheKey = $this->getCacheKey($id->toString(), 'id', $tenantId, $projectId);
@@ -63,7 +73,7 @@ readonly class CachedTypeRepository implements TypeRepositoryInterface
 
         return $this->cache->remember(
             key: $cacheKey,
-            ttl: self::CACHE_TTL,
+            ttl: 1,
             callback: function () use ($key, $tenantId, $projectId) {
                 return $this->repository->findByKey($key, $tenantId, $projectId);
             }

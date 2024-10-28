@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WordSphere\Core\Interfaces\Filament\Hooks;
 
 use WordSphere\Core\Domain\ContentManagement\ContentTypeRegistry;
+use WordSphere\Core\Domain\Types\ValueObjects\TypeKey;
 use WordSphere\Core\Interfaces\Filament\ContentTypes\ContentTypeFieldRegistry;
 
 readonly class ContentTypeFieldsHook
@@ -21,11 +22,11 @@ readonly class ContentTypeFieldsHook
             return [];
         }
 
-        $callbacks = $this->fieldRegistry->getFields($contentTypeKey, $location);
+        $callbacks = $this->fieldRegistry->getFields(TypeKey::fromString($contentTypeKey), $location);
 
         $fields = [];
         foreach ($callbacks as $callback) {
-            $fields = array_merge($fields, $callback->getFields($contentTypeKey, $location));
+            $fields = array_merge($fields, $callback->getFields(TypeKey::fromString($contentTypeKey), $location));
         }
 
         return $fields;
@@ -34,6 +35,6 @@ readonly class ContentTypeFieldsHook
 
     public function getAvailableLocations(string $contentTypeKey): array
     {
-        return $this->fieldRegistry->getAllLocations($contentTypeKey);
+        return $this->fieldRegistry->getAllLocations(TypeKey::fromString($contentTypeKey));
     }
 }

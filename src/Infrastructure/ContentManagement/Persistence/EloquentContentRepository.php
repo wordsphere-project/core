@@ -9,7 +9,7 @@ use WordSphere\Core\Domain\ContentManagement\ValueObjects\Media;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ContentAdapter;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentContent;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\ContentModel;
 
 use function collect;
 
@@ -27,7 +27,7 @@ class EloquentContentRepository implements ContentRepositoryInterface
 
     public function findByUuid(Uuid $uuid): ?Content
     {
-        $eloquentContent = EloquentContent::query()
+        $eloquentContent = ContentModel::query()
             ->with(['media' => function ($query): void {
                 $query->orderBy('order');
             }])
@@ -38,7 +38,7 @@ class EloquentContentRepository implements ContentRepositoryInterface
 
     public function findBySlug(Slug $slug): ?Content
     {
-        $eloquentContent = EloquentContent::query()
+        $eloquentContent = ContentModel::query()
             ->with(['media' => function ($query): void {
                 $query->orderBy('order');
             }])
@@ -63,21 +63,21 @@ class EloquentContentRepository implements ContentRepositoryInterface
 
     public function delete(Uuid $id): void
     {
-        EloquentContent::destroy($id->toString());
+        ContentModel::destroy($id->toString());
     }
 
     public function isSlugUnique(Slug $slug): bool
     {
-        return ! EloquentContent::query()
+        return ! ContentModel::query()
             ->where('slug', $slug->toString())
             ->exists();
     }
 
-    private function updateModelFromEntity(EloquentContent $eloquentContent, Content $content): void
+    private function updateModelFromEntity(ContentModel $eloquentContent, Content $content): void
     {
 
         $eloquentContent->id = $content->getId();
-        $eloquentContent->type = $content->getType()->toString();
+        $eloquentContent->type = $content->getType();
         $eloquentContent->title = $content->getTitle();
         $eloquentContent->slug = $content->getSlug();
         $eloquentContent->content = $content->getContent();
@@ -92,7 +92,7 @@ class EloquentContentRepository implements ContentRepositoryInterface
 
     }
 
-    private function saveMediaRelations(EloquentContent $eloquentContent, Content $content): void
+    private function saveMediaRelations(ContentModel $eloquentContent, Content $content): void
     {
         $mediaItems = collect($content->getMedia())->map(function (Media $media, $index) {
 

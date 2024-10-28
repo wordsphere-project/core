@@ -5,29 +5,30 @@ declare(strict_types=1);
 namespace WordSphere\Core\Interfaces\Filament\ContentTypes;
 
 use Closure;
+use WordSphere\Core\Domain\Types\ValueObjects\TypeKey;
 
 class ContentTypeFieldRegistry
 {
     private array $fields = [];
 
-    public function registerFields(string $contentTypeKey, string $location, Closure $callback): void
+    public function registerFields(TypeKey $contentTypeKey, string $location, Closure $callback): void
     {
-        if (! isset($this->fields[$contentTypeKey])) {
-            $this->fields[$contentTypeKey] = [];
+        if (! isset($this->fields[$contentTypeKey->toString()])) {
+            $this->fields[$contentTypeKey->toString()] = [];
         }
-        if (! isset($this->fields[$contentTypeKey][$location])) {
-            $this->fields[$contentTypeKey][$location] = [];
+        if (! isset($this->fields[$contentTypeKey->toString()][$location])) {
+            $this->fields[$contentTypeKey->toString()][$location] = [];
         }
-        $this->fields[$contentTypeKey][$location][] = $callback;
+        $this->fields[$contentTypeKey->toString()][$location][] = $callback;
     }
 
-    public function getFields(string $contentTypeKey, string $location): array
+    public function getFields(TypeKey $contentTypeKey, string $location): array
     {
-        return $this->fields[$contentTypeKey][$location] ?? [];
+        return $this->fields[$contentTypeKey->toString()][$location] ?? [];
     }
 
-    public function getAllLocations(string $contentTypeKey): array
+    public function getAllLocations(TypeKey $contentTypeKey): array
     {
-        return array_keys($this->fields[$contentTypeKey] ?? []);
+        return array_keys($this->fields[$contentTypeKey->toString()] ?? []);
     }
 }

@@ -11,7 +11,7 @@ use WordSphere\Core\Domain\ContentManagement\Enums\ContentStatus;
 use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidContentStatusException;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ContentRepositoryInterface;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
-use WordSphere\Core\Infrastructure\Support\Events\LaravelEventDispatcher;
+use WordSphere\Core\Infrastructure\Shared\Events\LaravelEventDispatcher;
 
 use function info;
 

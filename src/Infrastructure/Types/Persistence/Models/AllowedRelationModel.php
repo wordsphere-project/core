@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WordSphere\Core\Infrastructure\Types\Persistence\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use WordSphere\Core\Infrastructure\Shared\Models\TenantProjectModel;
 
 /**
  * @property string $id
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $tenant_id
  * @property string $project_id
  */
-class AllowedRelationModel extends BaseTenantProjectModel
+class AllowedRelationModel extends TenantProjectModel
 {
     protected $table = 'allowed_relations';
 

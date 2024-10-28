@@ -17,7 +17,7 @@ class ListContents extends ListRecords
         return [
             CreateAction::make()
                 ->url(fn (): string => static::getResource()::getUrl('create', [
-                    'contentType' => request()->route('contentType'),
+                    'type' => request()->route('type'),
                 ])),
         ];
     }
@@ -25,7 +25,7 @@ class ListContents extends ListRecords
     protected function getRedirectUrl(): string
     {
         return static::getResource()::getUrl('index', [
-            'contentType' => request()->route('contentType'),
+            'type' => request()->route('type'),
         ]);
     }
 }

@@ -6,6 +6,7 @@ namespace WordSphere\Core\Interfaces\Filament\Builders;
 
 use Filament\Navigation\NavigationItem;
 use WordSphere\Core\Domain\Types\TypeRegistry;
+use WordSphere\Core\Interfaces\Filament\Types\FilamentTypeData;
 
 use function route;
 
@@ -21,12 +22,12 @@ readonly class TypeNavigationBuilder
         $items = [];
 
         foreach ($types as $type) {
-            $interfaceData = $type->getInterfaceData();
-            $items[] = NavigationItem::make($interfaceData['pluralName'] ?? $type->getKey()->toString())
-                ->icon($interfaceData['icon'] ?? 'heroicon-o-document')
-                ->group($interfaceData['navigationGroup'] ?? '')
+            $interfaceData = FilamentTypeData::fromArray($type->getInterfaceData());
+            $items[] = NavigationItem::make(label: ! empty($interfaceData->getPluralName()) ? $interfaceData->getPluralName() : $type->getKey()->toString())
+                ->icon($interfaceData->getIcon() ?? 'heroicon-o-document')
+                ->group($interfaceData->getNavigationGroup() ?? '')
                 ->url(route('filament.wordsphere.resources.contents.index', ['type' => $type->getKey()->toString()]))
-                ->sort($interfaceData['navigationSort'] ?? 0);
+                ->sort($interfaceData->getNavigationOrder() ?? 10000);
         }
 
         return $items;

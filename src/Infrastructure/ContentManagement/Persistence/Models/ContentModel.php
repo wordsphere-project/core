@@ -110,6 +110,7 @@ class ContentModel extends TenantProjectModel implements TypeableInterface
             'custom_fields' => 'json',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+            'published_at' => 'datetime',
             'tenant_id' => 'string',
             'project_id' => 'string',
             'type' => 'string',

@@ -22,6 +22,7 @@ use WordSphere\Core\Application\ContentManagement\Services\PublishContentService
 use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidContentStatusException;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
+use WordSphere\Core\Domain\Types\ValueObjects\TypeKey;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\ContentModel as EloquentArticle;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
 use WordSphere\Core\Interfaces\Filament\Builders\TypeNavigationBuilder;
@@ -72,15 +73,19 @@ class ContentResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('slug')
             ->columns(
                 components: [
                     CuratorColumn::make('featured_image_id')
                         ->circular()
                         ->label('Feature Image')
+                        ->visible(fn () => ! self::getType()->getKey()->equals(TypeKey::fromString('blocks')))
                         ->size(60),
                     TextColumn::make('title')
+                        ->sortable()
                         ->searchable(),
                     TextColumn::make('slug')
+                        ->sortable()
                         ->searchable(),
                     TextColumn::make('status')
                         ->badge(),

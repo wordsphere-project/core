@@ -62,7 +62,7 @@ class ContentAdapter
             excerpt: $eloquentArticle->excerpt,
             customFields: $eloquentArticle->custom_fields,
             status: ContentStatus::from($eloquentArticle->status),
-            publishedAt: $eloquentArticle->published_at !== null ? new DateTimeImmutable($eloquentArticle->published_at->toString()) : null,
+            publishedAt: $eloquentArticle->published_at !== null ? DateTimeImmutable::createFromInterface($eloquentArticle->published_at) : null,
             createdAt: DateTimeImmutable::createFromInterface($eloquentArticle->created_at),
             updatedAt: DateTimeImmutable::createFromInterface($eloquentArticle->updated_at),
         );

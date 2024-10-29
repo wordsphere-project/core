@@ -9,11 +9,14 @@ use WordSphere\Core\Application\ContentManagement\Queries\GetContentBySlugQuery;
 use WordSphere\Core\Application\ContentManagement\Queries\GetContentsByTypeQuery;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\ContentModel;
 use WordSphere\Core\Infrastructure\Types\Services\TenantProjectProvider;
+use WordSphere\Core\Interfaces\Http\Api\ContentManagement\Resources\ContentResource;
+
+use function array_merge;
 
 readonly class ContentQueryService
 {
     public function __construct(
-        private TenantProjectProvider $tenantProjectProvider
+        private TenantProjectProvider $tenantProjectProvider,
     ) {}
 
     public function getContentsByType(GetContentsByTypeQuery $query): LengthAwarePaginator
@@ -31,11 +34,39 @@ readonly class ContentQueryService
 
     public function getContentBySlug(GetContentBySlugQuery $query): ?ContentModel
     {
-        return ContentModel::query()
+        $content = ContentModel::query()
             ->where('type', $query->type->toString())
             ->where('slug', $query->slug)
             ->where('tenant_id', $this->tenantProjectProvider->getCurrentTenantId()->toString())
             ->where('project_id', $this->tenantProjectProvider->getCurrentProjectId()->toString())
             ->first();
+
+        if (! $content) {
+            return null;
+        }
+
+        return $this->getContentWithBlocks($content);
+    }
+
+    public function getContentWithBlocks(ContentModel $content): ContentModel
+    {
+
+        // If there are block IDs in custom_fields
+        if (! empty($content->custom_fields['blocks'])) {
+            // Fetch all related blocks
+            $blocks = ContentModel::query()
+                ->where('type', 'blocks')
+                ->whereIn('id', $content->custom_fields['blocks'])
+                ->get();
+
+            $content->custom_fields = array_merge($content->custom_fields, [
+                'blocks' => (new ContentResource($content))->collection($blocks),
+            ]);
+
+            return $content;
+
+        }
+
+        return $content;
     }
 }

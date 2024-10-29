@@ -41,7 +41,7 @@ class WordSphereDashboardServiceProvider extends PanelProvider
         return $panel
             ->id('wordsphere')
             ->default()
-            ->spa()
+            //->spa()
             ->font('switzer', 'https://fonts.cdnfonts.com/css/switzer')
             ->path('admin')
             ->login()
@@ -72,14 +72,6 @@ class WordSphereDashboardServiceProvider extends PanelProvider
                 ]
             )
             ->navigationGroups([
-                NavigationGroup::make('CMS')
-                    ->label(__('CMS'))
-                    ->collapsed(false)
-                    ->icon('heroicon-o-newspaper'),
-                NavigationGroup::make('Content')
-                    ->label(__('content.content'))
-                    ->collapsible(true)
-                    ->icon('heroicon-o-newspaper'),
                 NavigationGroup::make('Pages')
                     ->label(__('pages.pages'))
                     ->collapsible(true)

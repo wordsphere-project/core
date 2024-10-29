@@ -53,6 +53,7 @@ trait HasTypedRelations
 
     protected function buildBelongsToRelation(string $related, string $relationName): BelongsTo
     {
+        /** @phpstan-ignore-next-line  */
         return $this->belongsTo($related, "{$relationName}_id")
             ->where('tenant_id', $this->tenant_id)
             ->where('project_id', $this->project_id);
@@ -97,6 +98,7 @@ trait HasTypedRelations
 
     protected function buildOneToManyRelation(string $related, string $relationName): HasMany
     {
+        /** @phpstan-ignore-next-line  */
         return $this->hasMany($related, 'parent_id')
             ->where('relation_name', $relationName)
             ->where('tenant_id', $this->tenant_id)

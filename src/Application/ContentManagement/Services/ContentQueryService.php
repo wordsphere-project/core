@@ -38,5 +38,4 @@ readonly class ContentQueryService
             ->where('project_id', $this->tenantProjectProvider->getCurrentProjectId()->toString())
             ->first();
     }
-
 }

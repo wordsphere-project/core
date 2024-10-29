@@ -55,5 +55,47 @@ class BlockContentTypeRegistrar extends BaseTypeRegistrar
             ]
         );
 
+        $this->addFields(
+            typeKey: $type->getKey(),
+            location: 'blocks',
+            callback: fn () => [
+                new CustomField(
+                    key: 'custom_fields.blocks',
+                    type: FilamentFieldType::FILAMENT_REPEATER->value,
+                    config: [
+                        'label' => __('Content Blocks'),
+                        'schema' => [
+                            [
+                                'name' => 'title',
+                                'type' => FilamentFieldType::FILAMENT_TEXT->value,
+                                'config' => [
+                                    'label' => __('Title'),
+                                    'required' => true,
+                                    'maxLength' => 255,
+                                ],
+                            ],
+                            [
+                                'name' => 'content',
+                                'type' => FilamentFieldType::FILAMENT_RICH_EDITOR->value,
+                                'config' => [
+                                    'label' => __('Content'),
+                                    'required' => true,
+                                ],
+                            ],
+                        ],
+                        'reorderable' => true,
+                        'collapsible' => true,
+                        'itemLabel' => [
+                            'from' => 'title',
+                        ],
+                    ],
+                    validation: [
+                        'required' => true,
+                        'array' => true,
+                    ]
+                ),
+            ]
+        );
+
     }
 }

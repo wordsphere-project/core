@@ -7,6 +7,7 @@ namespace WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models;
 use Awcodes\Curator\Models\Media;
 use Carbon\Carbon;
 use DateTimeImmutable;
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,7 +27,6 @@ use WordSphere\Core\Infrastructure\Shared\Models\TenantProjectModel;
 
 use function app;
 use function array_key_exists;
-use function auth;
 
 /**
  * @property string $id
@@ -48,6 +48,7 @@ use function auth;
  * @property Carbon|DateTimeImmutable $created_at
  * @property Carbon|DateTimeImmutable $updated_at
  * @property Carbon|DateTimeImmutable $published_at
+ * @property \Illuminate\Database\Eloquent\Relations\BelongsTo|\Illuminate\Database\Eloquent\Relations\BelongsToMany|\Illuminate\Database\Eloquent\Relations\HasMany|mixed $resource
  *
  * @method static ArticleFactory factory($count = null, $state = [])
  */
@@ -86,15 +87,19 @@ class ContentModel extends TenantProjectModel implements TypeableInterface
     {
 
         parent::boot();
-        /** @var EloquentUser $user */
-        $user = auth()->user();
-        static::creating(function (ContentModel $model) use ($user): void {
-            $model->setAttribute('created_by', $user->uuid);
-            $model->setAttribute('updated_by', $user->uuid);
+        static::creating(function (ContentModel $model): void {
+            if ($user = Filament::auth()->user()) {
+                /** @var EloquentUser $user */
+                $model->setAttribute('created_by', $user->uuid);
+                $model->setAttribute('updated_by', $user->uuid);
+            }
         });
-        static::updating(function (ContentModel $model) use ($user): void {
-            $model->setAttribute('created_by', $model->created_by);
-            $model->setAttribute('updated_by', $user->uuid);
+        static::updating(function (ContentModel $model): void {
+            if ($user = Filament::auth()->user()) {
+                /** @var EloquentUser $user */
+                $model->setAttribute('created_by', $model->created_by);
+                $model->setAttribute('updated_by', $user->uuid);
+            }
         });
 
     }
@@ -133,7 +138,7 @@ class ContentModel extends TenantProjectModel implements TypeableInterface
 
     public function featuredImage(): BelongsTo
     {
-        return $this->belongsTo(EloquentMedia::class, 'featured_image_id', 'uuid');
+        return $this->belongsTo(EloquentMedia::class, 'featured_image_id', 'id');
     }
 
     public function media(): BelongsToMany

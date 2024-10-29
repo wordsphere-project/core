@@ -13,5 +13,6 @@ enum FilamentFieldType: string
     case FILAMENT_FILES = 'filament:files';
     case FILAMENT_CHECKBOX = 'filament:checkbox';
     case FILAMENT_TEXTAREA = 'filament:textarea';
+    case FILAMENT_REPEATER = 'repeater';
 
 }

@@ -8,7 +8,8 @@ use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use WordSphere\Core\Infrastructure\Shared\Providers\ContentManagementServiceProvider;
+use WordSphere\Core\Infrastructure\Shared\Providers\ApiServiceProvider;
+use WordSphere\Core\Infrastructure\Shared\Providers\ContentServiceProvider;
 use WordSphere\Core\Infrastructure\Shared\Providers\EventServiceProvider;
 use WordSphere\Core\Infrastructure\Shared\Providers\TypeServiceProvider;
 use WordSphere\Core\Interfaces\Filament\Providers\FilamentTypeFieldServiceProvider;
@@ -41,9 +42,10 @@ class WordSphereServiceProvider extends PackageServiceProvider
     {
 
         $this->app->register(provider: EventServiceProvider::class);
+        $this->app->register(provider: ApiServiceProvider::class);
         $this->app->register(provider: FilamentTypeFieldServiceProvider::class);
         $this->app->register(provider: TypeServiceProvider::class);
-        $this->app->register(provider: ContentManagementServiceProvider::class);
+        $this->app->register(provider: ContentServiceProvider::class);
 
         if ($this->app->isLocal()) {
             $this->app->register(IdeHelperServiceProvider::class);

@@ -29,6 +29,7 @@ use WordSphere\Core\Domain\ContentManagement\Enums\ContentStatus;
 use WordSphere\Core\Domain\Types\Entities\Type;
 use WordSphere\Core\Domain\Types\Enums\RelationType;
 use WordSphere\Core\Domain\Types\ValueObjects\AllowedRelation;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\ContentModel;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\ContentModel as EloquentArticle;
 use WordSphere\Core\Infrastructure\Types\Services\TenantProjectProvider;
 use WordSphere\Core\Interfaces\Filament\Concerns\InteractsWithStatus;
@@ -67,6 +68,17 @@ class ContentForm
                                         ->columnSpan(2),
                                     RichEditor::make('content')
                                         ->columnSpan(2),
+                                    Select::make('custom_fields.blocks')
+                                        ->multiple()
+                                        ->options(function (TenantProjectProvider $tenantProjectProvider) {
+                                            return ContentModel::query()
+                                                ->where('type', 'blocks')
+                                                ->where('tenant_id', $tenantProjectProvider->getCurrentTenantId())
+                                                ->where('project_id', $tenantProjectProvider->getCurrentProjectId())
+                                                ->pluck('slug', 'id')->all();
+                                        })
+                                        ->preload()
+                                        ->searchable(),
                                 ]
                             ),
 

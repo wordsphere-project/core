@@ -9,21 +9,21 @@ use WordSphere\Core\Interfaces\Filament\Types\FilamentTypeData;
 
 use function __;
 
-class NewsArticleContentTypeRegistrar extends BaseTypeRegistrar
+class EventContentTypeRegistrar extends BaseTypeRegistrar
 {
     public function register(): void
     {
         $this->registry->register(
-            key: TypeKey::fromString('news'),
+            key: TypeKey::fromString('events'),
             entityClass: Content::class,
             interfaceData: (new FilamentTypeData(
-                singularName: __('content.new'),
-                pluralName: __('content.news'),
+                singularName: __('content.event'),
+                pluralName: __('content.events'),
                 navigationGroup: __('content.content'),
                 icon: 'heroicon-o-rectangle-group',
-                description: __('News'),
+                description: __('Events.'),
                 hasAuthor: false,
-                navigationOrder: 1
+                navigationOrder: 2
             ))->toArray()
         );
     }

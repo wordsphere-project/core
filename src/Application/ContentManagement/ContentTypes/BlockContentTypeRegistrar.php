@@ -25,7 +25,8 @@ class BlockContentTypeRegistrar extends BaseTypeRegistrar
                 navigationGroup: 'Content',
                 icon: 'heroicon-o-square-3-stack-3d',
                 description: __('Content block to be linked pages or other type of contents.'),
-                hasAuthor: false
+                hasAuthor: false,
+                navigationOrder: 999,
             ))->toArray()
         );
 

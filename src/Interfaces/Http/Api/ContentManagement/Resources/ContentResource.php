@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace WordSphere\Core\Interfaces\Http\Api\ContentManagement\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Media;
+
+use function is_string;
 
 /**
  * @property mixed $id
@@ -20,6 +23,7 @@ use WordSphere\Core\Domain\ContentManagement\ValueObjects\Media;
  * @property mixed $updated_at
  * @property mixed $published_at
  * @property mixed $media
+ * @property mixed $attachedBlocks
  */
 class ContentResource extends JsonResource
 {
@@ -45,7 +49,7 @@ class ContentResource extends JsonResource
             ),
             'createdAt' => $this->created_at->toIso8601String(),
             'updatedAt' => $this->updated_at->toIso8601String(),
-            'publishedAt' => $this->published_at?->toIso8601String(),
+            'publishedAt' => is_string($this->published_at) ? Carbon::createFromTimeString($this->published_at)->toIso8601String() : $this->published_at?->toIso8601String(),
         ];
     }
 

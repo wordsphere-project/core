@@ -38,6 +38,8 @@ class PageResource extends Resource
 
     protected CustomFieldsManager $customFieldsManager;
 
+    protected static bool $shouldRegisterNavigation = false;
+
     public static function form(Form $form): Form
     {
 

@@ -87,7 +87,7 @@ class EditContent extends EditRecord
             content: array_key_exists('content', $data) ? $data['content'] : null,
             excerpt: array_key_exists('excerpt', $data) ? $data['excerpt'] : null,
             slug: array_key_exists('slug', $data) ? $data['slug'] : null,
-            customFields: array_key_exists('data', $data) ? $data['data'] : null,
+            customFields: array_key_exists('custom_fields', $data) ? $data['custom_fields'] : null,
             featuredImage: array_key_exists('featured_image_id', $data) ? ($data['featured_image_id'] ? Id::fromInt($data['featured_image_id']) : null) : null,
             media: $media,
         );

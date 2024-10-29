@@ -41,7 +41,7 @@ class WordSphereDashboardServiceProvider extends PanelProvider
         return $panel
             ->id('wordsphere')
             ->default()
-            ->spa()
+            //->spa()
             ->font('switzer', 'https://fonts.cdnfonts.com/css/switzer')
             ->path('admin')
             ->login()

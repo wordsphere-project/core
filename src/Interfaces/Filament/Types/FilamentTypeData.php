@@ -23,6 +23,7 @@ readonly class FilamentTypeData
         private ?int $defaultVisibility = ContentVisibility::PUBLIC->value,
         private bool $hasAuthor = false,
         private bool $hasFeaturedImage = false,
+        private ?int $navigationOrder = null,
     ) {}
 
     public function getSingularName(): string
@@ -85,12 +86,18 @@ readonly class FilamentTypeData
         return $this->hasFeaturedImage;
     }
 
+    public function getNavigationOrder(): ?int
+    {
+        return $this->navigationOrder;
+    }
+
     public function toArray(): array
     {
         return [
             'singularName' => $this->getSingularName(),
             'pluralName' => $this->getPluralName(),
             'navigationGroup' => $this->getNavigationGroup(),
+            'navigationOrder' => $this->getNavigationOrder(),
             'label' => $this->getLabel(),
             'icon' => $this->getIcon(),
             'description' => $this->getDescription(),
@@ -118,6 +125,7 @@ readonly class FilamentTypeData
             defaultVisibility: array_key_exists('defaultVisibility', $data) ? $data['defaultVisibility'] : ContentVisibility::PUBLIC->value,
             hasAuthor: array_key_exists('author', $data) ? $data['author'] : false,
             hasFeaturedImage: array_key_exists('hasFeaturedImage', $data) ? $data['hasFeaturedImage'] : true,
+            navigationOrder: array_key_exists('navigationOrder', $data) ? $data['navigationOrder'] : 1,
         );
     }
 }

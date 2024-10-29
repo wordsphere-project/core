@@ -22,9 +22,11 @@ class PageContentTypeRegistrar extends BaseTypeRegistrar
             interfaceData: (new FilamentTypeData(
                 singularName: __('Page'),
                 pluralName: __('Pages'),
+                navigationGroup: __('content.content'),
                 icon: 'heroicon-o-rectangle-group',
                 description: __('Static pages for your website such as About Us, Contact, Terms & Conditions, etc.'),
-                hasAuthor: false
+                hasAuthor: false,
+                navigationOrder: 98
             ))->toArray()
         );
 

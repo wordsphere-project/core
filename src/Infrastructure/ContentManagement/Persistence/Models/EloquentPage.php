@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use WordSphere\Core\Database\Factories\PageFactory;
 use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
-use WordSphere\Core\Infrastructure\Support\Concerns\CreatedUpdatedBy;
-use WordSphere\Core\Infrastructure\Support\Concerns\HasFeaturedImage;
+use WordSphere\Core\Infrastructure\Shared\Concerns\CreatedUpdatedBy;
+use WordSphere\Core\Infrastructure\Shared\Concerns\HasFeaturedImage;
 use WordSphere\Core\Legacy\Enums\ContentStatus;
 use WordSphere\Core\Legacy\Enums\ContentVisibility;
 
@@ -42,11 +42,11 @@ use WordSphere\Core\Legacy\Enums\ContentVisibility;
 class EloquentPage extends Model
 {
     use CreatedUpdatedBy;
-
     use CreatedUpdatedBy;
 
     /** @use HasFactory<PageFactory> */
     use HasFactory;
+
     use HasFeaturedImage;
     use HasUuids;
 

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use WordSphere\Core\Interfaces\Http\Api\ContentManagement\Controllers\ContentApiController;
 use WordSphere\Core\Interfaces\Http\Controllers\Api\PageController;
 
 Route::prefix('api/v1')->group(function (): void {
@@ -20,4 +21,15 @@ Route::prefix('api/v1')->group(function (): void {
 
         // Other page-related endpoints
     });
+
+    Route::group(['prefix' => 'contents'], function (): void {
+
+        Route::get('{type}', [ContentApiController::class, 'getByType'])
+            ->name('api.v1.content.by.type');
+
+        Route::get('{type}/{slug}', [ContentApiController::class, 'getBySlug'])
+            ->name('api.v1.content.by.slug');
+
+    });
+
 });

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace WordSphere\Core\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentContent;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\ContentModel;
 
 /**
- * @extends Factory<EloquentContent>
+ * @extends Factory<ContentModel>
  */
 class ArticleFactory extends Factory
 {

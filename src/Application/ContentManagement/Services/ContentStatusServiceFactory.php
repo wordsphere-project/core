@@ -8,7 +8,7 @@ use InvalidArgumentException;
 use WordSphere\Core\Application\ContentManagement\Contracts\ContentStatusServiceInterface;
 use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ContentRepositoryInterface;
-use WordSphere\Core\Infrastructure\Support\Events\LaravelEventDispatcher;
+use WordSphere\Core\Infrastructure\Shared\Events\LaravelEventDispatcher;
 
 readonly class ContentStatusServiceFactory
 {

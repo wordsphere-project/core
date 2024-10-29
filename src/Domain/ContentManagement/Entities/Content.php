@@ -13,23 +13,27 @@ use WordSphere\Core\Domain\ContentManagement\Events\ContentPublished;
 use WordSphere\Core\Domain\ContentManagement\Events\ContentUnpublished;
 use WordSphere\Core\Domain\ContentManagement\Events\ContentUpdated;
 use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidContentStatusException;
-use WordSphere\Core\Domain\ContentManagement\ValueObjects\ContentType;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Media;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\Concerns\HasAuditTrail;
 use WordSphere\Core\Domain\Shared\Concerns\HasFeaturedImage;
+use WordSphere\Core\Domain\Shared\Concerns\HasTenantAndProject;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
+use WordSphere\Core\Domain\Types\Concerns\HasType;
+use WordSphere\Core\Domain\Types\Contracts\TypeableInterface;
 
 use function array_merge;
 
-class Content
+class Content implements TypeableInterface
 {
     use HasAuditTrail;
     use HasFeaturedImage;
+    use HasTenantAndProject;
+    use HasType;
 
     private Uuid $id;
 
-    private ContentType $type;
+    private string $type;
 
     private string $title;
 
@@ -53,7 +57,7 @@ class Content
 
     public function __construct(
         Uuid $id,
-        ContentType $type,
+        string $type,
         string $title,
         Slug $slug,
         Uuid $createdBy,
@@ -97,7 +101,7 @@ class Content
     }
 
     public static function create(
-        ContentType $type,
+        string $type,
         string $title,
         Slug $slug,
         Uuid $creator,
@@ -125,7 +129,7 @@ class Content
 
     public function update(
         Uuid $id,
-        ContentType $type,
+        string $type,
         Uuid $updater,
         string $title,
         ?string $content = '',
@@ -158,7 +162,7 @@ class Content
     {
         $this->media = array_filter(
             $this->media,
-            fn (Media $media) => $media->id !== $mediaId
+            fn (Media $media): bool => $media->id !== $mediaId
         );
     }
 
@@ -166,7 +170,7 @@ class Content
     {
         $this->media = $media;
         $this->updatedBy = $updatedBy;
-        $this->updatedAt = new \DateTimeImmutable;
+        $this->updatedAt = new DateTimeImmutable;
 
         $this->domainEvents[] = new ContentMediaUpdated($this->getId());
     }
@@ -254,7 +258,7 @@ class Content
         return $this->id;
     }
 
-    public function getType(): ContentType
+    public function getType(): string
     {
         return $this->type;
     }
@@ -306,7 +310,7 @@ class Content
     {
         return [
             'id' => $this->getId()->toString(),
-            'type' => $this->getType()->toString(),
+            'type' => $this->getType(),
             'title' => $this->getTitle(),
             'content' => $this->getContent(),
             'excerpt' => $this->getExcerpt(),

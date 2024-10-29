@@ -14,7 +14,7 @@ use WordSphere\Core\Domain\ContentManagement\Repositories\ContentRepositoryInter
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\ContentType;
 use WordSphere\Core\Domain\ContentManagement\ValueObjects\Slug;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentContent as EloquentArticle;
+use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\ContentModel as EloquentArticle;
 
 /**
  * @template TModel of EloquentArticle

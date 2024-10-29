@@ -12,7 +12,6 @@ use WordSphere\Core\Application\Factories\ContentManagement\MediaFactory;
 
 /**
  * @property int $id
- * @property string $uuid
  * @property-read mixed $full_path
  * @property-read mixed $width
  * @property-read mixed $height

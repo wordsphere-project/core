@@ -5,6 +5,8 @@ declare(strict_types=1);
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use WordSphere\Core\Domain\ContentManagement\Enums\ContentStatus;
+use WordSphere\Core\Legacy\Enums\ContentVisibility;
 
 return new class extends Migration
 {
@@ -22,9 +24,14 @@ return new class extends Migration
             $table->string('website')->nullable();
             $table->json('social_links')->nullable();
             $table->string('photo')->nullable();
+            $table->uuid('tenant_id');
+            $table->uuid('project_id');
             $table->uuid('created_by');
             $table->uuid('updated_by');
             $table->timestamps();
+
+            $table->unique(['email', 'tenant_id', 'project_id']);
+            $table->index(['tenant_id', 'project_id']);
 
             $table->foreign('created_by')
                 ->references('uuid')
@@ -39,17 +46,23 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('type')->index();
             $table->string('title');
-            $table->string('slug')->unique();
+            $table->string('slug');
             $table->text('content')->nullable();
             $table->text('excerpt')->nullable();
             $table->jsonb('custom_fields')->nullable();
-            $table->string('status');
+            $table->string('status')->default(ContentStatus::DRAFT->value);
+            $table->integer('visibility')->default(ContentVisibility::PUBLIC->value);
             $table->uuid('author_id')->nullable();
             $table->unsignedInteger('featured_image_id')->nullable();
             $table->timestamps();
             $table->timestamp('published_at')->nullable();
+            $table->uuid('tenant_id');
+            $table->uuid('project_id');
             $table->uuid('created_by');
             $table->uuid('updated_by');
+
+            $table->unique(['slug', 'tenant_id', 'project_id']);
+            $table->index(['tenant_id', 'project_id']);
 
             $table->foreign('author_id')
                 ->references('id')

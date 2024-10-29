@@ -23,7 +23,7 @@ class PageContentTypeRegistrar extends BaseTypeRegistrar
                 singularName: __('Page'),
                 pluralName: __('Pages'),
                 navigationGroup: __('content.content'),
-                icon: 'heroicon-o-rectangle-group',
+                icon: 'heroicon-o-document-text',
                 description: __('Static pages for your website such as About Us, Contact, Terms & Conditions, etc.'),
                 hasAuthor: false,
                 navigationOrder: 98

@@ -20,8 +20,8 @@ class EventContentTypeRegistrar extends BaseTypeRegistrar
                 singularName: __('content.event'),
                 pluralName: __('content.events'),
                 navigationGroup: __('content.content'),
-                icon: 'heroicon-o-rectangle-group',
-                description: __('Events.'),
+                icon: 'heroicon-o-calendar-days',
+                description: __('Content type for managing in-person and online events.'),
                 hasAuthor: false,
                 navigationOrder: 2
             ))->toArray()

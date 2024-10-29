@@ -20,8 +20,8 @@ class NewsArticleContentTypeRegistrar extends BaseTypeRegistrar
                 singularName: __('content.new'),
                 pluralName: __('content.news'),
                 navigationGroup: __('content.content'),
-                icon: 'heroicon-o-rectangle-group',
-                description: __('News'),
+                icon: 'heroicon-o-newspaper',
+                description: __('Content type used for publishing news, updates and announcements'),
                 hasAuthor: false,
                 navigationOrder: 1
             ))->toArray()

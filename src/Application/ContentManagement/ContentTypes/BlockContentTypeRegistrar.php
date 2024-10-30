@@ -36,5 +36,6 @@ class BlockContentTypeRegistrar extends BaseTypeRegistrar
             inverseRelationName: 'blocks'
         );
 
+
     }
 }

@@ -5,9 +5,8 @@ namespace WordSphere\Core\Application\ContentManagement\ContentTypes;
 use WordSphere\Core\Application\Types\Registrars\BaseTypeRegistrar;
 use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 use WordSphere\Core\Domain\Types\Enums\RelationType;
-use WordSphere\Core\Domain\Types\ValueObjects\CustomField;
 use WordSphere\Core\Domain\Types\ValueObjects\TypeKey;
-use WordSphere\Core\Interfaces\Filament\Enums\FilamentFieldType;
+use WordSphere\Core\Interfaces\Filament\Enums\FieldType;
 use WordSphere\Core\Interfaces\Filament\Types\FilamentTypeData;
 
 use function __;
@@ -39,23 +38,15 @@ class PageContentTypeRegistrar extends BaseTypeRegistrar
             inverseRelationName: 'pages'
         );
 
-        $this->addFields(
-            typeKey: $type->getKey(),
-            location: 'main',
-            callback: fn () => [
-                new CustomField(
-                    key: 'custom_fields.subtitle',
-                    type: FilamentFieldType::FILAMENT_TEXT->value,
-                    config: [
-                        'label' => __('Subtitle'),
-                    ],
-                    validation: [
-                        'required' => false,
-                        'max_length' => 255,
-                    ]
-                ),
-            ]
-        );
+        $this->addFields($type->getKey(), 'main', function () {
+            return [
+                [
+                    'key' => 'custom_fields.blocks',
+                    'type' => FieldType::BLOCKS->value,
+                    'config' => [],
+                ],
+            ];
+        });
 
     }
 }

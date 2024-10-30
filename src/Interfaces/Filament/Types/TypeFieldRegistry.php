@@ -62,12 +62,12 @@ class TypeFieldRegistry
             throw new \InvalidArgumentException("No renderer registered for field type: {$field->getType()}");
         }
 
-        return ($this->fieldRenderers[$field->getType()])($field->getConfig());
+        return ($this->fieldRenderers[$field->getType()])($field);
     }
 
     public function getFields(TypeKey $typeKey, string $location): array
     {
-        return $this->fields[$typeKey->toString()][$location] ?? [];
+        return $this->fieldDefinitions[$typeKey->toString()][$location] ?? [];
     }
 
     public function registerGroupRenderer(TypeKey $fieldType, Closure $renderer): void

@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace WordSphere\Core\Interfaces\Filament\Hooks;
 
 use WordSphere\Core\Domain\Types\TypeRegistry;
+use WordSphere\Core\Domain\Types\ValueObjects\CustomField;
 use WordSphere\Core\Domain\Types\ValueObjects\TypeKey;
 use WordSphere\Core\Interfaces\Filament\Types\TypeFieldRegistry;
+
+use function array_merge;
 
 readonly class TypeFieldHook
 {
@@ -23,11 +26,13 @@ readonly class TypeFieldHook
         }
 
         $fields = [];
-        foreach ($this->fieldRegistry->getFields(TypeKey::fromString($typeKey), $location) as $field) {
-            $fields = array_merge(
-                $fields,
-                $this->fieldRegistry->getAllLocations(TypeKey::fromString($typeKey))
-            );
+        foreach ($this->fieldRegistry->getFields(TypeKey::fromString($typeKey), $location) as $locationFieldsCallBack) {
+
+            $locationFields = $locationFieldsCallBack();
+
+            foreach ($locationFields as $field) {
+                $fields = array_merge($fields, [$this->fieldRegistry->renderField(CustomField::fromArray($field))]);
+            }
         }
 
         return $fields;

@@ -29,10 +29,11 @@ use WordSphere\Core\Domain\ContentManagement\Enums\ContentStatus;
 use WordSphere\Core\Domain\Types\Entities\Type;
 use WordSphere\Core\Domain\Types\Enums\RelationType;
 use WordSphere\Core\Domain\Types\ValueObjects\AllowedRelation;
-use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\ContentModel;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\ContentModel as EloquentArticle;
 use WordSphere\Core\Infrastructure\Types\Services\TenantProjectProvider;
 use WordSphere\Core\Interfaces\Filament\Concerns\InteractsWithStatus;
+use WordSphere\Core\Interfaces\Filament\Enums\ContentFormPlaceholder;
+use WordSphere\Core\Interfaces\Filament\Hooks\TypeFieldHook;
 
 use function __;
 
@@ -48,6 +49,8 @@ class ContentForm
     public static function make(Form $form, Type $type): array
     {
 
+        $typeFieldsHook = app(TypeFieldHook::class);
+
         return [
             Split::make([
                 Tabs::make('Main Content')
@@ -58,27 +61,28 @@ class ContentForm
                                 components: [
                                     Hidden::make('type')
                                         ->default($type->getKey()->toString()),
+
+                                    ...$typeFieldsHook->getCustomFields($type->getKey()->toString(), ContentFormPlaceholder::GENERAL_START->value),
+
                                     TextInput::make('title')
                                         ->columnSpan(2)
                                         ->required(),
+
                                     TextInput::make('slug')
                                         ->columnSpan(2)
                                         ->required(),
+
                                     Textarea::make('excerpt')
+                                        ->visible($type->getInterfaceData()['showExcerpt'] ?? true)
                                         ->columnSpan(2),
+
+                                    ...$typeFieldsHook->getCustomFields($type->getKey()->toString(), ContentFormPlaceholder::GENERAL_BEFORE_CONTENT->value),
+
                                     RichEditor::make('content')
+                                        ->visible($type->getInterfaceData()['showContent'] ?? true)
                                         ->columnSpan(2),
-                                    Select::make('custom_fields.blocks')
-                                        ->multiple()
-                                        ->options(function (TenantProjectProvider $tenantProjectProvider) {
-                                            return ContentModel::query()
-                                                ->where('type', 'blocks')
-                                                ->where('tenant_id', $tenantProjectProvider->getCurrentTenantId())
-                                                ->where('project_id', $tenantProjectProvider->getCurrentProjectId())
-                                                ->pluck('slug', 'id')->all();
-                                        })
-                                        ->preload()
-                                        ->searchable(),
+
+                                    ...$typeFieldsHook->getCustomFields($type->getKey()->toString(), ContentFormPlaceholder::GENERAL_END->value),
                                 ]
                             ),
 
@@ -107,14 +111,17 @@ class ContentForm
                                         ->content(fn (EloquentArticle $record) => $record->status)
                                         ->visible(fn (): bool => $form->getRecord() !== null),
                                     Select::make('visibility')
+                                        ->visible(false)
                                         ->options([
                                             'public' => 'Public',
                                             'private' => 'Private',
                                         ])
                                         ->label('Visibility'),
+
                                     DateTimePicker::make('published_at')
                                         ->label('Publish at')
                                         ->reactive(),
+
                                     Actions::make([
                                         Actions\Action::make('publish')
                                             ->label('Publish')
@@ -136,8 +143,10 @@ class ContentForm
                                             ->keyBindings(['command+u', 'ctrl+u'])
                                             ->color('danger'),
                                     ]),
+
                                     Select::make('author_id')
                                         ->relationship('author', 'name')
+                                        ->visible($type->getInterfaceData()['hasAuthor'] ?? true)
                                         ->searchable(),
                                 ]
                             )

@@ -5,9 +5,7 @@ namespace WordSphere\Core\Application\ContentManagement\ContentTypes;
 use WordSphere\Core\Application\Types\Registrars\BaseTypeRegistrar;
 use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 use WordSphere\Core\Domain\Types\Enums\RelationType;
-use WordSphere\Core\Domain\Types\ValueObjects\CustomField;
 use WordSphere\Core\Domain\Types\ValueObjects\TypeKey;
-use WordSphere\Core\Interfaces\Filament\Enums\FieldType;
 use WordSphere\Core\Interfaces\Filament\Types\FilamentTypeData;
 
 use function __;
@@ -37,7 +35,6 @@ class BlockContentTypeRegistrar extends BaseTypeRegistrar
             relationType: RelationType::MANY_TO_MANY,
             inverseRelationName: 'blocks'
         );
-
 
     }
 }

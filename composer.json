@@ -1,7 +1,6 @@
 {
     "name": "wordsphere/core",
     "description": "An awesome content management system.",
-    "version": "0.0.1",
     "keywords": [
         "wordsphere",
         "laravel",

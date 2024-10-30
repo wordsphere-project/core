@@ -21,4 +21,5 @@ return [
     'settings' => 'Configurações',
     'setting' => 'Configuração',
     'dashboard' => 'Painel',
+    'url' => 'URL',
 ];

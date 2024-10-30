@@ -21,4 +21,5 @@ return [
     'settings' => 'Settings',
     'setting' => 'Setting',
     'dashboard' => 'Dashboard',
+    'url' => 'URL',
 ];

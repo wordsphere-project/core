@@ -6,6 +6,7 @@ use WordSphere\Core\Application\Types\Registrars\BaseTypeRegistrar;
 use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 use WordSphere\Core\Domain\Types\Enums\RelationType;
 use WordSphere\Core\Domain\Types\ValueObjects\TypeKey;
+use WordSphere\Core\Interfaces\Filament\Enums\ContentFormPlaceholder;
 use WordSphere\Core\Interfaces\Filament\Enums\FieldType;
 use WordSphere\Core\Interfaces\Filament\Types\FilamentTypeData;
 
@@ -38,7 +39,7 @@ class PageContentTypeRegistrar extends BaseTypeRegistrar
             inverseRelationName: 'pages'
         );
 
-        $this->addFields($type->getKey(), 'main', function () {
+        $this->addFields($type->getKey(), ContentFormPlaceholder::GENERAL_END->value, function () {
             return [
                 [
                     'key' => 'custom_fields.blocks',

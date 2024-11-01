@@ -18,7 +18,7 @@ use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ContentAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\MediaAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\ContentModel;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 use WordSphere\Core\Interfaces\Filament\Resources\ContentResource;
 
 use function array_key_exists;
@@ -70,7 +70,7 @@ class EditContent extends EditRecord
                 ->toArray();
         }
 
-        /** @var EloquentUser $updater */
+        /** @var UserModel $updater */
         $updater = $this->auth->user();
         $updaterId = Uuid::fromString($updater->uuid);
         $articleId = Uuid::fromString($record->id);

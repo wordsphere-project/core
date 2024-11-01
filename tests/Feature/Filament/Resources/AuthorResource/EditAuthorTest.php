@@ -4,13 +4,13 @@ use WordSphere\Core\Domain\ContentManagement\Entities\Author;
 use WordSphere\Core\Domain\ContentManagement\Repositories\AuthorRepositoryInterface;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\AuthorAdapter;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 use WordSphere\Core\Interfaces\Filament\Resources\AuthorResource\Pages\EditAuthor;
 
 use function WordSphere\Tests\livewire;
 
 beforeEach(function (): void {
-    $this->user = EloquentUser::factory()->create();
+    $this->user = UserModel::factory()->create();
     $this->actingAs($this->user);
 });
 

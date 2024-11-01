@@ -45,13 +45,15 @@ use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use Spatie\LaravelSettings\LaravelSettingsServiceProvider;
 use Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository;
 use Spatie\Permission\Models\Role;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Domain\UserManagement\Enums\SystemGuard;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 use WordSphere\Core\Legacy\Enums\SystemRole;
 use WordSphere\Core\Legacy\Settings\AppSettings;
 use WordSphere\Core\WordSphereDashboardServiceProvider;
 use WordSphere\Core\WordSphereServiceProvider;
 
 use function database_path;
+use function dump;
 use function Orchestra\Testbench\package_path;
 
 #[WithEnv('DB_CONNECTION', 'testing')]
@@ -59,7 +61,7 @@ class TestCase extends Orchestra
 {
     use LazilyRefreshDatabase;
 
-    protected EloquentUser $superAdmin;
+    protected UserModel $superAdmin;
 
     protected function setUp(): void
     {
@@ -80,10 +82,12 @@ class TestCase extends Orchestra
     private function createSuperAdminUSer(): void
     {
 
-        $this->superAdmin = EloquentUser::factory()->create();
+        $this->superAdmin = UserModel::factory()->create();
         $superAdmin = Role::findByName(
-            name: SystemRole::SUPER_ADMIN->value
+            name: SystemRole::SUPER_ADMIN->value,
+            guardName: SystemGuard::WEB->value
         );
+
         $this->superAdmin->assignRole(
             roles: $superAdmin
         );

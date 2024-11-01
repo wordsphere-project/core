@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace WordSphere\Core\Infrastructure\Identity\Persistence;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Althinect\FilamentSpatieRolesPermissions\Concerns\HasSuperAdmin;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
@@ -18,10 +17,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
 use WordSphere\Core\Database\Factories\UserFactory;
+use WordSphere\Core\Infrastructure\Shared\Concerns\HasUuidAttribute;
 use WordSphere\Core\Legacy\Enums\SystemRole;
 
 /**
@@ -41,29 +41,29 @@ use WordSphere\Core\Legacy\Enums\SystemRole;
  * @property-read Collection<int, Role> $roles
  * @property-read int|null $roles_count
  *
- * @method static Builder<static>|EloquentUser newModelQuery()
- * @method static Builder<static>|EloquentUser newQuery()
- * @method static Builder<static>|EloquentUser permission($permissions, $without = false)
- * @method static Builder<static>|EloquentUser query()
- * @method static Builder<static>|EloquentUser role($roles, $guard = null, $without = false)
- * @method static Builder<static>|EloquentUser withoutPermission($permissions)
- * @method static Builder<static>|EloquentUser withoutRole($roles, $guard = null)
+ * @method static Builder<static>|UserModel newModelQuery()
+ * @method static Builder<static>|UserModel newQuery()
+ * @method static Builder<static>|UserModel permission($permissions, $without = false)
+ * @method static Builder<static>|UserModel query()
+ * @method static Builder<static>|UserModel role($roles, $guard = null, $without = false)
+ * @method static Builder<static>|UserModel withoutPermission($permissions)
+ * @method static Builder<static>|UserModel withoutRole($roles, $guard = null)
  *
  * @mixin Eloquent
  */
-class EloquentUser extends Authenticatable implements FilamentUser, MustVerifyEmail
+class UserModel extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory;
-
+    use HasUuidAttribute;
+    use HasRoles;
     use HasSuperAdmin;
     use Notifiable;
-
-    protected string $guard_name = 'web';
 
     protected $table = 'users';
 
     protected $fillable = [
+        'uuid',
         'name',
         'email',
         'password',
@@ -79,13 +79,19 @@ class EloquentUser extends Authenticatable implements FilamentUser, MustVerifyEm
         'remember_token',
     ];
 
+    public function guardName(): array
+    {
+        return ['web', 'api'];
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
+
         if ($this->isSuperAdmin()) {
             return true;
         }
 
-        return $this->hasRole(SystemRole::USER->value);
+        return $this->hasRole(SystemRole::SUPER_ADMIN->value);
     }
 
     /**
@@ -99,14 +105,6 @@ class EloquentUser extends Authenticatable implements FilamentUser, MustVerifyEm
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    protected static function boot(): void
-    {
-        parent::boot();
-        static::creating(function (EloquentUser $user): void {
-            $user->uuid = (string) Str::uuid();
-        });
     }
 
     protected static function newFactory(): UserFactory

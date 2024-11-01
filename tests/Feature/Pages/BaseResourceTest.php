@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Filament\Forms\Components\Select;
 use Symfony\Component\HttpFoundation\Response;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentPage;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 use WordSphere\Core\Interfaces\Filament\Resources\PageResource;
 use WordSphere\Core\Interfaces\Filament\Resources\PageResource\Pages\CreatePage;
 use WordSphere\Core\Interfaces\Filament\Resources\PageResource\Pages\ListPages;
@@ -67,8 +67,8 @@ describe('page admin', tests: function (): void {
 
     it('can create', function (): void {
 
-        /** @var EloquentUser $user */
-        $user = EloquentUser::factory()->create();
+        /** @var UserModel $user */
+        $user = UserModel::factory()->create();
 
         /** @var EloquentPage $newData */
         $newData = EloquentPage::factory()
@@ -108,8 +108,8 @@ describe('page admin', tests: function (): void {
 
     it('can list pages', function (): void {
 
-        /** @var EloquentUser $user */
-        $user = EloquentUser::factory()->create();
+        /** @var UserModel $user */
+        $user = UserModel::factory()->create();
 
         $pages = EloquentPage::factory()
             ->for($user, 'createdBy')

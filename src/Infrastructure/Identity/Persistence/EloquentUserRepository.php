@@ -14,7 +14,7 @@ class EloquentUserRepository implements UserRepositoryInterface
 {
     public function findById(Id $id): ?DomainUser
     {
-        $eloquentUser = EloquentUser::query()->find($id->toInt());
+        $eloquentUser = UserModel::query()->find($id->toInt());
 
         return $eloquentUser ? UserAdapter::toDomain($eloquentUser) : null;
 
@@ -22,7 +22,7 @@ class EloquentUserRepository implements UserRepositoryInterface
 
     public function findByUuid(Uuid $uuid): ?DomainUser
     {
-        $eloquentUser = EloquentUser::query()
+        $eloquentUser = UserModel::query()
             ->where('uuid', $uuid->toString())
             ->first();
 
@@ -31,14 +31,14 @@ class EloquentUserRepository implements UserRepositoryInterface
 
     public function save(DomainUser $user): void
     {
-        $eloquentUser = EloquentUser::query()
+        $eloquentUser = UserModel::query()
             ->findOrNew($user->getId()->toInt());
         $this->updateEloquentFromEntity($eloquentUser, $user);
         $eloquentUser->save();
 
     }
 
-    private function updateEloquentFromEntity(EloquentUser $eloquentUser, DomainUser $user): void
+    private function updateEloquentFromEntity(UserModel $eloquentUser, DomainUser $user): void
     {
         $eloquentUser->id = $user->getId()->toInt();
         $eloquentUser->uuid = $user->getUuid()->toString();

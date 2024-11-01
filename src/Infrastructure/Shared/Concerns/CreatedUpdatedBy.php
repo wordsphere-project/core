@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WordSphere\Core\Infrastructure\Shared\Concerns;
 
 use Illuminate\Database\Eloquent\Model;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 
 use function auth;
 
@@ -13,7 +13,7 @@ trait CreatedUpdatedBy
 {
     public static function bootCreatedUpdatedBy(): void
     {
-        /** @var EloquentUser $user */
+        /** @var UserModel $user */
         $user = auth()->user();
 
         static::creating(function (Model $model) use ($user): void {

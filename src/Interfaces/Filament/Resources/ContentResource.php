@@ -24,7 +24,7 @@ use WordSphere\Core\Domain\ContentManagement\Exceptions\InvalidContentStatusExce
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Domain\Types\ValueObjects\TypeKey;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\ContentModel as EloquentArticle;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 use WordSphere\Core\Interfaces\Filament\Builders\TypeNavigationBuilder;
 use WordSphere\Core\Interfaces\Filament\Concerns\InteractsWithStatus;
 use WordSphere\Core\Interfaces\Filament\Concerns\InteractsWithType;
@@ -114,7 +114,7 @@ class ContentResource extends Resource
     public static function publishArticle(AuthManager $auth, EloquentArticle $record, PublishContentService $publishArticleService): void
     {
 
-        /** @var EloquentUser $user */
+        /** @var UserModel $user */
         $user = $auth->user();
 
         $publisher = Uuid::fromString($user->uuid);

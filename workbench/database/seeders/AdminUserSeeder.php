@@ -7,7 +7,7 @@ namespace Workbench\Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 use WordSphere\Core\Legacy\Enums\SystemRole;
 
 class AdminUserSeeder extends Seeder
@@ -18,8 +18,8 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
 
-        /* @var EloquentUser $francisco */
-        $test1 = EloquentUser::query()->createOrFirst([
+        /* @var UserModel $francisco */
+        $test1 = UserModel::query()->createOrFirst([
             'email' => 'test@wordsphere.io',
         ], [
             'password' => Hash::make('password'),
@@ -27,8 +27,8 @@ class AdminUserSeeder extends Seeder
             'name' => 'Bruce Wayne',
         ]);
 
-        /* @var EloquentUser $joao */
-        $test2 = EloquentUser::query()->createOrFirst([
+        /* @var UserModel $joao */
+        $test2 = UserModel::query()->createOrFirst([
             'email' => 'test+2@wordsphere.io',
         ], [
             'password' => Hash::make('123456789'),

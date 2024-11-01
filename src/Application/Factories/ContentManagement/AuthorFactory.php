@@ -10,7 +10,7 @@ use WordSphere\Core\Domain\ContentManagement\Entities\Author as DomainAuthor;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentAuthor;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentMedia;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 
 use function array_key_exists;
 
@@ -30,8 +30,8 @@ final class AuthorFactory extends Factory
 
     public function definition(): array
     {
-        /** @var EloquentUser $creator */
-        $creator = EloquentUser::factory()
+        /** @var UserModel $creator */
+        $creator = UserModel::factory()
             ->create();
 
         return [

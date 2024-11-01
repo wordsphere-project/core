@@ -10,7 +10,7 @@ use WordSphere\Core\Domain\ContentManagement\Repositories\AuthorRepositoryInterf
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\AuthorAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentAuthor;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 use WordSphere\Core\Interfaces\Filament\Resources\AuthorResource;
 
 class CreateAuthor extends CreateRecord
@@ -36,7 +36,7 @@ class CreateAuthor extends CreateRecord
     protected function handleRecordCreation(array $data): EloquentAuthor
     {
 
-        /** @var EloquentUser $user */
+        /** @var UserModel $user */
         $user = $this->auth->user();
 
         $command = new CreateAuthorCommand(

@@ -12,7 +12,7 @@ use WordSphere\Core\Domain\ContentManagement\Repositories\AuthorRepositoryInterf
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\AuthorAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentAuthor;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 use WordSphere\Core\Interfaces\Filament\Resources\AuthorResource;
 
 class EditAuthor extends EditRecord
@@ -44,7 +44,7 @@ class EditAuthor extends EditRecord
 
     protected function handleRecordUpdate(Model|EloquentAuthor $record, array $data): EloquentAuthor
     {
-        /** @var EloquentUser $user */
+        /** @var UserModel $user */
         $user = $this->auth->user();
 
         /** @var EloquentAuthor $record */

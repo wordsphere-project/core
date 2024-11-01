@@ -5,7 +5,7 @@ use WordSphere\Core\Application\ContentManagement\Services\CreateContentService;
 use WordSphere\Core\Domain\ContentManagement\Repositories\ContentRepositoryInterface;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\EloquentContentRepository;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 
 use function Pest\Laravel\assertDatabaseHas;
 
@@ -54,8 +54,8 @@ test('creates unique slug when not provided', function (): void {
     //Arrange
     /** @var CreateContentService $createArticleService */
     $createArticleService = $this->app->make(CreateContentService::class);
-    /** @var EloquentUser $user */
-    $user = EloquentUser::factory()
+    /** @var UserModel $user */
+    $user = UserModel::factory()
         ->create();
     $createdBy = Uuid::fromString($user->uuid);
     $command = new CreateContentCommand(
@@ -115,8 +115,8 @@ test('creates unique slug when not provided', function (): void {
 test('throws exception for empty title', function (): void {
     /** @var CreateContentService $createArticleService */
     $createArticleService = $this->app->make(CreateContentService::class);
-    /** @var EloquentUser $user */
-    $user = EloquentUser::factory()
+    /** @var UserModel $user */
+    $user = UserModel::factory()
         ->create();
     $cratedBy = Uuid::fromString($user->uuid);
     $command = new CreateContentCommand(

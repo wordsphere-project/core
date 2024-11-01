@@ -6,21 +6,21 @@ use WordSphere\Core\Domain\Identity\Entities\User as DomainUser;
 use WordSphere\Core\Domain\Shared\ValueObjects\Email;
 use WordSphere\Core\Domain\Shared\ValueObjects\Id;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 
 class UserAdapter
 {
-    public static function toEloquent(DomainUser $domainUser): EloquentUser
+    public static function toEloquent(DomainUser $domainUser): UserModel
     {
 
-        $eloquentUser = new EloquentUser;
+        $eloquentUser = new UserModel;
         $eloquentUser->forceFill(attributes: $domainUser->toArray());
 
         return $eloquentUser;
 
     }
 
-    public static function toDomain(EloquentUser $eloquentUser): DomainUser
+    public static function toDomain(UserModel $eloquentUser): DomainUser
     {
         return new DomainUser(
             id: Id::fromInt($eloquentUser->id),

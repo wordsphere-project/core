@@ -15,7 +15,7 @@ use WordSphere\Core\Application\ContentManagement\Services\ContentStatusServiceF
 use WordSphere\Core\Domain\ContentManagement\Enums\ContentStatus;
 use WordSphere\Core\Domain\Shared\ValueObjects\Uuid;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\ContentModel;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 
 trait InteractsWithStatus
 {
@@ -28,7 +28,7 @@ trait InteractsWithStatus
         ?Set $set = null
     ): void {
 
-        /** @var EloquentUser $user */
+        /** @var UserModel $user */
         $user = $auth->user();
 
         if (! $record instanceof ContentModel) {

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 // config for VendorName/Skeleton
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 use WordSphere\Core\Legacy\Support\CustomFields\CustomFieldsManager;
 
 return [
@@ -22,7 +22,7 @@ return [
     'auth' => [
         'providers' => [
             'user' => [
-                'model' => EloquentUser::class,
+                'model' => UserModel::class,
             ],
         ],
     ],

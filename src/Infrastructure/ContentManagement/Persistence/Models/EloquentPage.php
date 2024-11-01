@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use WordSphere\Core\Database\Factories\PageFactory;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 use WordSphere\Core\Infrastructure\Shared\Concerns\CreatedUpdatedBy;
 use WordSphere\Core\Infrastructure\Shared\Concerns\HasFeaturedImage;
 use WordSphere\Core\Legacy\Enums\ContentStatus;
@@ -66,12 +66,12 @@ class EloquentPage extends Model
 
     public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(EloquentUser::class, 'created_by', 'uuid');
+        return $this->belongsTo(UserModel::class, 'created_by', 'uuid');
     }
 
     public function updatedBy(): BelongsTo
     {
-        return $this->belongsTo(EloquentUser::class, 'updated_by', 'uuid');
+        return $this->belongsTo(UserModel::class, 'updated_by', 'uuid');
     }
 
     public function media(): HasMany

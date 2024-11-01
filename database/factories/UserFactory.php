@@ -7,10 +7,10 @@ namespace WordSphere\Core\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 
 /**
- * @template TModel of EloquentUser
+ * @template TModel of UserModel
  *
  * @extends Factory<TModel>
  */
@@ -21,7 +21,7 @@ class UserFactory extends Factory
      *
      * @var class-string<TModel>
      */
-    protected $model = EloquentUser::class;
+    protected $model = UserModel::class;
 
     /**
      * The current password being used by the factory.

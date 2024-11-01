@@ -19,7 +19,7 @@ use WordSphere\Core\Domain\ContentManagement\Entities\Content;
 use WordSphere\Core\Domain\Types\Contracts\TypeableInterface;
 use WordSphere\Core\Domain\Types\TypeRegistry;
 use WordSphere\Core\Domain\Types\ValueObjects\TypeKey;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 use WordSphere\Core\Infrastructure\Shared\Concerns\HasFeaturedImage;
 use WordSphere\Core\Infrastructure\Shared\Concerns\HasType;
 use WordSphere\Core\Infrastructure\Shared\Concerns\HasTypedRelations;
@@ -89,14 +89,14 @@ class ContentModel extends TenantProjectModel implements TypeableInterface
         parent::boot();
         static::creating(function (ContentModel $model): void {
             if ($user = Filament::auth()->user()) {
-                /** @var EloquentUser $user */
+                /** @var UserModel $user */
                 $model->setAttribute('created_by', $user->uuid);
                 $model->setAttribute('updated_by', $user->uuid);
             }
         });
         static::updating(function (ContentModel $model): void {
             if ($user = Filament::auth()->user()) {
-                /** @var EloquentUser $user */
+                /** @var UserModel $user */
                 $model->setAttribute('created_by', $model->created_by);
                 $model->setAttribute('updated_by', $user->uuid);
             }
@@ -124,17 +124,17 @@ class ContentModel extends TenantProjectModel implements TypeableInterface
 
     public function author(): BelongsTo
     {
-        return $this->belongsTo(EloquentUser::class, 'author_id');
+        return $this->belongsTo(UserModel::class, 'author_id');
     }
 
     public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(EloquentUser::class, 'created_by', 'uuid');
+        return $this->belongsTo(UserModel::class, 'created_by', 'uuid');
     }
 
     public function updatedBy(): BelongsTo
     {
-        return $this->belongsTo(EloquentUser::class, 'updated_by', 'uuid');
+        return $this->belongsTo(UserModel::class, 'updated_by', 'uuid');
     }
 
     public function featuredImage(): BelongsTo

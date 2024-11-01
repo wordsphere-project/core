@@ -15,7 +15,7 @@ use WordSphere\Core\Infrastructure\ContentManagement\Adapters\ContentAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Adapters\MediaAdapter;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\ContentModel;
 use WordSphere\Core\Infrastructure\ContentManagement\Persistence\Models\EloquentMedia;
-use WordSphere\Core\Infrastructure\Identity\Persistence\EloquentUser;
+use WordSphere\Core\Infrastructure\Identity\Persistence\UserModel;
 use WordSphere\Core\Interfaces\Filament\Resources\ContentResource;
 
 class CreateContent extends CreateRecord
@@ -40,7 +40,7 @@ class CreateContent extends CreateRecord
 
     public function handleRecordCreation(array $data): ContentModel
     {
-        /** @var EloquentUser $user */
+        /** @var UserModel $user */
         $user = $this->auth->user();
 
         // Convert curator media IDs to Media value objects

@@ -66,6 +66,8 @@ class TypeResource extends Resource
                             ->schema([
                                 Forms\Components\Repeater::make('allowedRelations')
                                     ->relationship()
+                                    ->reorderable(false)
+                                    ->orderColumn('sort_order')
                                     ->schema([
                                         Forms\Components\Grid::make(3)
                                             ->schema([
@@ -125,7 +127,6 @@ class TypeResource extends Resource
                                             ->regex('/^[a-z0-9_]+$/')
                                             ->columnSpanFull(),
                                     ])
-                                    ->orderColumn()
                                     ->defaultItems(0)
                                     ->addActionLabel('Add Relation')
                                     ->collapsible()

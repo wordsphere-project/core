@@ -34,7 +34,7 @@ return new class extends Migration
                 ->default(ContentStatus::DRAFT->value);
             $table->integer('visibility')
                 ->default(ContentVisibility::PUBLIC->value);
-            $table->unsignedInteger('featured_image_id')->nullable();
+            $table->unsignedBigInteger('featured_image_id')->nullable();
             $table->jsonb('custom_fields')->nullable();
             $table->uuid('created_by');
             $table->uuid('updated_by');

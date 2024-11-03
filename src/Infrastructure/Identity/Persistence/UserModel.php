@@ -55,9 +55,10 @@ class UserModel extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory;
-    use HasUuidAttribute;
+
     use HasRoles;
     use HasSuperAdmin;
+    use HasUuidAttribute;
     use Notifiable;
 
     protected $table = 'users';

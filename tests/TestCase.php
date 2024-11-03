@@ -53,7 +53,6 @@ use WordSphere\Core\WordSphereDashboardServiceProvider;
 use WordSphere\Core\WordSphereServiceProvider;
 
 use function database_path;
-use function dump;
 use function Orchestra\Testbench\package_path;
 
 #[WithEnv('DB_CONNECTION', 'testing')]

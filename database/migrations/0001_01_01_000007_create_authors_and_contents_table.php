@@ -53,7 +53,7 @@ return new class extends Migration
             $table->string('status')->default(ContentStatus::DRAFT->value);
             $table->integer('visibility')->default(ContentVisibility::PUBLIC->value);
             $table->uuid('author_id')->nullable();
-            $table->unsignedInteger('featured_image_id')->nullable();
+            $table->unsignedBigInteger('featured_image_id')->nullable();
             $table->timestamps();
             $table->timestamp('published_at')->nullable();
             $table->uuid('tenant_id');
@@ -86,7 +86,7 @@ return new class extends Migration
         Schema::create('content_media', function (Blueprint $table): void {
             $table->id();
             $table->uuid('content_id');
-            $table->unsignedInteger('media_id');
+            $table->unsignedBigInteger('media_id');
             $table->integer('order')->default(0);
             $table->jsonb('attributes')->nullable();
             $table->timestamps();

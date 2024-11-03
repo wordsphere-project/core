@@ -11,7 +11,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(app(config('curator.model'))->getTable(), function (Blueprint $table): void {
-            $table->unsignedBigInteger('id')->primary();
+            $table->bigIncrements('id');
             $table->string('disk')->default('public');
             $table->string('directory')->default('media');
             $table->string('visibility')->default('public');

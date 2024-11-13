@@ -28,6 +28,7 @@ use WordSphere\Core\Interfaces\Filament\Middleware\RequireTenantAndProject;
 use WordSphere\Core\Interfaces\Filament\Middleware\ValidateType;
 
 use function __;
+use function app_path;
 
 class WordSphereDashboardServiceProvider extends PanelProvider
 {
@@ -55,6 +56,7 @@ class WordSphereDashboardServiceProvider extends PanelProvider
             ->viteTheme('resources/css/filament/admin/wordsphere.css', 'vendor/wordsphere/build')
             ->discoverClusters(in: __DIR__.'/Interfaces/Filament/Clusters', for: 'WordSphere\\Core\\Interfaces\\Filament\\Clusters')
             ->discoverResources(in: __DIR__.'/Interfaces/Filament/Resources', for: 'WordSphere\\Core\\Interfaces\\Filament\\Resources')
+            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: __DIR__.'/Interfaces/Filament/Pages', for: 'WordSphere\\Core\\Interfaces\\Filament\\Pages')
             ->pages([
                 Dashboard::class,

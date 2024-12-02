@@ -17,6 +17,7 @@ use WordSphere\Core\Infrastructure\Shared\Models\TenantProjectModel;
  * @property ?int $min_items
  * @property ?int $max_items
  * @property ?string $inverse_relation_name
+ * @property ?int $sort_order
  * @property string $tenant_id
  * @property string $project_id
  */
@@ -34,6 +35,7 @@ class AllowedRelationModel extends TenantProjectModel
         'min_items',
         'max_items',
         'inverse_relation_name',
+        'sort_order',
         'tenant_id',
         'project_id',
     ];

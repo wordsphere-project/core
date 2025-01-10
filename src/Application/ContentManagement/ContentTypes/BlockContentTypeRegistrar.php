@@ -18,8 +18,8 @@ class BlockContentTypeRegistrar extends BaseTypeRegistrar
             key: TypeKey::fromString('blocks'),
             entityClass: Content::class,
             interfaceData: (new FilamentTypeData(
-                singularName: __('Block'),
-                pluralName: __('Blocks'),
+                singularName: __('blocks.block'),
+                pluralName: __('blocks.blocks'),
                 navigationGroup: 'Content',
                 icon: 'heroicon-o-square-3-stack-3d',
                 description: __('Content block to be linked pages or other type of contents.'),
@@ -35,6 +35,5 @@ class BlockContentTypeRegistrar extends BaseTypeRegistrar
             relationType: RelationType::MANY_TO_MANY,
             inverseRelationName: 'blocks'
         );
-
     }
 }

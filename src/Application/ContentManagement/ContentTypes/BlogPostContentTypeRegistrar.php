@@ -11,8 +11,8 @@ class BlogPostContentTypeRegistrar extends BaseContentTypeRegistrar
         $this->registry->register(
             contentType: new ContentType(
                 key: 'blog-posts',
-                singularName: __('Post'),
-                pluralName: __('Posts'),
+                singularName: __('posts.post'),
+                pluralName: __('posts.posts'),
                 navigationGroup: 'Content',
                 description: __('Regular blog post for the website'),
                 icon: 'heroicon-o-document-text',

@@ -20,8 +20,8 @@ class PageContentTypeRegistrar extends BaseTypeRegistrar
             key: TypeKey::fromString('pages'),
             entityClass: Content::class,
             interfaceData: (new FilamentTypeData(
-                singularName: __('Page'),
-                pluralName: __('Pages'),
+                singularName: __('pages.page'),
+                pluralName: __('pages.pages'),
                 navigationGroup: __('content.content'),
                 icon: 'heroicon-o-document-text',
                 description: __('Static pages for your website such as About Us, Contact, Terms & Conditions, etc.'),
@@ -48,6 +48,5 @@ class PageContentTypeRegistrar extends BaseTypeRegistrar
                 ],
             ];
         });
-
     }
 }
